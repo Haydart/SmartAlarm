@@ -1,8 +1,9 @@
-package com.calabs.loop.mobile.android.base.mvp
+package pl.rmakowiecki.smartalarm.base.mvp
 
 import android.os.Handler
 import android.os.Looper
 import io.reactivex.disposables.CompositeDisposable
+import pl.rmakowiecki.smartalarm.base.Contracts
 
 abstract class MvpPresenter<V : Contracts.View, out RO : Contracts.Router>(private val router: RO? = null)
     : Contracts.Presenter {
@@ -31,10 +32,6 @@ abstract class MvpPresenter<V : Contracts.View, out RO : Contracts.Router>(priva
             uiHandler.post { function(it) }
         } ?: queueUiAction(function)
     }
-
-    protected fun showProgress() = performUiAction { it.showProgress() }
-
-    protected fun hideProgress() = performUiAction { it.hideProgress() }
 
     private fun queueUiAction(function: (V) -> Unit) {
         uiCommands += function

@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.calabs.loop.mobile.android.base.mvp.MvpPresenter
 import pl.rmakowiecki.smartalarm.base.Contracts
 
 abstract class MvpFragment<V : Contracts.View, out RO : Contracts.Router, P : MvpPresenter<V, RO>> : Fragment(), Contracts.View {

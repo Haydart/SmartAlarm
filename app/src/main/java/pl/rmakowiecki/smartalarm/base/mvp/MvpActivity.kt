@@ -3,7 +3,6 @@ package pl.rmakowiecki.smartalarm.base.mvp
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
-import com.calabs.loop.mobile.android.base.mvp.MvpPresenter
 import pl.rmakowiecki.smartalarm.base.Contracts
 
 abstract class MvpActivity<V : Contracts.View, out RO : Contracts.Router, P : MvpPresenter<V, RO>> : AppCompatActivity(), Contracts.View {
