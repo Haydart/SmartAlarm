@@ -21,13 +21,14 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.screens.splash.SplashActivity"
             android:screenOrientation="portrait" />
-
         <activity
-            android:name="pl.rmakowiecki.smartalarm.ui.screens.auth.AuthActivity"
+            android:name=".ui.screens.auth.AuthActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.screens.setup.SetupActivity"
             android:screenOrientation="portrait" />
     </application>
 
