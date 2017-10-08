@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.screens.auth.AuthActivity">
+    tools:context=".ui.screens.auth.AuthActivity"
+    android:orientation="vertical"
+    android:gravity="center">
 
     <Button
         android:id="@+id/facebookButton"
@@ -17,10 +19,14 @@
         android:layout_height="wrap_content"
         android:text="Sign in with Google" />
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <Button
         android:id="@+id/continueButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign in with Google" />
+        android:text="Continue" />
 
 </LinearLayout>

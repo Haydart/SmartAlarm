@@ -1,9 +1,10 @@
 package pl.rmakowiecki.smartalarm.ui.screens.auth
 
+import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
 import pl.rmakowiecki.smartalarm.R
+import pl.rmakowiecki.smartalarm.R.id.continueButton
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
-
 
 class AuthActivity : MviActivity<AuthView, AuthViewState, AuthPresenter>(), AuthView {
 
@@ -12,23 +13,20 @@ class AuthActivity : MviActivity<AuthView, AuthViewState, AuthPresenter>(), Auth
 
     override fun createPresenter() = AuthPresenter()
 
-    override fun render(authViewState: AuthViewState) {
-        //todo implement
+    override fun render(authViewState: AuthViewState) = when (authViewState) {
+        is AuthViewState.Idle -> Unit
+        is AuthViewState.Loading -> Unit
     }
 
-    override fun emailInputIntent(): Observable<String> {
-        //todo implement
-    }
+    override fun emailInputIntent(): Observable<String> =
+            Observable.just("")
 
-    override fun googleAuthIntent(): Observable<Unit> {
-        //todo implement
-    }
+    override fun googleAuthIntent(): Observable<Unit> =
+            RxView.clicks(googleButton).map { Unit }
 
-    override fun facebookAuthIntent(): Observable<Unit> {
-        //todo implement
-    }
+    override fun facebookAuthIntent(): Observable<Unit> =
+            RxView.clicks(facebookButton).map { Unit }
 
-    override fun emailSignInIntent(): Observable<Unit> {
-        //todo implement
-    }
+    override fun emailSignInIntent(): Observable<Unit> =
+            RxView.clicks(continueButton).map { Unit }
 }
