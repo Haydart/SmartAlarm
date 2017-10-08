@@ -1,4 +1,4 @@
-package pl.rmakowiecki.smartalarm.base.mvp
+package pl.rmakowiecki.smartalarm.base.mvi
 
 import android.os.Bundle
 import android.support.annotation.LayoutRes
@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import pl.rmakowiecki.smartalarm.base.Contracts
 
-abstract class MvpFragment<V : Contracts.View, out RO : Contracts.Router, P : MvpPresenter<V, RO>> : Fragment(), Contracts.View {
+abstract class MvpFragment<V : Contracts.View, out RO : Contracts.Router, P : MviPresenter<V, RO>> : Fragment(), Contracts.View {
 
     @get:LayoutRes
     protected abstract val layout: Int

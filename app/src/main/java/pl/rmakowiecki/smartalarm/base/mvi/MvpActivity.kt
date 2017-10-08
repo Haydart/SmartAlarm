@@ -1,11 +1,11 @@
-package pl.rmakowiecki.smartalarm.base.mvp
+package pl.rmakowiecki.smartalarm.base.mvi
 
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
 import pl.rmakowiecki.smartalarm.base.Contracts
 
-abstract class MvpActivity<V : Contracts.View, out RO : Contracts.Router, P : MvpPresenter<V, RO>> : AppCompatActivity(), Contracts.View {
+abstract class MvpActivity<V : Contracts.View, out RO : Contracts.Router, P : MviPresenter<V, RO>> : AppCompatActivity(), Contracts.View {
 
     @get:LayoutRes
     protected abstract val layoutRes: Int

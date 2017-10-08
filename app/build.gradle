@@ -59,6 +59,7 @@ dependencies {
 	compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 	compile 'com.android.support.constraint:constraint-layout:1.0.2'
 	compile "com.jakewharton.rxbinding2:rxbinding:$versions.rxbinding"
+	compile 'com.hannesdorfmann.mosby3:mvi:3.0.4'
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.firebase-perf'
