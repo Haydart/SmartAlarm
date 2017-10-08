@@ -2,7 +2,6 @@ package pl.rmakowiecki.smartalarm.base.mvi
 
 import android.support.annotation.CallSuper
 import android.support.annotation.MainThread
-import com.hannesdorfmann.mosby3.mvp.MvpView
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposables
@@ -11,7 +10,7 @@ import io.reactivex.subjects.PublishSubject
 import pl.rmakowiecki.smartalarm.base.Contracts
 import java.util.*
 
-abstract class MviPresenter<V : MvpView, VS : ViewState>(initialViewState: VS) : Contracts.Presenter {
+abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>(initialViewState: VS) : Contracts.Presenter {
 
     /**
      * This relay is the bridge to the viewState (UI). Whenever the viewState get's reattached, the
@@ -59,7 +58,7 @@ abstract class MviPresenter<V : MvpView, VS : ViewState>(initialViewState: VS) :
     /**
      * This binder is used to subscribe the view's render method to render the ViewState in the view.
      */
-    private var viewStateConsumer: ViewStateVisitor<V, VS>? = null
+    private var viewStateConsumer: ViewStateConsumer<V, VS>? = null
 
     init {
         reset()
@@ -70,11 +69,9 @@ abstract class MviPresenter<V : MvpView, VS : ViewState>(initialViewState: VS) :
             bindIntents()
         }
 
-        //
         // Build the chain from bottom to top:
         // 1. Subscribe to ViewState
         // 2. Subscribe intents
-        //
         if (viewStateConsumer != null) {
             subscribeViewStateConsumerActually(view)
         }
@@ -82,7 +79,7 @@ abstract class MviPresenter<V : MvpView, VS : ViewState>(initialViewState: VS) :
         val intentsSize = intentRelaysBinders.size
         (0..intentsSize - 1)
                 .map { intentRelaysBinders[it] }
-                .forEach { bindIntentActually<Any>(view, it) }
+                .forEach { bindIntentActually(view, it as IntentRelayBinderPair<Any>) }
 
         viewAttachedFirstTime = false
     }
@@ -117,10 +114,10 @@ abstract class MviPresenter<V : MvpView, VS : ViewState>(initialViewState: VS) :
         subscribeViewStateMethodCalled = false
     }
 
-    @MainThread private fun <I> bindIntentActually(view: V, relayBinderPair: IntentRelayBinderPair<*>): Observable<I> {
+    @MainThread private fun <I> bindIntentActually(view: V, relayBinderPair: IntentRelayBinderPair<I>): Observable<I> {
 
-        val intentRelay = relayBinderPair.intentRelaySubject as PublishSubject<I>
-        val intentBinder = relayBinderPair.intentBinder as ViewIntentBinder<V, I>
+        val intentRelay = relayBinderPair.intentRelaySubject
+        val intentBinder = relayBinderPair.intentBinder
         val intent = intentBinder.bind(view)
 
         intentsDisposables.add(intent.subscribeWith(DisposableIntentObserver(intentRelay)))
@@ -133,7 +130,7 @@ abstract class MviPresenter<V : MvpView, VS : ViewState>(initialViewState: VS) :
         return intentRelay
     }
 
-    @MainThread protected fun subscribeViewState(viewStateObservable: Observable<VS>, consumer: ViewStateVisitor<V, VS>) {
+    @MainThread protected fun subscribeViewState(viewStateObservable: Observable<VS>, consumer: ViewStateConsumer<V, VS>) {
         if (subscribeViewStateMethodCalled) {
             throw IllegalStateException(
                     "subscribeViewState() method is only allowed to be called once"
@@ -141,7 +138,7 @@ abstract class MviPresenter<V : MvpView, VS : ViewState>(initialViewState: VS) :
         }
         subscribeViewStateMethodCalled = true
 
-        this.viewStateConsumer = consumer
+        viewStateConsumer = consumer
 
         viewStateDisposable = viewStateObservable.subscribeWith(
                 DisposableViewStateObserver(viewStateBehaviorSubject)
@@ -153,11 +150,11 @@ abstract class MviPresenter<V : MvpView, VS : ViewState>(initialViewState: VS) :
             val intentBinder: ViewIntentBinder<V, I>
     )
 
-    protected interface ViewStateVisitor<in V : MvpView, in VS> {
+    protected interface ViewStateConsumer<in V, in VS> {
         fun accept(view: V, viewState: VS)
     }
 
-    protected interface ViewIntentBinder<in V : MvpView, I> {
+    protected interface ViewIntentBinder<in V, I> {
         fun bind(view: V): Observable<I>
     }
 }
