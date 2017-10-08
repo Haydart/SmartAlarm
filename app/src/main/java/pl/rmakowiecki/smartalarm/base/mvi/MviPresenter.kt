@@ -6,20 +6,19 @@ import com.hannesdorfmann.mosby3.mvp.MvpView
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposables
-import io.reactivex.observers.DisposableObserver
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import pl.rmakowiecki.smartalarm.base.Contracts
 import java.util.*
 
-abstract class MviPresenter<V : MvpView, VS : ViewState> : Contracts.Presenter {
+abstract class MviPresenter<V : MvpView, VS : ViewState>(initialViewState: VS) : Contracts.Presenter {
 
     /**
      * This relay is the bridge to the viewState (UI). Whenever the viewState get's reattached, the
      * latest
      * state will be reemitted.
      */
-    private lateinit var viewStateBehaviorSubject: BehaviorSubject<VS>
+    private var viewStateBehaviorSubject: BehaviorSubject<VS> = BehaviorSubject.createDefault<VS>(initialViewState)
 
     /**
      * We only allow to cal [.subscribeViewState] method once
@@ -61,6 +60,10 @@ abstract class MviPresenter<V : MvpView, VS : ViewState> : Contracts.Presenter {
      * This binder is used to subscribe the view's render method to render the ViewState in the view.
      */
     private var viewStateConsumer: ViewStateVisitor<V, VS>? = null
+
+    init {
+        reset()
+    }
 
     @CallSuper fun attachView(view: V) {
         if (viewAttachedFirstTime) {
@@ -106,6 +109,24 @@ abstract class MviPresenter<V : MvpView, VS : ViewState> : Contracts.Presenter {
         intentsDisposables.dispose()
     }
 
+    protected fun unbindIntents() = Unit
+
+    private fun reset() {
+        viewAttachedFirstTime = true
+        intentRelaysBinders.clear()
+        subscribeViewStateMethodCalled = false
+    }
+
+    @MainThread private fun <I> bindIntentActually(view: V, relayBinderPair: IntentRelayBinderPair<*>): Observable<I> {
+
+        val intentRelay = relayBinderPair.intentRelaySubject as PublishSubject<I>
+        val intentBinder = relayBinderPair.intentBinder as ViewIntentBinder<V, I>
+        val intent = intentBinder.bind(view)
+
+        intentsDisposables.add(intent.subscribeWith(DisposableIntentObserver(intentRelay)))
+        return intentRelay
+    }
+
     @MainThread protected fun <I> handleIntent(binder: ViewIntentBinder<V, I>): Observable<I> {
         val intentRelay = PublishSubject.create<I>()
         intentRelaysBinders.add(IntentRelayBinderPair(intentRelay, binder))
@@ -128,8 +149,8 @@ abstract class MviPresenter<V : MvpView, VS : ViewState> : Contracts.Presenter {
     }
 
     private inner class IntentRelayBinderPair<I>(
-            private val intentRelaySubject: PublishSubject<I>,
-            private val intentBinder: ViewIntentBinder<V, I>
+            val intentRelaySubject: PublishSubject<I>,
+            val intentBinder: ViewIntentBinder<V, I>
     )
 
     protected interface ViewStateVisitor<in V : MvpView, in VS> {
@@ -139,17 +160,4 @@ abstract class MviPresenter<V : MvpView, VS : ViewState> : Contracts.Presenter {
     protected interface ViewIntentBinder<in V : MvpView, I> {
         fun bind(view: V): Observable<I>
     }
-
-    internal class DisposableViewStateObserver<VS>(private val subject: BehaviorSubject<VS>) : DisposableObserver<VS>() {
-
-        override fun onNext(viewState: VS) = subject.onNext(viewState)
-
-        override fun onError(e: Throwable) {
-            throw IllegalStateException(
-                    "ViewState observable must not reach error state - onError()", e)
-        }
-
-        override fun onComplete() = Unit
-    }
 }
-
