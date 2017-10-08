@@ -2,8 +2,8 @@ package pl.rmakowiecki.smartalarm.ui.screens.auth
 
 import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
+import kotlinx.android.synthetic.main.activity_auth.*
 import pl.rmakowiecki.smartalarm.R
-import pl.rmakowiecki.smartalarm.R.id.continueButton
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
 
 class AuthActivity : MviActivity<AuthView, AuthViewState, AuthPresenter>(), AuthView {
