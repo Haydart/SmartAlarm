@@ -5,7 +5,8 @@ import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
 import pl.rmakowiecki.smartalarm.base.Contracts
 
-abstract class MvpActivity<V : Contracts.View, out RO : Contracts.Router, P : MviPresenter<V, RO>> : AppCompatActivity(), Contracts.View {
+abstract class MviActivity<V : Contracts.View, VS : Contracts.ViewState, P : MviPresenter<V, VS>> :
+        AppCompatActivity(), Contracts.View {
 
     @get:LayoutRes
     protected abstract val layoutRes: Int
@@ -24,13 +25,8 @@ abstract class MvpActivity<V : Contracts.View, out RO : Contracts.Router, P : Mv
     }
 
     override fun onStop() {
-        presenter.detachView()
+        presenter.detachView(retainInstance = true)
         super.onStop()
-    }
-
-    override fun onDestroy() {
-        presenter.onViewDestroy()
-        super.onDestroy()
     }
 
     protected abstract fun createPresenter(): P
