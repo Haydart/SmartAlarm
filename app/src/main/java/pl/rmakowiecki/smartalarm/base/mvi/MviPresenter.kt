@@ -77,7 +77,7 @@ abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>(initia
         }
 
         val intentsSize = intentRelaysBinders.size
-        (0..intentsSize - 1)
+        (0 until intentsSize)
                 .map { intentRelaysBinders[it] }
                 .forEach { bindIntentActually(view, it as IntentRelayBinderPair<Any>) }
 

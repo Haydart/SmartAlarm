@@ -5,12 +5,13 @@ import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
 import pl.rmakowiecki.smartalarm.base.Contracts
 
-abstract class MviActivity<V : Contracts.View, VS : Contracts.ViewState, P : MviPresenter<V, VS>> :
+abstract class MviActivity<V : Contracts.View, VS : Contracts.ViewState, out P : MviPresenter<V, VS>> :
         AppCompatActivity(), Contracts.View {
 
     @get:LayoutRes
     protected abstract val layoutRes: Int
-    protected lateinit var presenter: P
+
+    private lateinit var presenter: P
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

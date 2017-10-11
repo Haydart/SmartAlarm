@@ -8,6 +8,6 @@ class SmartAlarmApp : Application() {
     override fun onCreate() {
         super.onCreate()
         FirebaseApp.initializeApp(this)
-        FirebaseMessaging.getInstance().subscribeToTopic("Alarm_Notifications")
+        FirebaseMessaging.getInstance().subscribeToTopic("8XwDg5Fxo0WszCCEaMCWusoq0vu1")
     }
 }

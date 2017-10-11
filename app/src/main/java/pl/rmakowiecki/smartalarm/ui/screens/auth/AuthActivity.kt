@@ -1,6 +1,7 @@
 package pl.rmakowiecki.smartalarm.ui.screens.auth
 
 import com.jakewharton.rxbinding2.view.RxView
+import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_auth.*
 import pl.rmakowiecki.smartalarm.R
@@ -19,7 +20,7 @@ class AuthActivity : MviActivity<AuthView, AuthViewState, AuthPresenter>(), Auth
     }
 
     override fun emailInputIntent(): Observable<String> =
-            Observable.just("")
+            RxTextView.textChanges(emailInput).map { it.toString() }
 
     override fun googleAuthIntent(): Observable<Unit> =
             RxView.clicks(googleButton).map { Unit }

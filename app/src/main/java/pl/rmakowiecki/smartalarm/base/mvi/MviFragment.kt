@@ -8,13 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import pl.rmakowiecki.smartalarm.base.Contracts
 
-abstract class MviFragment<V : Contracts.View, VS : Contracts.ViewState, P : MviPresenter<V, VS>> :
+abstract class MviFragment<V : Contracts.View, VS : Contracts.ViewState, out P : MviPresenter<V, VS>> :
         Fragment(), Contracts.View {
 
     @get:LayoutRes
     protected abstract val layout: Int
 
-    protected lateinit var presenter: P
+    private lateinit var presenter: P
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
