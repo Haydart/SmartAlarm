@@ -12,52 +12,13 @@ import java.util.*
 
 abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>(initialViewState: VS) : Contracts.Presenter {
 
-    /**
-     * This relay is the bridge to the viewState (UI). Whenever the viewState get's reattached, the
-     * latest
-     * state will be reemitted.
-     */
     private var viewStateBehaviorSubject: BehaviorSubject<VS> = BehaviorSubject.createDefault<VS>(initialViewState)
-
-    /**
-     * We only allow to cal [.subscribeViewState] method once
-     */
     private var subscribeViewStateMethodCalled = false
-    /**
-     * List of internal relays, bridging the gap between intents coming from the viewState (will be
-     * unsubscribed temporarily when viewState is detached i.e. during config changes)
-     */
     private val intentRelaysBinders = ArrayList<IntentRelayBinderPair<*>>(4)
-
-    /**
-     * Composite Disposals holding subscriptions to all intents observable offered by the viewState.
-     */
     private var intentsDisposables = CompositeDisposable()
-
-    /**
-     * Disposal to unsubscribe from the viewState when the viewState is detached (i.e. during screen
-     * orientation
-     * changes)
-     */
     private var viewRelayConsumerDisposable = Disposables.disposed()
-
-    /**
-     * Disposable between the viewState observable returned from [.handleIntent]
-     * and
-     * [.viewStateBehaviorSubject]
-     */
     private var viewStateDisposable = Disposables.disposed()
-
-    /**
-     * Will be used to determine whether or not a View has been attached for the first time.
-     * This is used to determine whether or not the intents should be bound via [ ][.bindIntents]
-     * or rebound internally.
-     */
     private var viewAttachedFirstTime = true
-
-    /**
-     * This binder is used to subscribe the view's render method to render the ViewState in the view.
-     */
     private var viewStateConsumer: ((view: V, viewState: VS) -> Unit)? = null
 
     init {
@@ -69,10 +30,7 @@ abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>(initia
             bindIntents()
         }
 
-        // Build the chain from bottom to top:
-        // 1. Subscribe to ViewState
-        // 2. Subscribe intents
-        if (viewStateConsumer != null) {
+        viewStateConsumer?.let {
             subscribeViewStateConsumerActually(view)
         }
 
@@ -94,17 +52,13 @@ abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>(initia
 
     @CallSuper fun detachView(retainInstance: Boolean) {
         if (!retainInstance) {
-            // Cancel the overall observable stream
             viewStateDisposable.dispose()
 
             unbindIntents()
             reset()
         }
 
-        // Cancel subscription from View to viewState Relay
         viewRelayConsumerDisposable.dispose()
-
-        // Cancel subscriptons from view intents to handleIntent Relays
         intentsDisposables.dispose()
     }
 
