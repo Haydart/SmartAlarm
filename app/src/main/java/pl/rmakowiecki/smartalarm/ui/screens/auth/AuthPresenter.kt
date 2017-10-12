@@ -5,11 +5,13 @@ import pl.rmakowiecki.smartalarm.base.mvi.MviPresenter
 
 class AuthPresenter : MviPresenter<AuthView, AuthViewState>(AuthViewState.Idle()) {
     override fun bindIntents() {
-        val observable = handleIntent(object : ViewIntentBinder<AuthView, Unit> {
-            override fun bind(view: AuthView): Observable<Unit> =
-                    view.googleAuthIntent()
-        })
+        val facebookIntent = handleIntent(AuthView::facebookAuthIntent)
+        val googleIntent = handleIntent(AuthView::googleAuthIntent)
+        val emailInputIntent = handleIntent(AuthView::emailInputIntent)
+        val emailSubmitIntent = handleIntent(AuthView::emailSubmitIntent)
 
-        subscribeViewState(observable, object : ViewStateConsumer<AuthView, >)
+        val mergedIntentStream = Observable.merge(facebookIntent, googleIntent, emailInputIntent, emailSubmitIntent)
+
+        subscribeViewState(mergedIntentStream, AuthView::render)
     }
 }

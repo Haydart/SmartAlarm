@@ -58,7 +58,7 @@ abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>(initia
     /**
      * This binder is used to subscribe the view's render method to render the ViewState in the view.
      */
-    private var viewStateConsumer: ViewStateConsumer<V, VS>? = null
+    private var viewStateConsumer: ((view: V, viewState: VS) -> Unit)? = null
 
     init {
         reset()
@@ -87,7 +87,9 @@ abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>(initia
     protected abstract fun bindIntents()
 
     @MainThread private fun subscribeViewStateConsumerActually(view: V) {
-        viewRelayConsumerDisposable = viewStateBehaviorSubject.subscribe { vs -> viewStateConsumer?.accept(view, vs) }
+        viewRelayConsumerDisposable = viewStateBehaviorSubject.subscribe { viewState ->
+            viewStateConsumer?.invoke(view, viewState)
+        }
     }
 
     @CallSuper fun detachView(retainInstance: Boolean) {
@@ -117,20 +119,21 @@ abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>(initia
     @MainThread private fun <I> bindIntentActually(view: V, relayBinderPair: IntentRelayBinderPair<I>): Observable<I> {
 
         val intentRelay = relayBinderPair.intentRelaySubject
-        val intentBinder = relayBinderPair.intentBinder
-        val intent = intentBinder.bind(view)
+        val binderFunction = relayBinderPair.binderFunc
+        val intent = binderFunction(view)
 
         intentsDisposables.add(intent.subscribeWith(DisposableIntentObserver(intentRelay)))
         return intentRelay
     }
 
-    @MainThread protected fun <I> handleIntent(binder: ViewIntentBinder<V, I>): Observable<I> {
+    @MainThread protected fun <I> handleIntent(binderFunction: (V) -> Observable<I>): Observable<I> {
+
         val intentRelay = PublishSubject.create<I>()
-        intentRelaysBinders.add(IntentRelayBinderPair(intentRelay, binder))
+        intentRelaysBinders.add(IntentRelayBinderPair(intentRelay, binderFunction))
         return intentRelay
     }
 
-    @MainThread protected fun subscribeViewState(viewStateObservable: Observable<VS>, consumer: ViewStateConsumer<V, VS>) {
+    @MainThread protected fun subscribeViewState(viewStateObservable: Observable<VS>, consumerFunction: (view: V, viewState: VS) -> Unit) {
         if (subscribeViewStateMethodCalled) {
             throw IllegalStateException(
                     "subscribeViewState() method is only allowed to be called once"
@@ -138,7 +141,7 @@ abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>(initia
         }
         subscribeViewStateMethodCalled = true
 
-        viewStateConsumer = consumer
+        viewStateConsumer = consumerFunction
 
         viewStateDisposable = viewStateObservable.subscribeWith(
                 DisposableViewStateObserver(viewStateBehaviorSubject)
@@ -147,14 +150,6 @@ abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>(initia
 
     private inner class IntentRelayBinderPair<I>(
             val intentRelaySubject: PublishSubject<I>,
-            val intentBinder: ViewIntentBinder<V, I>
+            val binderFunc: (V) -> Observable<I>
     )
-
-    protected interface ViewStateConsumer<in V, in VS> {
-        fun accept(view: V, viewState: VS)
-    }
-
-    protected interface ViewIntentBinder<in V, I> {
-        fun bind(view: V): Observable<I>
-    }
 }
