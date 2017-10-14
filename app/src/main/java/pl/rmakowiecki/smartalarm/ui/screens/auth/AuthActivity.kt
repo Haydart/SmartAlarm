@@ -3,6 +3,7 @@ package pl.rmakowiecki.smartalarm.ui.screens.auth
 import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.Observable
+import kotlinx.android.synthetic.main.activity_auth.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
 
@@ -13,9 +14,8 @@ class AuthActivity : MviActivity<AuthView, AuthViewState, AuthPresenter>(), Auth
 
     override fun createPresenter() = AuthPresenter()
 
-    override fun render(authViewState: AuthViewState) = when (authViewState) {
-        is AuthViewState.Idle -> Unit
-        is AuthViewState.Loading -> Unit
+    override fun render(authViewState: AuthViewState) {
+
     }
 
     override fun emailInputIntent(): Observable<String> =
