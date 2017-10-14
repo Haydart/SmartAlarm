@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ActionButton">
+        <attr name="text" format="string" />
+        <attr name="text_color" format="color|reference" />
+        <attr name="success_color" format="color|reference" />
+        <attr name="failure_color" format="color|reference" />
+        <attr name="default_color" format="color|reference" />
+        <attr name="success_icon" format="reference" />
+        <attr name="failure_icon" format="reference" />
+        <attr name="inactive_button_alpha" format="float" />
+        <attr name="button_shape" format="enum">
+            <enum name="pill" value="0" />
+            <enum name="rectangle" value="1" />
+        </attr>
+        <attr name="dot_loader" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="PinInput">
+        <attr name="is_background_white" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="LineColorPicker">
+        <attr name="orientation" format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+        <attr name="colors" format="reference" />
+        <attr name="selectedColorIndex" format="integer" />
+        <attr name="thickness" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="DigitalTimePicker">
+        <attr name="contents_color" format="color|reference" />
+    </declare-styleable>
+</resources>

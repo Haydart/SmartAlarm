@@ -1,4 +1,4 @@
-package pl.rmakowiecki.smartalarm.base.mvp
+package pl.rmakowiecki.smartalarm.base.mvi
 
 import android.os.Bundle
 import android.support.annotation.LayoutRes
@@ -8,11 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import pl.rmakowiecki.smartalarm.base.Contracts
 
-abstract class MvpFragment<V : Contracts.View, out RO : Contracts.Router, P : MvpPresenter<V, RO>> : Fragment(), Contracts.View {
+abstract class MviFragment<V : Contracts.View, VS : Contracts.ViewState, out P : MviPresenter<V, VS>> :
+        Fragment(), Contracts.View {
 
     @get:LayoutRes
     protected abstract val layout: Int
-    protected lateinit var presenter: P
+
+    private lateinit var presenter: P
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +31,7 @@ abstract class MvpFragment<V : Contracts.View, out RO : Contracts.Router, P : Mv
     }
 
     override fun onDestroyView() {
-        presenter.onViewDestroy()
+        presenter.detachView(retainInstance = true)
         super.onDestroyView()
     }
 
