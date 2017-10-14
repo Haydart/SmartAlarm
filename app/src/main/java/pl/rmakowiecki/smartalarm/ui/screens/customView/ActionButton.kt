@@ -39,7 +39,7 @@ private const val DEFAULT_INACTIVE_ALPHA = .75f
 private const val START_NO_DELAY = 0
 
 class ActionButton @JvmOverloads constructor(
-        val context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     private var centerX = 0
@@ -53,7 +53,7 @@ class ActionButton @JvmOverloads constructor(
     private var iconSuccess: Drawable? = null
     private var iconFailure: Drawable? = null
     private var layoutInflater: LayoutInflater? = null
-    private var isEnabled: Boolean = false
+    private var enabled = false
 
     private lateinit var successFrameLayout: FrameLayout
     private lateinit var failureFrameLayout: FrameLayout
@@ -123,9 +123,9 @@ class ActionButton @JvmOverloads constructor(
 
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
-        isEnabled = enabled
+        this.enabled = enabled
         isClickable = enabled
-        alpha = if (isEnabled) 1f else inactiveAlpha
+        alpha = if (this.enabled) 1f else inactiveAlpha
     }
 
     fun showSuccess() {
@@ -170,7 +170,7 @@ class ActionButton @JvmOverloads constructor(
         val backgroundDrawable = ContextCompat.getDrawable(context, R.drawable.pill_button)
         backgroundDrawable.setColorFilter(color, PorterDuff.Mode.SRC_IN)
         background = backgroundDrawable
-        setEnabled(isEnabled)
+        setEnabled(enabled)
     }
 
     private fun performSlideInAnimation(view: View, animationStartOffset: Int) {
