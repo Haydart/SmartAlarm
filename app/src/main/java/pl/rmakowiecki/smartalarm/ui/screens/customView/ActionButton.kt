@@ -26,12 +26,22 @@ import android.widget.TextView
 import com.wang.avi.AVLoadingIndicatorView
 import pl.rmakowiecki.smartalarm.R
 
+private const val CIRCULAR_REVEAL_DURATION = 500
+private const val CIRCULAR_REVEAL_RADIUS = 1024
+private const val CIRCULAR_REVEAL_DELAY = 1250
+private const val FAILURE_ICON_DISPLAYING_TIME = 800
+private const val SLIDE_DURATION = 300
+private const val SLIDE_DELAY = 300
+private const val SLIDE_IN_Y_DELTA = 500
+private const val SLIDE_OUT_Y_DELTA = -500
+private const val ERROR_DISPLAY_DURATION = 1500
+private const val DEFAULT_INACTIVE_ALPHA = .75f
+private const val START_NO_DELAY = 0
+
 class ActionButton @JvmOverloads constructor(
-        val context: Context, val attrs: AttributeSet? = null, defStyleAttr: Int = 0
+        val context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private var centerX: Int = 0
-    private var centerY: Int = 0
     private var successColor: Int = 0
     private var textColor: Int = 0
     private var failureColor: Int = 0
@@ -41,21 +51,15 @@ class ActionButton @JvmOverloads constructor(
     private var iconSuccess: Drawable? = null
     private var iconFailure: Drawable? = null
     private var layoutInflater: LayoutInflater? = null
-    private var isEnabled = false
-    private var shape = ButtonShape.PILL
+    private var isEnabled: Boolean = false
 
-    @BindView(R.id.frame_layout_button_success) internal var successFrameLayout: FrameLayout? = null
-    @BindView(R.id.frame_layout_button_failure) internal var failureFrameLayout: FrameLayout? = null
-    @BindView(R.id.text_view_button_action_desc) internal var buttonActionDescriptionTextView: TextView? = null
-    @BindView(R.id.text_view_error_desc) internal var buttonErrorDescTextView: TextView? = null
-    @BindView(R.id.progress_indicator) internal var progressView: AVLoadingIndicatorView? = null
-    @BindView(R.id.icon_success) internal var successImageView: ImageView? = null
-    @BindView(R.id.icon_failure) internal var failureImageView: ImageView? = null
-
-    private enum class ButtonShape {
-        PILL,
-        RECTANGLE
-    }
+    private lateinit var successFrameLayout: FrameLayout
+    private lateinit var failureFrameLayout: FrameLayout
+    private lateinit var buttonActionDescriptionTextView: TextView
+    private lateinit var buttonErrorDescTextView: TextView
+    private lateinit var progressView: AVLoadingIndicatorView
+    private lateinit var successImageView: ImageView
+    private lateinit var failureImageView: ImageView
 
     init {
         initView()
@@ -78,36 +82,37 @@ class ActionButton @JvmOverloads constructor(
         iconSuccess = typedAttrArray.getDrawable(R.styleable.ActionButton_success_icon)
         iconFailure = typedAttrArray.getDrawable(R.styleable.ActionButton_failure_icon)
         inactiveAlpha = typedAttrArray.getFloat(R.styleable.ActionButton_inactive_button_alpha, DEFAULT_INACTIVE_ALPHA)
-        shape = if (typedAttrArray.getInt(R.styleable.ActionButton_button_shape, 1) == 0) ButtonShape.PILL else ButtonShape.RECTANGLE
         buttonActionDescription = typedAttrArray.getString(R.styleable.ActionButton_text)
         typedAttrArray.recycle()
     }
 
     private fun bindViews() {
+        successFrameLayout = findViewById((R.id.frame_layout_button_success))
+        failureFrameLayout = findViewById((R.id.frame_layout_button_failure))
+        buttonActionDescriptionTextView = findViewById((R.id.text_view_button_action_desc))
+        buttonErrorDescTextView = findViewById((R.id.text_view_error_desc))
+        progressView = findViewById((R.id.progress_indicator))
+        successImageView = findViewById((R.id.icon_success))
+        failureImageView = findViewById((R.id.icon_failure))
     }
 
     private fun initAfterViewBinding() {
         setEnabled(false)
-        setBackgroundDependingOnButtonShape(this)
+        setWidgetBackground(this)
         (background as GradientDrawable).setColor(defaultColor)
-        buttonActionDescriptionTextView!!.text = buttonActionDescription
-        buttonActionDescriptionTextView!!.setTextColor(textColor)
-        successFrameLayout!!.background.setColorFilter(successColor, PorterDuff.Mode.SRC_ATOP)
-        failureFrameLayout!!.background.setColorFilter(failureColor, PorterDuff.Mode.SRC_ATOP)
-        successImageView!!.setImageDrawable(iconSuccess)
+        buttonActionDescriptionTextView.text = buttonActionDescription
+        buttonActionDescriptionTextView.setTextColor(textColor)
+        successFrameLayout.background.setColorFilter(successColor, PorterDuff.Mode.SRC_ATOP)
+        failureFrameLayout.background.setColorFilter(failureColor, PorterDuff.Mode.SRC_ATOP)
+        successImageView.setImageDrawable(iconSuccess)
         iconSuccess!!.setColorFilter(textColor, PorterDuff.Mode.SRC_IN)
-        failureImageView!!.setImageDrawable(iconFailure)
+        failureImageView.setImageDrawable(iconFailure)
         iconFailure!!.setColorFilter(textColor, PorterDuff.Mode.SRC_IN)
-        progressView!!.setIndicatorColor(textColor)
+        progressView.setIndicatorColor(textColor)
     }
 
-    private fun setBackgroundDependingOnButtonShape(viewGroup: ViewGroup?) {
-        viewGroup!!.setBackgroundResource(if (shape == ButtonShape.PILL)
-            R.drawable.pill_button
-        else
-            R.drawable.rectangle_action_button
-        )
-    }
+    private fun setWidgetBackground(viewGroup: ViewGroup) = viewGroup
+            .setBackgroundResource(R.drawable.pill_button)
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
@@ -123,7 +128,7 @@ class ActionButton @JvmOverloads constructor(
 
     fun showSuccess() {
         performSlideOutAnimation(progressView, START_NO_DELAY, {
-            progressView!!.setVisibility(View.INVISIBLE)
+            progressView!!.visibility = View.INVISIBLE
             successFrameLayout!!.visibility = View.VISIBLE
         })
         performSlideInAnimation(successImageView, SLIDE_DELAY)
@@ -136,14 +141,14 @@ class ActionButton @JvmOverloads constructor(
             createAndStartCircularRevealAnimation(failureFrameLayout, CIRCULAR_REVEAL_DELAY)
         } else {
             performFadeInAnimation(failureFrameLayout)
-            performSlideOutAnimation(progressView, CIRCULAR_REVEAL_DELAY, { progressView!!.setVisibility(View.INVISIBLE) })
+            performSlideOutAnimation(progressView, CIRCULAR_REVEAL_DELAY, { progressView!!.visibility = View.INVISIBLE })
         }
         showErrorMessage(message, FAILURE_ICON_DISPLAYING_TIME)
     }
 
     private fun setLayoutsBackground() {
-        setBackgroundDependingOnButtonShape(failureFrameLayout)
-        setBackgroundDependingOnButtonShape(successFrameLayout)
+        setWidgetBackground(failureFrameLayout)
+        setWidgetBackground(successFrameLayout)
         failureFrameLayout!!.background.setColorFilter(failureColor, PorterDuff.Mode.SRC_ATOP)
     }
 
@@ -162,7 +167,7 @@ class ActionButton @JvmOverloads constructor(
     }
 
     fun setColor(color: Int) {
-        val backgroundDrawable = ContextCompat.getDrawable(context!!, R.drawable.pill_button)
+        val backgroundDrawable = ContextCompat.getDrawable(context, R.drawable.pill_button)
         backgroundDrawable.setColorFilter(color, PorterDuff.Mode.SRC_IN)
         background = backgroundDrawable
         setEnabled(isEnabled)
@@ -171,32 +176,33 @@ class ActionButton @JvmOverloads constructor(
     private fun performSlideInAnimation(view: View?, startOffset: Int) {
         view!!.visibility = View.VISIBLE
 
-        val slideInAnimation = TranslateAnimation(0f, 0f, SLIDE_IN_Y_DELTA.toFloat(), 0f)
-        slideInAnimation.duration = SLIDE_DURATION.toLong()
-        slideInAnimation.interpolator = LinearOutSlowInInterpolator()
-        slideInAnimation.startOffset = startOffset.toLong()
+        val slideInAnimation = TranslateAnimation(0f, 0f, SLIDE_IN_Y_DELTA.toFloat(), 0f).apply {
+            slideInAnimation.duration = SLIDE_DURATION.toLong()
+            slideInAnimation.interpolator = LinearOutSlowInInterpolator()
+            slideInAnimation.startOffset = startOffset.toLong()
+        }
         view.startAnimation(slideInAnimation)
     }
 
-    private fun performSlideOutAnimation(view: View?, startOffset: Int, onEndAction: Runnable) {
+    private fun performSlideOutAnimation(view: View?, startOffset: Int, onEndAction: () -> Unit) {
         val slideOutAnimation = TranslateAnimation(0f, 0f, 0f, SLIDE_OUT_Y_DELTA.toFloat())
         slideOutAnimation.duration = SLIDE_DURATION.toLong()
         slideOutAnimation.startOffset = startOffset.toLong()
         slideOutAnimation.interpolator = FastOutLinearInInterpolator()
         slideOutAnimation.setAnimationListener(object : AnimationListenerAdapter() {
             fun onAnimationEnd(animation: Animation) {
-                onEndAction.run()
+                onEndAction()
             }
         })
         view!!.startAnimation(slideOutAnimation)
     }
 
-    private fun performScaleUpAndFadeOutAnimation(view: View?, startOffset: Int, onEndAction: Runnable) {
+    private fun performScaleUpAndFadeOutAnimation(view: View?, startOffset: Int, onEndAction: () -> Unit) {
         val scaleUpFadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.scale_up_fade_out)
         scaleUpFadeOutAnimation.startOffset = startOffset.toLong()
         scaleUpFadeOutAnimation.setAnimationListener(object : AnimationListenerAdapter() {
             fun onAnimationEnd(animation: Animation) {
-                onEndAction.run()
+                onEndAction()
             }
         })
         view!!.startAnimation(scaleUpFadeOutAnimation)
@@ -295,17 +301,12 @@ class ActionButton @JvmOverloads constructor(
         centerY = height / 2
     }
 
-    companion object {
-        private val CIRCULAR_REVEAL_DURATION = 500
-        private val CIRCULAR_REVEAL_RADIUS = 1024
-        private val CIRCULAR_REVEAL_DELAY = 1250
-        private val FAILURE_ICON_DISPLAYING_TIME = 800
-        private val SLIDE_DURATION = 300
-        private val SLIDE_DELAY = 300
-        private val SLIDE_IN_Y_DELTA = 500
-        private val SLIDE_OUT_Y_DELTA = -500
-        private val ERROR_DISPLAY_DURATION = 1500
-        private val DEFAULT_INACTIVE_ALPHA = .75f
-        val START_NO_DELAY = 0
+    private inner open class AnimationListenerAdapter : Animation.AnimationListener {
+
+        override fun onAnimationStart(animation: Animation) = Unit
+
+        override fun onAnimationEnd(animation: Animation) = Unit
+
+        override fun onAnimationRepeat(animation: Animation) = Unit
     }
 }
