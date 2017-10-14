@@ -12,6 +12,4 @@ interface AuthView : Contracts.View {
     fun facebookAuthIntent(): Observable<Unit>
 }
 
-data class AuthViewState(
-        val
-) : Contracts.ViewState
+class AuthViewState : Contracts.ViewState

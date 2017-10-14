@@ -39,19 +39,21 @@ private const val DEFAULT_INACTIVE_ALPHA = .75f
 private const val START_NO_DELAY = 0
 
 class ActionButton @JvmOverloads constructor(
-        val context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private var successColor: Int = 0
-    private var textColor: Int = 0
-    private var failureColor: Int = 0
-    private var defaultColor: Int = 0
-    private var inactiveAlpha: Float = 0.toFloat()
+    private var centerX = 0
+    private var centerY = 0
+    private var successColor = 0
+    private var textColor = 0
+    private var failureColor = 0
+    private var defaultColor = 0
+    private var inactiveAlpha = 0f
     private var buttonActionDescription: String? = null
     private var iconSuccess: Drawable? = null
     private var iconFailure: Drawable? = null
     private var layoutInflater: LayoutInflater? = null
-    private var isEnabled: Boolean = false
+    private var enabled = false
 
     private lateinit var successFrameLayout: FrameLayout
     private lateinit var failureFrameLayout: FrameLayout
@@ -121,18 +123,18 @@ class ActionButton @JvmOverloads constructor(
 
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
-        isEnabled = enabled
+        this.enabled = enabled
         isClickable = enabled
-        alpha = if (isEnabled) 1f else inactiveAlpha
+        alpha = if (this.enabled) 1f else inactiveAlpha
     }
 
     fun showSuccess() {
         performSlideOutAnimation(progressView, START_NO_DELAY, {
-            progressView!!.visibility = View.INVISIBLE
-            successFrameLayout!!.visibility = View.VISIBLE
+            progressView.visibility = View.INVISIBLE
+            successFrameLayout.visibility = View.VISIBLE
         })
         performSlideInAnimation(successImageView, SLIDE_DELAY)
-        performScaleUpAndFadeOutAnimation(successImageView, SLIDE_DELAY + SLIDE_DURATION, { successImageView!!.visibility = View.INVISIBLE })
+        performScaleUpAndFadeOutAnimation(successImageView, SLIDE_DELAY + SLIDE_DURATION, { successImageView.visibility = View.INVISIBLE })
     }
 
     fun showFailure(message: String) {
@@ -141,7 +143,7 @@ class ActionButton @JvmOverloads constructor(
             createAndStartCircularRevealAnimation(failureFrameLayout, CIRCULAR_REVEAL_DELAY)
         } else {
             performFadeInAnimation(failureFrameLayout)
-            performSlideOutAnimation(progressView, CIRCULAR_REVEAL_DELAY, { progressView!!.visibility = View.INVISIBLE })
+            performSlideOutAnimation(progressView, CIRCULAR_REVEAL_DELAY, { progressView.visibility = View.INVISIBLE })
         }
         showErrorMessage(message, FAILURE_ICON_DISPLAYING_TIME)
     }
@@ -149,39 +151,36 @@ class ActionButton @JvmOverloads constructor(
     private fun setLayoutsBackground() {
         setWidgetBackground(failureFrameLayout)
         setWidgetBackground(successFrameLayout)
-        failureFrameLayout!!.background.setColorFilter(failureColor, PorterDuff.Mode.SRC_ATOP)
+        failureFrameLayout.background.setColorFilter(failureColor, PorterDuff.Mode.SRC_ATOP)
     }
 
     fun showProcessing() {
         isClickable = false
-        performSlideOutAnimation(buttonActionDescriptionTextView, 0, { buttonActionDescriptionTextView!!.visibility = View.INVISIBLE })
+        performSlideOutAnimation(buttonActionDescriptionTextView, 0, { buttonActionDescriptionTextView.visibility = View.INVISIBLE })
         performSlideInAnimation(progressView, SLIDE_DELAY)
     }
 
-    fun setTextColor(color: Int) {
-        buttonActionDescriptionTextView!!.setTextColor(color)
-    }
+    fun setTextColor(color: Int) = buttonActionDescriptionTextView
+            .setTextColor(color)
 
-    fun setLoaderColor(color: Int) {
-        progressView!!.setIndicatorColor(color)
-    }
+    fun setLoaderColor(color: Int) = progressView
+            .setIndicatorColor(color)
 
     fun setColor(color: Int) {
         val backgroundDrawable = ContextCompat.getDrawable(context, R.drawable.pill_button)
         backgroundDrawable.setColorFilter(color, PorterDuff.Mode.SRC_IN)
         background = backgroundDrawable
-        setEnabled(isEnabled)
+        setEnabled(enabled)
     }
 
-    private fun performSlideInAnimation(view: View?, startOffset: Int) {
-        view!!.visibility = View.VISIBLE
-
-        val slideInAnimation = TranslateAnimation(0f, 0f, SLIDE_IN_Y_DELTA.toFloat(), 0f).apply {
-            slideInAnimation.duration = SLIDE_DURATION.toLong()
-            slideInAnimation.interpolator = LinearOutSlowInInterpolator()
-            slideInAnimation.startOffset = startOffset.toLong()
-        }
-        view.startAnimation(slideInAnimation)
+    private fun performSlideInAnimation(view: View, animationStartOffset: Int) {
+        view.visibility = View.VISIBLE
+        view.startAnimation(
+                TranslateAnimation(0f, 0f, SLIDE_IN_Y_DELTA.toFloat(), 0f).apply {
+                    duration = SLIDE_DURATION.toLong()
+                    interpolator = LinearOutSlowInInterpolator()
+                    startOffset = animationStartOffset.toLong()
+                })
     }
 
     private fun performSlideOutAnimation(view: View?, startOffset: Int, onEndAction: () -> Unit) {
@@ -190,22 +189,22 @@ class ActionButton @JvmOverloads constructor(
         slideOutAnimation.startOffset = startOffset.toLong()
         slideOutAnimation.interpolator = FastOutLinearInInterpolator()
         slideOutAnimation.setAnimationListener(object : AnimationListenerAdapter() {
-            fun onAnimationEnd(animation: Animation) {
+            override fun onAnimationEnd(animation: Animation) {
                 onEndAction()
             }
         })
         view!!.startAnimation(slideOutAnimation)
     }
 
-    private fun performScaleUpAndFadeOutAnimation(view: View?, startOffset: Int, onEndAction: () -> Unit) {
+    private fun performScaleUpAndFadeOutAnimation(view: View, animationStartOffset: Int, onEndAction: () -> Unit) {
         val scaleUpFadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.scale_up_fade_out)
-        scaleUpFadeOutAnimation.startOffset = startOffset.toLong()
+        scaleUpFadeOutAnimation.startOffset = animationStartOffset.toLong()
         scaleUpFadeOutAnimation.setAnimationListener(object : AnimationListenerAdapter() {
-            fun onAnimationEnd(animation: Animation) {
+            override fun onAnimationEnd(animation: Animation) {
                 onEndAction()
             }
         })
-        view!!.startAnimation(scaleUpFadeOutAnimation)
+        view.startAnimation(scaleUpFadeOutAnimation)
     }
 
     private fun performFadeInAnimation(view: View?) {
@@ -217,7 +216,7 @@ class ActionButton @JvmOverloads constructor(
     private fun performFadeOutAnimation(view: View) {
         val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
         fadeOutAnimation.setAnimationListener(object : AnimationListenerAdapter() {
-            fun onAnimationEnd(animation: Animation) {
+            override fun onAnimationEnd(animation: Animation) {
                 view.visibility = View.INVISIBLE
             }
         })
