@@ -14,4 +14,7 @@
     <dimen name="text_size_extra_large">20sp</dimen>
 
     <dimen name="custom_button_corner_radius">4dp</dimen>
+    <dimen name="splash_icon_size">128dp</dimen>
+    <dimen name="splash_inscription_width">240dp</dimen>
+    <dimen name="splash_inscription_height">52dp</dimen>
 </resources>
