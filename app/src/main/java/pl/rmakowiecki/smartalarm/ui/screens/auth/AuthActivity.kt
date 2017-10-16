@@ -14,10 +14,6 @@ class AuthActivity : MviActivity<AuthView, AuthViewState, AuthPresenter>(), Auth
 
     override fun createPresenter() = AuthPresenter()
 
-    override fun render(authViewState: AuthViewState) {
-
-    }
-
     override fun emailInputIntent(): Observable<String> =
             RxTextView.textChanges(emailInput).map { it.toString() }
 
@@ -29,4 +25,8 @@ class AuthActivity : MviActivity<AuthView, AuthViewState, AuthPresenter>(), Auth
 
     override fun emailSubmitIntent(): Observable<Unit> =
             RxView.clicks(continueButton).map { Unit }
+
+    override fun render(authViewState: AuthViewState) {
+
+    }
 }

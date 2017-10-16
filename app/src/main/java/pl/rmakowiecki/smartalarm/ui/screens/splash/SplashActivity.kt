@@ -19,6 +19,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
         setActivityBackground()
         Handler().postDelayed({ startLogoAnimation() }, 750)
+        Handler().postDelayed({ startAuthActivity() }, 1500)
     }
 
     private fun setActivityBackground() {
@@ -34,5 +35,9 @@ class SplashActivity : AppCompatActivity() {
                 .inflateTransition(R.transition.splash_logo) as TransitionSet
         TransitionManager.beginDelayedTransition(rootLayout, transitionSet)
         splashLogoInscription.visibility = View.VISIBLE
+    }
+
+    private fun startAuthActivity() {
+//todo implement
     }
 }

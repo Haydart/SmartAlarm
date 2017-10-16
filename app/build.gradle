@@ -22,7 +22,7 @@ android {
 }
 
 ext {
-	versions = [support         : "25.3.1",
+	versions = [support         : "26.0.1",
 	            firebase        : "11.0.2",
 	            rxkotlin        : "2.1.0",
 	            rxandroid       : "2.0.1",
@@ -59,6 +59,8 @@ dependencies {
 	testCompile("com.nhaarman:mockito-kotlin:$versions.mockitokotlin") {
 		transitive = false
 	}
+
+	compile "com.android.support:design:${versions.support}"
 
 	compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 	compile 'com.android.support.constraint:constraint-layout:1.0.2'
