@@ -8,4 +8,5 @@
     <color name="textSecondary">#757575</color>
     <color name="icons">#212121</color>
     <color name="divider">#BDBDBD</color>
+    <color name="failureRed">#FF0000</color>
 </resources>

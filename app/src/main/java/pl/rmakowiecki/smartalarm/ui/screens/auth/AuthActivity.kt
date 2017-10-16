@@ -12,6 +12,9 @@ import pl.rmakowiecki.smartalarm.ui.screens.customView.TilingDrawable
 
 class AuthActivity : MviActivity<AuthView, AuthViewState, AuthPresenter>(), AuthView {
 
+    override val shouldMoveToBack: Boolean
+        get() = true
+
     override val layoutRes: Int
         get() = R.layout.activity_auth
 

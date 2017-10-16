@@ -6,4 +6,7 @@
     <string name="transition_background">transition_background</string>
     <string name="transition_logo">transition_logo</string>
     <string name="text_input_hint_email">Email</string>
+    <string name="facebook_sign_in">Sign in with Facebook</string>
+    <string name="google_sign_in">Sign in with Google</string>
+    <string name="forgot_password">Forgot password?</string>
 </resources>

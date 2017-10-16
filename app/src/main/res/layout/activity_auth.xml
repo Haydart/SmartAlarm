@@ -1,92 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guidelineHorizontalIconTop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.07"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="40dp" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guidelineHorizontalIconBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.21"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="119dp" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guidelineHorizontalHeaderBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="170dp" />
-
-    <ImageView
-        android:id="@+id/headerBackgroundImage"
-        android:layout_width="0dp"
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineHorizontalHeaderBottom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        android:layout_weight="0.25"
+        android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:adjustViewBounds="true"
-        android:src="@drawable/app_logo"
-        android:transitionName="@string/transition_logo"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineHorizontalIconBottom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guidelineHorizontalIconTop"
-        tools:layout_editor_absoluteX="153dp" />
+        <ImageView
+            android:id="@+id/headerBackgroundImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:layout_width="@dimen/auth_screen_logo_size"
+            android:layout_height="@dimen/auth_screen_logo_size"
+            android:layout_gravity="center"
+            android:src="@drawable/app_logo"
+            android:transitionName="@string/transition_logo" />
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/contentLayout"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="0dp"
+        android:layout_weight="0.75"
+        android:gravity="center"
+        android:orientation="vertical"
         android:transitionName="@string/transition_auth_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerBackgroundImage"
-        android:orientation="vertical">
+        android:paddingBottom="@dimen/margin_xxlarge">
 
         <Button
             android:id="@+id/googleButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Facebook" />
+            android:background="?attr/selectableItemBackground"
+            android:drawableStart="@drawable/fb_login_icon"
+            android:paddingBottom="@dimen/margin_medium"
+            android:paddingEnd="@dimen/auth_screen_button_padding"
+            android:paddingStart="@dimen/auth_screen_button_padding"
+            android:paddingTop="@dimen/margin_medium"
+            android:text="@string/facebook_sign_in"
+            android:textAllCaps="false"
+            android:textColor="@color/textSecondary"
+            android:textSize="@dimen/text_size_large" />
 
         <Button
             android:id="@+id/facebookButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Google" />
+            android:background="?attr/selectableItemBackground"
+            android:drawableStart="@drawable/google_login_icon"
+            android:paddingBottom="@dimen/margin_medium"
+            android:paddingEnd="@dimen/auth_screen_button_padding"
+            android:paddingStart="@dimen/auth_screen_button_padding"
+            android:paddingTop="@dimen/margin_medium"
+            android:text="@string/google_sign_in"
+            android:textAllCaps="false"
+            android:textColor="@color/textSecondary"
+            android:textSize="@dimen/text_size_large" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/text_input_height"
             android:layout_marginLeft="@dimen/text_input_side_margin"
-            android:layout_marginRight="@dimen/text_input_side_margin">
+            android:layout_marginRight="@dimen/text_input_side_margin"
+            android:layout_marginTop="@dimen/text_size_large">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/emailInput"
@@ -96,11 +81,26 @@
                 android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
 
-        <Button
+        <pl.rmakowiecki.smartalarm.ui.screens.customView.ActionButton
             android:id="@+id/continueButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/action_button_height"
+            android:layout_margin="@dimen/margin_large"
+            android:enabled="true"
+            app:default_color="@color/accent"
+            app:failure_color="@color/failureRed"
+            app:failure_icon="@drawable/icon_failure_pill_button"
+            app:success_icon="@drawable/icon_success_pill_button"
+            app:text="Continue"
+            app:text_color="@android:color/white" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Continue" />
+            android:text="@string/forgot_password"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:textColor="@color/accent" />
 
     </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

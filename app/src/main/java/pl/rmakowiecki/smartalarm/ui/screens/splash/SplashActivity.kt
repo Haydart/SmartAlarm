@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.transition.Explode
 import android.transition.TransitionInflater
 import android.transition.TransitionManager
 import android.transition.TransitionSet
@@ -44,8 +45,8 @@ class SplashActivity : AppCompatActivity() {
         startActivity<AuthActivity>(
                 Extra.SharedView(splashLogo),
                 Extra.SharedView(contentView)
-//                Extra.IntentFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         )
         overridePendingTransition(0, 0)
+        window.exitTransition = Explode()
     }
 }
