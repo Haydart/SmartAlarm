@@ -31,7 +31,7 @@ abstract class MviFragment<V : Contracts.View, VS : Contracts.ViewState, out P :
     }
 
     override fun onDestroyView() {
-        presenter.detachView(retainInstance = true)
+        presenter.detachView()
         super.onDestroyView()
     }
 

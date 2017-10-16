@@ -10,20 +10,16 @@ import io.reactivex.subjects.PublishSubject
 import pl.rmakowiecki.smartalarm.base.Contracts
 import java.util.*
 
-abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>(initialViewState: VS) : Contracts.Presenter {
+abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>() : Contracts.Presenter {
 
-    private var viewStateBehaviorSubject: BehaviorSubject<VS> = BehaviorSubject.createDefault<VS>(initialViewState)
+    private var viewStateBehaviorSubject: BehaviorSubject<VS> = BehaviorSubject.create()
     private var subscribeViewStateMethodCalled = false
-    private val intentRelaysBinders = ArrayList<IntentRelayBinderPair<*>>(4)
+    private val intentRelaysBinders = ArrayList<IntentRelayBinderPair<*>>()
     private var intentsDisposables = CompositeDisposable()
     private var viewRelayConsumerDisposable = Disposables.disposed()
     private var viewStateDisposable = Disposables.disposed()
     private var viewAttachedFirstTime = true
     private var viewStateConsumer: ((view: V, viewState: VS) -> Unit)? = null
-
-    init {
-        reset()
-    }
 
     @CallSuper fun attachView(view: V) {
         if (viewAttachedFirstTime) {
@@ -34,10 +30,9 @@ abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>(initia
             subscribeViewStateConsumerActually(view)
         }
 
-        val intentsSize = intentRelaysBinders.size
-        (0 until intentsSize)
-                .map { intentRelaysBinders[it] }
-                .forEach { bindIntentActually(view, it as IntentRelayBinderPair<Any>) }
+        intentRelaysBinders.forEach {
+            bindIntentActually(view, it)
+        }
 
         viewAttachedFirstTime = false
     }
@@ -50,25 +45,13 @@ abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>(initia
         }
     }
 
-    @CallSuper fun detachView(retainInstance: Boolean) {
-        if (!retainInstance) {
-            viewStateDisposable.dispose()
-
-            unbindIntents()
-            reset()
-        }
-
+    @CallSuper
+    fun detachView() {
         viewRelayConsumerDisposable.dispose()
         intentsDisposables.dispose()
     }
 
     protected fun unbindIntents() = Unit
-
-    private fun reset() {
-        viewAttachedFirstTime = true
-        intentRelaysBinders.clear()
-        subscribeViewStateMethodCalled = false
-    }
 
     @MainThread private fun <I> bindIntentActually(view: V, relayBinderPair: IntentRelayBinderPair<I>): Observable<I> {
 

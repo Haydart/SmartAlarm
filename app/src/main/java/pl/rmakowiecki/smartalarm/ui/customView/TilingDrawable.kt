@@ -1,4 +1,4 @@
-package pl.rmakowiecki.smartalarm.ui.screens.customView
+package pl.rmakowiecki.smartalarm.ui.customView
 
 import android.graphics.Canvas
 import android.graphics.Rect

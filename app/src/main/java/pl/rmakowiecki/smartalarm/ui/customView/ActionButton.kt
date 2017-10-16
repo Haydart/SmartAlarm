@@ -1,4 +1,4 @@
-package pl.rmakowiecki.smartalarm.ui.screens.customView
+package pl.rmakowiecki.smartalarm.ui.customView
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -7,7 +7,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.animation.FastOutLinearInInterpolator
@@ -25,6 +24,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.wang.avi.AVLoadingIndicatorView
 import pl.rmakowiecki.smartalarm.R
+import pl.rmakowiecki.smartalarm.extensions.invisible
+import pl.rmakowiecki.smartalarm.extensions.visible
 
 private const val CIRCULAR_REVEAL_DURATION = 500
 private const val CIRCULAR_REVEAL_RADIUS = 1024
@@ -99,22 +100,22 @@ class ActionButton @JvmOverloads constructor(
     }
 
     private fun initAfterViewBinding() {
-        setEnabled(false)
+        isEnabled = false
         setWidgetBackground(this)
-        (background as GradientDrawable).setColor(defaultColor)
+        background.setColorFilter(defaultColor, PorterDuff.Mode.ADD)
         buttonActionDescriptionTextView.text = buttonActionDescription
         buttonActionDescriptionTextView.setTextColor(textColor)
         successFrameLayout.background.setColorFilter(successColor, PorterDuff.Mode.SRC_ATOP)
         failureFrameLayout.background.setColorFilter(failureColor, PorterDuff.Mode.SRC_ATOP)
         successImageView.setImageDrawable(iconSuccess)
-        iconSuccess!!.setColorFilter(textColor, PorterDuff.Mode.SRC_IN)
+        iconSuccess?.setColorFilter(textColor, PorterDuff.Mode.SRC_IN)
         failureImageView.setImageDrawable(iconFailure)
-        iconFailure!!.setColorFilter(textColor, PorterDuff.Mode.SRC_IN)
+        iconFailure?.setColorFilter(textColor, PorterDuff.Mode.SRC_IN)
         progressView.setIndicatorColor(textColor)
     }
 
     private fun setWidgetBackground(viewGroup: ViewGroup) = viewGroup
-            .setBackgroundResource(R.drawable.pill_button)
+            .setBackgroundResource(R.drawable.pill_button_ripple)
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
@@ -129,12 +130,14 @@ class ActionButton @JvmOverloads constructor(
     }
 
     fun showSuccess() {
-        performSlideOutAnimation(progressView, START_NO_DELAY, {
-            progressView.visibility = View.INVISIBLE
-            successFrameLayout.visibility = View.VISIBLE
-        })
+        performSlideOutAnimation(progressView, START_NO_DELAY) {
+            progressView.invisible()
+            successFrameLayout.visible()
+        }
         performSlideInAnimation(successImageView, SLIDE_DELAY)
-        performScaleUpAndFadeOutAnimation(successImageView, SLIDE_DELAY + SLIDE_DURATION, { successImageView.visibility = View.INVISIBLE })
+        performScaleUpAndFadeOutAnimation(successImageView, SLIDE_DELAY + SLIDE_DURATION) {
+            successImageView.invisible()
+        }
     }
 
     fun showFailure(message: String) {
@@ -143,7 +146,9 @@ class ActionButton @JvmOverloads constructor(
             createAndStartCircularRevealAnimation(failureFrameLayout, CIRCULAR_REVEAL_DELAY)
         } else {
             performFadeInAnimation(failureFrameLayout)
-            performSlideOutAnimation(progressView, CIRCULAR_REVEAL_DELAY, { progressView.visibility = View.INVISIBLE })
+            performSlideOutAnimation(progressView, CIRCULAR_REVEAL_DELAY) {
+                progressView.invisible()
+            }
         }
         showErrorMessage(message, FAILURE_ICON_DISPLAYING_TIME)
     }
@@ -156,7 +161,9 @@ class ActionButton @JvmOverloads constructor(
 
     fun showProcessing() {
         isClickable = false
-        performSlideOutAnimation(buttonActionDescriptionTextView, 0, { buttonActionDescriptionTextView.visibility = View.INVISIBLE })
+        performSlideOutAnimation(buttonActionDescriptionTextView, 0) {
+            buttonActionDescriptionTextView.invisible()
+        }
         performSlideInAnimation(progressView, SLIDE_DELAY)
     }
 
@@ -170,12 +177,12 @@ class ActionButton @JvmOverloads constructor(
         val backgroundDrawable = ContextCompat.getDrawable(context, R.drawable.pill_button)
         backgroundDrawable.setColorFilter(color, PorterDuff.Mode.SRC_IN)
         background = backgroundDrawable
-        setEnabled(enabled)
+        isEnabled = enabled
     }
 
-    private fun performSlideInAnimation(view: View, animationStartOffset: Int) {
-        view.visibility = View.VISIBLE
-        view.startAnimation(
+    private fun performSlideInAnimation(view: View, animationStartOffset: Int) = with(view) {
+        visible()
+        startAnimation(
                 TranslateAnimation(0f, 0f, SLIDE_IN_Y_DELTA.toFloat(), 0f).apply {
                     duration = SLIDE_DURATION.toLong()
                     interpolator = LinearOutSlowInInterpolator()
@@ -183,43 +190,49 @@ class ActionButton @JvmOverloads constructor(
                 })
     }
 
-    private fun performSlideOutAnimation(view: View?, startOffset: Int, onEndAction: () -> Unit) {
-        val slideOutAnimation = TranslateAnimation(0f, 0f, 0f, SLIDE_OUT_Y_DELTA.toFloat())
-        slideOutAnimation.duration = SLIDE_DURATION.toLong()
-        slideOutAnimation.startOffset = startOffset.toLong()
-        slideOutAnimation.interpolator = FastOutLinearInInterpolator()
-        slideOutAnimation.setAnimationListener(object : AnimationListenerAdapter() {
-            override fun onAnimationEnd(animation: Animation) {
-                onEndAction()
-            }
-        })
-        view!!.startAnimation(slideOutAnimation)
+    private fun performSlideOutAnimation(view: View, animationStartOffset: Int, onEndAction: () -> Unit) {
+        val slideOutAnimation = TranslateAnimation(0f, 0f, 0f, SLIDE_OUT_Y_DELTA.toFloat()).apply {
+
+            duration = SLIDE_DURATION.toLong()
+            startOffset = animationStartOffset.toLong()
+            interpolator = FastOutLinearInInterpolator()
+            setAnimationListener(object : AnimationListenerAdapter() {
+                override fun onAnimationEnd(animation: Animation) {
+                    onEndAction()
+                }
+            })
+        }
+        view.startAnimation(slideOutAnimation)
     }
 
     private fun performScaleUpAndFadeOutAnimation(view: View, animationStartOffset: Int, onEndAction: () -> Unit) {
-        val scaleUpFadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.scale_up_fade_out)
-        scaleUpFadeOutAnimation.startOffset = animationStartOffset.toLong()
-        scaleUpFadeOutAnimation.setAnimationListener(object : AnimationListenerAdapter() {
-            override fun onAnimationEnd(animation: Animation) {
-                onEndAction()
-            }
-        })
+        val scaleUpFadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.scale_up_fade_out).apply {
+
+            startOffset = animationStartOffset.toLong()
+            setAnimationListener(object : AnimationListenerAdapter() {
+                override fun onAnimationEnd(animation: Animation) {
+                    onEndAction()
+                }
+            })
+        }
         view.startAnimation(scaleUpFadeOutAnimation)
     }
 
-    private fun performFadeInAnimation(view: View?) {
-        view!!.visibility = View.VISIBLE
+    private fun performFadeInAnimation(view: View) {
+        view.visible()
         val fadeInAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
         view.startAnimation(fadeInAnimation)
     }
 
     private fun performFadeOutAnimation(view: View) {
-        val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-        fadeOutAnimation.setAnimationListener(object : AnimationListenerAdapter() {
-            override fun onAnimationEnd(animation: Animation) {
-                view.visibility = View.INVISIBLE
-            }
-        })
+        val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out).apply {
+
+            setAnimationListener(object : AnimationListenerAdapter() {
+                override fun onAnimationEnd(animation: Animation) {
+                    view.invisible()
+                }
+            })
+        }
         view.startAnimation(fadeOutAnimation)
     }
 
@@ -231,20 +244,25 @@ class ActionButton @JvmOverloads constructor(
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun createAndStartCircularRevealAnimation(view: View?, startOffset: Int) {
-        val circularRevealAnimation = ViewAnimationUtils.createCircularReveal(view,
-                centerX, centerY, 0f, CIRCULAR_REVEAL_RADIUS.toFloat())
-                .setDuration(CIRCULAR_REVEAL_DURATION.toLong())
-        circularRevealAnimation.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationStart(animation: Animator) {
-                view!!.visibility = View.VISIBLE
-            }
+    private fun createAndStartCircularRevealAnimation(view: View, startOffset: Int) {
+        val circularRevealAnimation = ViewAnimationUtils
+                .createCircularReveal(view, centerX, centerY, 0f, CIRCULAR_REVEAL_RADIUS.toFloat()).apply {
 
-            override fun onAnimationEnd(animation: Animator) {
-                resetButtonState(ERROR_DISPLAY_DURATION)
-            }
-        })
-        circularRevealAnimation.startDelay = startOffset.toLong()
+            duration = CIRCULAR_REVEAL_DURATION.toLong()
+
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator) {
+                    view.visible()
+                }
+
+                override fun onAnimationEnd(animation: Animator) {
+                    resetButtonState(ERROR_DISPLAY_DURATION)
+                }
+            })
+
+            startDelay = startOffset.toLong()
+        }
+
         circularRevealAnimation.start()
     }
 
@@ -259,40 +277,43 @@ class ActionButton @JvmOverloads constructor(
     private fun resetButtonStatePreLollipop() {
         postDelayed({
             resetViewsVisibilityAfterAnimation()
-            setEnabled(true)
+            isEnabled = true
         }, CIRCULAR_REVEAL_DELAY.toLong())
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun createAndStartCircularShrinkAnimation() {
-        val circularShrinkAnimation = ViewAnimationUtils.createCircularReveal(
-                failureFrameLayout,
-                centerX, centerY, CIRCULAR_REVEAL_RADIUS.toFloat(), 0f)
-        circularShrinkAnimation.duration = CIRCULAR_REVEAL_DURATION.toLong()
-        circularShrinkAnimation.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                resetViewsVisibilityAfterAnimation()
-                setEnabled(true)
-            }
-        })
+        val circularShrinkAnimation = ViewAnimationUtils
+                .createCircularReveal(failureFrameLayout, centerX, centerY, CIRCULAR_REVEAL_RADIUS.toFloat(), 0f).apply {
+
+            duration = CIRCULAR_REVEAL_DURATION.toLong()
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    resetViewsVisibilityAfterAnimation()
+                    isEnabled = true
+                }
+            })
+        }
         circularShrinkAnimation.start()
     }
 
     private fun resetViewsVisibilityAfterAnimation() {
-        failureFrameLayout!!.visibility = View.INVISIBLE
-        buttonErrorDescTextView!!.visibility = View.INVISIBLE
-        failureImageView!!.visibility = View.VISIBLE
+        failureFrameLayout.invisible()
+        buttonErrorDescTextView.invisible()
+        failureImageView.visible()
     }
 
     private fun resetViewsVisibilityBeforeAnimation() {
-        progressView!!.setVisibility(View.INVISIBLE)
-        buttonActionDescriptionTextView!!.visibility = View.VISIBLE
+        progressView.invisible()
+        buttonActionDescriptionTextView.visible()
     }
 
     private fun showErrorMessage(message: String, failureIconDisplayingTime: Int) {
-        buttonErrorDescTextView!!.text = message
+        buttonErrorDescTextView.text = message
         performSlideInAnimation(buttonErrorDescTextView, failureIconDisplayingTime)
-        performSlideOutAnimation(failureImageView, failureIconDisplayingTime, { failureImageView!!.visibility = View.INVISIBLE })
+        performSlideOutAnimation(failureImageView, failureIconDisplayingTime) {
+            failureImageView.invisible()
+        }
     }
 
     private fun calculateButtonCenter() {
