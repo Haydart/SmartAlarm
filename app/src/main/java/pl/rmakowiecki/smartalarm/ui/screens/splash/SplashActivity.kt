@@ -10,6 +10,9 @@ import android.transition.TransitionSet
 import android.view.View
 import kotlinx.android.synthetic.main.activity_splash.*
 import pl.rmakowiecki.smartalarm.R
+import pl.rmakowiecki.smartalarm.extensions.Extra
+import pl.rmakowiecki.smartalarm.extensions.startActivity
+import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthActivity
 import pl.rmakowiecki.smartalarm.ui.screens.customView.TilingDrawable
 
 class SplashActivity : AppCompatActivity() {
@@ -26,7 +29,7 @@ class SplashActivity : AppCompatActivity() {
         val rawDrawable = ContextCompat.getDrawable(this, R.drawable.background_vector)
 
         val tilingDrawable = TilingDrawable(rawDrawable)
-        rootLayout.background = tilingDrawable
+        contentLayout.background = tilingDrawable
     }
 
     private fun startLogoAnimation() {
@@ -38,6 +41,11 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun startAuthActivity() {
-//todo implement
+        startActivity<AuthActivity>(
+                Extra.SharedView(splashLogo),
+                Extra.SharedView(contentView)
+//                Extra.IntentFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        )
+        overridePendingTransition(0, 0)
     }
 }
