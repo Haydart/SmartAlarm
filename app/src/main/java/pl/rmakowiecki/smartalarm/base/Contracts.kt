@@ -5,4 +5,5 @@ interface Contracts {
     interface ViewState
     interface Interactor
     interface Presenter
+    interface Navigator
 }

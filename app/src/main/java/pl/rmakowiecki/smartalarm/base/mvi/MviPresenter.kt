@@ -10,9 +10,9 @@ import io.reactivex.subjects.PublishSubject
 import pl.rmakowiecki.smartalarm.base.Contracts
 import java.util.*
 
-abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>(initialViewState: VS) : Contracts.Presenter {
+abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>() : Contracts.Presenter {
 
-    private var viewStateBehaviorSubject: BehaviorSubject<VS> = BehaviorSubject.createDefault<VS>(initialViewState)
+    private var viewStateBehaviorSubject: BehaviorSubject<VS> = BehaviorSubject.create()
     private var subscribeViewStateMethodCalled = false
     private val intentRelaysBinders = ArrayList<IntentRelayBinderPair<*>>()
     private var intentsDisposables = CompositeDisposable()

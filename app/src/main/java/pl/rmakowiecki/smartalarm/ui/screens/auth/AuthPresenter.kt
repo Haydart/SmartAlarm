@@ -1,24 +1,20 @@
 package pl.rmakowiecki.smartalarm.ui.screens.auth
 
-import io.reactivex.Observable
 import pl.rmakowiecki.smartalarm.base.mvi.MviPresenter
 
-class AuthPresenter : MviPresenter<AuthView, AuthViewState>(AuthViewState()) {
+class AuthPresenter(
+        private val interactor: Auth.Interactor
+) : MviPresenter<Auth.View, AuthViewState>() {
+
     override fun bindIntents() {
-        val facebookIntent = handleIntent(AuthView::facebookAuthIntent)
-                .map { AuthViewState() }
+        interactor.harnessUserIntents(
+                handleIntent(Auth.View::facebookAuthIntent),
+                handleIntent(Auth.View::googleAuthIntent),
+                handleIntent(Auth.View::emailInputIntent),
+                handleIntent(Auth.View::emailSubmitIntent),
+                handleIntent(Auth.View::forgotPasswordIntent)
+        )
 
-        val googleIntent = handleIntent(AuthView::googleAuthIntent)
-                .map { AuthViewState() }
-
-        val emailInputIntent = handleIntent(AuthView::emailInputIntent)
-                .map { AuthViewState() }
-
-        val emailSubmitIntent = handleIntent(AuthView::emailSubmitIntent)
-                .map { AuthViewState() }
-
-        val mergedIntentStream = Observable.merge(facebookIntent, googleIntent, emailInputIntent, emailSubmitIntent)
-
-        subscribeViewState(mergedIntentStream, AuthView::render)
+        subscribeViewState(interactor.mergedIntentStream, Auth.View::render)
     }
 }

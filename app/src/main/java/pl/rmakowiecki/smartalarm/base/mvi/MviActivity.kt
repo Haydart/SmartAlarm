@@ -26,7 +26,7 @@ abstract class MviActivity<V : Contracts.View, VS : Contracts.ViewState, out P :
     }
 
     override fun onStop() {
-        presenter.detachView(retainInstance = true)
+        presenter.detachView()
         super.onStop()
     }
 

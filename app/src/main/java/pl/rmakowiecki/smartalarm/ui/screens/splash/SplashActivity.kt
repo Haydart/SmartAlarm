@@ -13,8 +13,8 @@ import kotlinx.android.synthetic.main.activity_splash.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.extensions.Extra
 import pl.rmakowiecki.smartalarm.extensions.startActivity
+import pl.rmakowiecki.smartalarm.ui.customView.TilingDrawable
 import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthActivity
-import pl.rmakowiecki.smartalarm.ui.screens.customView.TilingDrawable
 
 class SplashActivity : AppCompatActivity() {
 
