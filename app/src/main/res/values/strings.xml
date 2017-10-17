@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name">SmartAlarm</string>
+    <string name="facebook_app_id" translatable="false">346142935847817</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb346142935847817</string>
+
+    <string name="app_name" translatable="false">SmartAlarm</string>
+
     <string name="button_text_disarm">Disarm the alarm</string>
     <string name="button_text_arm">Arm the alarm</string>
     <string name="transition_auth_content">auth_content</string>

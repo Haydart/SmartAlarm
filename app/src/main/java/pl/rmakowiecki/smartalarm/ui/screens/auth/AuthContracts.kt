@@ -17,14 +17,12 @@ interface Auth {
     interface Navigator : Contracts.Navigator
 
     interface Interactor : Contracts.Interactor {
-        val mergedIntentStream: Observable<AuthViewState>
-
         fun harnessUserIntents(
                 facebookButtonIntentObservable: Observable<Unit>,
                 googleButtonIntentObservable: Observable<Unit>,
                 emailInputIntentObservable: Observable<String>,
                 continueButtonIntentObservable: Observable<Unit>,
                 forgotPasswordIntentObservable: Observable<Unit>
-        )
+        ): Pair<Observable<AuthViewState>, Observable<Unit>>
     }
 }

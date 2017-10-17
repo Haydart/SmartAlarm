@@ -8,7 +8,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.25"
+        android:layout_weight="0.20"
         android:orientation="vertical">
 
         <ImageView
@@ -30,7 +30,7 @@
         android:id="@+id/contentLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.75"
+        android:layout_weight="0.80"
         android:gravity="center"
         android:orientation="vertical"
         android:transitionName="@string/transition_auth_content"
@@ -67,6 +67,7 @@
             android:textSize="@dimen/text_size_large" />
 
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/emailInputLayout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/text_input_height"
             android:layout_marginLeft="@dimen/text_input_side_margin"
@@ -75,6 +76,38 @@
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/emailInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_input_hint_email"
+                android:inputType="textEmailAddress" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/passwordInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_input_height"
+            android:layout_marginLeft="@dimen/text_input_side_margin"
+            android:layout_marginRight="@dimen/text_input_side_margin"
+            android:visibility="gone">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/passwordInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_input_hint_email"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/repeatPasswordInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_input_height"
+            android:layout_marginLeft="@dimen/text_input_side_margin"
+            android:layout_marginRight="@dimen/text_input_side_margin"
+            android:visibility="gone">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/repeatPasswordInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/text_input_hint_email"
@@ -102,6 +135,5 @@
             android:textAllCaps="true"
             android:textStyle="bold"
             android:textColor="@color/accent" />
-
     </LinearLayout>
 </LinearLayout>
