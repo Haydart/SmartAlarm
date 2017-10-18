@@ -13,9 +13,8 @@ class AuthInteractor : Auth.Interactor {
 
         val viewStateStream = Observable.merge(
                 emailInputIntentObservable.map { ChangeAction.EmailInput() },
-                continueButtonIntentObservable.map { ChangeAction.ContinueButtonClicked() }
+                continueButtonIntentObservable.map { ChangeAction.ActionButtonClicked() }
         ).scan(AuthViewState.createInitial(), this::reducer)
-
 
         val useCaseEventStream = Observable.empty<Unit>()
 
@@ -23,6 +22,6 @@ class AuthInteractor : Auth.Interactor {
     }
 
     private fun reducer(initialState: AuthViewState, change: ChangeAction): AuthViewState {
-
+        return AuthViewState.createInitial()
     }
 }

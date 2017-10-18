@@ -90,13 +90,13 @@ class ActionButton @JvmOverloads constructor(
     }
 
     private fun bindViews() {
-        successFrameLayout = findViewById((R.id.frame_layout_button_success))
-        failureFrameLayout = findViewById((R.id.frame_layout_button_failure))
-        buttonActionDescriptionTextView = findViewById((R.id.text_view_button_action_desc))
-        buttonErrorDescTextView = findViewById((R.id.text_view_error_desc))
-        progressView = findViewById((R.id.progress_indicator))
-        successImageView = findViewById((R.id.icon_success))
-        failureImageView = findViewById((R.id.icon_failure))
+        successFrameLayout = findViewById(R.id.buttonSuccessLayout)
+        failureFrameLayout = findViewById(R.id.buttonFailureLayout)
+        buttonActionDescriptionTextView = findViewById(R.id.buttonActionText)
+        buttonErrorDescTextView = findViewById(R.id.errorText)
+        progressView = findViewById(R.id.loader)
+        successImageView = findViewById(R.id.successIcon)
+        failureImageView = findViewById(R.id.failureIcon)
     }
 
     private fun initAfterViewBinding() {

@@ -7,7 +7,7 @@ class AuthPresenter(
 ) : MviPresenter<Auth.View, AuthViewState>() {
 
     override fun bindIntents() {
-        interactor.harnessUserIntents(
+        val (mergedIntentsStream, useCaseChangeStream) = interactor.harnessUserIntents(
                 handleIntent(Auth.View::facebookAuthIntent),
                 handleIntent(Auth.View::googleAuthIntent),
                 handleIntent(Auth.View::emailInputIntent),
@@ -15,6 +15,6 @@ class AuthPresenter(
                 handleIntent(Auth.View::forgotPasswordIntent)
         )
 
-        subscribeViewState(interactor.mergedIntentStream, Auth.View::render)
+        subscribeViewState(mergedIntentsStream, Auth.View::render)
     }
 }

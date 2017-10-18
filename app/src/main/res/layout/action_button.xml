@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.wang.avi.AVLoadingIndicatorView
-        android:id="@+id/progress_indicator"
+        android:id="@+id/loader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -13,28 +13,28 @@
         style="@style/AVLoadingIndicatorView" />
 
     <TextView
-        android:id="@+id/text_view_button_action_desc"
+        android:id="@+id/buttonActionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         style="@style/WhiteTextMedium" />
 
     <FrameLayout
-        android:id="@+id/frame_layout_button_failure"
+        android:id="@+id/buttonFailureLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="invisible"
         android:background="@drawable/pill_button">
 
         <ImageView
-            android:id="@+id/icon_failure"
+            android:id="@+id/failureIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/icon_failure_pill_button" />
 
         <TextView
-            android:id="@+id/text_view_error_desc"
+            android:id="@+id/errorText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -43,14 +43,14 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/frame_layout_button_success"
+        android:id="@+id/buttonSuccessLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="invisible"
         android:background="@drawable/pill_button">
 
         <ImageView
-            android:id="@+id/icon_success"
+            android:id="@+id/successIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

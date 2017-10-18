@@ -4,7 +4,7 @@ import pl.rmakowiecki.smartalarm.base.Contracts
 
 class AuthViewState private constructor(
         emailInputText: String = "",
-        continueButtonEnabled: String = "",
+        continueButtonEnabled: Boolean = false,
         screenPerspective: AuthPerspective = AuthPerspective.LOGIN,
         isLoading: Boolean = false
 ) : Contracts.ViewState {
