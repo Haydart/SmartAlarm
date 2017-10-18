@@ -8,21 +8,21 @@ class AuthPresenter(
 
     override fun bindIntents() = with(interactor) {
         harnessFacebookAuthIntent(
-                handleIntent(Auth.View::facebookAuthIntent))
+                bindIntent(Auth.View::facebookAuthIntent))
         harnessGoogleAuthIntent(
-                handleIntent(Auth.View::googleAuthIntent))
+                bindIntent(Auth.View::googleAuthIntent))
         harnessEmailInputIntent(
-                handleIntent(Auth.View::emailInputIntent))
+                bindIntent(Auth.View::emailInputIntent))
         harnessPasswordInputIntent(
-                handleIntent(Auth.View::passwordInputIntent))
+                bindIntent(Auth.View::passwordInputIntent))
         harnessRepeatPasswordInputIntent(
-                handleIntent(Auth.View::repeatPasswordInputIntent))
+                bindIntent(Auth.View::repeatPasswordInputIntent))
         harnessCredentialsSubmitIntent(
-                handleIntent(Auth.View::credentialsSubmitIntent))
+                bindIntent(Auth.View::credentialsSubmitIntent))
         harnessEmailRegistrationIntent(
-                handleIntent(Auth.View::emailRegistrationIntent))
+                bindIntent(Auth.View::emailRegistrationIntent))
         harnessForgotPasswordIntent(
-                handleIntent(Auth.View::forgotPasswordIntent))
+                bindIntent(Auth.View::forgotPasswordIntent))
 
         subscribeViewState(interactor.viewStateStream, Auth.View::render)
     }

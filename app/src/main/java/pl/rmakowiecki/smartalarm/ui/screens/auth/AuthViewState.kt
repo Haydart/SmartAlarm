@@ -2,11 +2,13 @@ package pl.rmakowiecki.smartalarm.ui.screens.auth
 
 import pl.rmakowiecki.smartalarm.base.Contracts
 
-class AuthViewState private constructor(
-        emailInputText: String = "",
-        continueButtonEnabled: Boolean = false,
-        screenPerspective: AuthPerspective = AuthPerspective.LOGIN,
-        isLoading: Boolean = false
+data class AuthViewState private constructor(
+        val emailInputText: String = "",
+        val passwordInputText: String = "",
+        val repeatPasswordInputText: String = "",
+        val continueButtonEnabled: Boolean = false,
+        val screenPerspective: AuthPerspective = AuthPerspective.LOGIN,
+        val isLoading: Boolean = false
 ) : Contracts.ViewState {
     companion object {
         fun createInitial() = AuthViewState()
@@ -18,13 +20,9 @@ enum class AuthPerspective {
     REGISTER
 }
 
-sealed class AuthAction {
-    class FacebookSignInClick : AuthAction()
-    class GoogleSignInClick : AuthAction()
-    class EmailInput : AuthAction()
-    class PasswordInput : AuthAction()
-    class RepeatPasswordInput : AuthAction()
-    class CredentialsSubmitButtonClick : AuthAction()
-    class EmailRegistrationClick : AuthAction()
-    class ForgotPasswordClick : AuthAction()
+sealed class AuthViewStateChange {
+    class EmailInput(val email: String) : AuthViewStateChange()
+    class PasswordInput(val password: String) : AuthViewStateChange()
+    class RepeatPasswordInput(val repeatedPassword: String) : AuthViewStateChange()
+    class PerspectiveSwitch : AuthViewStateChange()
 }
