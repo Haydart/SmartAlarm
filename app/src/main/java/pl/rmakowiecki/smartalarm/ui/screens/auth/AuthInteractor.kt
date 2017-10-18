@@ -4,24 +4,60 @@ import io.reactivex.Observable
 
 class AuthInteractor : Auth.Interactor {
 
-    override fun harnessUserIntents(
-            facebookButtonIntentObservable: Observable<Unit>,
-            googleButtonIntentObservable: Observable<Unit>,
-            emailInputIntentObservable: Observable<String>,
-            continueButtonIntentObservable: Observable<Unit>,
-            forgotPasswordIntentObservable: Observable<Unit>): Pair<Observable<AuthViewState>, Observable<Unit>> {
+    private val mergedIntentsStream: Observable<AuthAction> = Observable.empty()
 
-        val viewStateStream = Observable.merge(
-                emailInputIntentObservable.map { ChangeAction.EmailInput() },
-                continueButtonIntentObservable.map { ChangeAction.ActionButtonClicked() }
-        ).scan(AuthViewState.createInitial(), this::reducer)
+    override val viewStateStream: Observable<AuthViewState> = mergedIntentsStream
+            .scan(AuthViewState.createInitial(), ::reduce)
 
-        val useCaseEventStream = Observable.empty<Unit>()
-
-        return Pair(viewStateStream, useCaseEventStream)
+    override fun harnessFacebookAuthIntent(intentObservable: Observable<Unit>) {
+        mergedIntentsStream.mergeWith(
+                intentObservable.map { AuthAction.FacebookSignInClick() }
+        )
     }
 
-    private fun reducer(initialState: AuthViewState, change: ChangeAction): AuthViewState {
-        return AuthViewState.createInitial()
+    override fun harnessGoogleAuthIntent(intentObservable: Observable<Unit>) {
+        mergedIntentsStream.mergeWith(
+                intentObservable.map { AuthAction.GoogleSignInClick() }
+        )
     }
+
+    override fun harnessEmailInputIntent(intentObservable: Observable<String>) {
+        mergedIntentsStream.mergeWith(
+                intentObservable.map { AuthAction.EmailInput() }
+        )
+    }
+
+    override fun harnessPasswordInputIntent(intentObservable: Observable<String>) {
+        mergedIntentsStream.mergeWith(
+                intentObservable.map { AuthAction.PasswordInput() }
+        )
+    }
+
+    override fun harnessRepeatPasswordInputIntent(intentObservable: Observable<String>) {
+        mergedIntentsStream.mergeWith(
+                intentObservable.map { AuthAction.RepeatPasswordInput() }
+        )
+    }
+
+    override fun harnessCredentialsSubmitIntent(intentObservable: Observable<Unit>) {
+        mergedIntentsStream.mergeWith(
+                intentObservable.map { AuthAction.CredentialsSubmitButtonClick() }
+        )
+    }
+
+    override fun harnessEmailRegistrationIntent(intentObservable: Observable<Unit>) {
+        mergedIntentsStream.mergeWith(
+                intentObservable.map { AuthAction.EmailRegistrationClick() }
+        )
+    }
+
+    override fun harnessForgotPasswordIntent(intentObservable: Observable<Unit>) {
+        mergedIntentsStream.mergeWith(
+                intentObservable.map { AuthAction.ForgotPasswordClick() }
+        )
+    }
+}
+
+private fun reduce(initialState: AuthViewState, change: AuthAction): AuthViewState {
+    return AuthViewState.createInitial()
 }

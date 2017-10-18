@@ -18,10 +18,13 @@ enum class AuthPerspective {
     REGISTER
 }
 
-sealed class ChangeAction {
-    class ActionButtonClicked : ChangeAction()
-    class ForgotPasswordClicked : ChangeAction()
-    class EmailInput : ChangeAction()
-    class PasswordInput : ChangeAction()
-    class RepeatPasswordInput : ChangeAction()
+sealed class AuthAction {
+    class FacebookSignInClick : AuthAction()
+    class GoogleSignInClick : AuthAction()
+    class EmailInput : AuthAction()
+    class PasswordInput : AuthAction()
+    class RepeatPasswordInput : AuthAction()
+    class CredentialsSubmitButtonClick : AuthAction()
+    class EmailRegistrationClick : AuthAction()
+    class ForgotPasswordClick : AuthAction()
 }
