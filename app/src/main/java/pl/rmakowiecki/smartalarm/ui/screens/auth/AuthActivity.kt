@@ -8,6 +8,7 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_auth.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
+import pl.rmakowiecki.smartalarm.extensions.setTextIfDifferent
 import pl.rmakowiecki.smartalarm.ui.customView.TilingDrawable
 
 class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
@@ -45,7 +46,7 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
             RxTextView.textChanges(emailInput).map { it.toString() }
 
     override fun credentialsSubmitIntent(): Observable<Unit> =
-            RxView.clicks(continueButton).map { Unit }
+            RxView.clicks(credentialsSubmitButton).map { Unit }
 
     override fun emailRegistrationIntent(): Observable<Unit> =
             RxView.clicks(registerText).map { Unit }
@@ -53,7 +54,10 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
     override fun forgotPasswordIntent(): Observable<Unit> =
             RxView.clicks(forgotPasswordText).map { Unit }
 
-    override fun render(authViewState: AuthViewState) {
-
+    override fun render(authViewState: AuthViewState) = with(authViewState) {
+        emailInput.setTextIfDifferent(emailInputText)
+        passwordInput.setTextIfDifferent(passwordInputText)
+        repeatPasswordInput.setTextIfDifferent(repeatPasswordInputText)
+        credentialsSubmitButton.isEnabled = credentialsSubmitButtonEnabled
     }
 }
