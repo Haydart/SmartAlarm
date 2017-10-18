@@ -8,13 +8,13 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_auth.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
+import pl.rmakowiecki.smartalarm.extensions.setTextIfDifferent
 import pl.rmakowiecki.smartalarm.ui.customView.TilingDrawable
 
 class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
         Auth.View, Auth.Navigator {
 
-    override val layoutRes: Int
-        get() = R.layout.activity_auth
+    override val layoutRes = R.layout.activity_auth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,13 +39,25 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
     override fun emailInputIntent(): Observable<String> =
             RxTextView.textChanges(emailInput).map { it.toString() }
 
-    override fun emailSubmitIntent(): Observable<Unit> =
-            RxView.clicks(continueButton).map { Unit }
+    override fun passwordInputIntent(): Observable<String> =
+            RxTextView.textChanges(emailInput).map { it.toString() }
+
+    override fun repeatPasswordInputIntent(): Observable<String> =
+            RxTextView.textChanges(emailInput).map { it.toString() }
+
+    override fun credentialsSubmitIntent(): Observable<Unit> =
+            RxView.clicks(credentialsSubmitButton).map { Unit }
+
+    override fun emailRegistrationIntent(): Observable<Unit> =
+            RxView.clicks(registerText).map { Unit }
 
     override fun forgotPasswordIntent(): Observable<Unit> =
             RxView.clicks(forgotPasswordText).map { Unit }
 
-    override fun render(authViewState: AuthViewState) {
-
+    override fun render(authViewState: AuthViewState) = with(authViewState) {
+        emailInput.setTextIfDifferent(emailInputText)
+        passwordInput.setTextIfDifferent(passwordInputText)
+        repeatPasswordInput.setTextIfDifferent(repeatPasswordInputText)
+        credentialsSubmitButton.isEnabled = credentialsSubmitButtonEnabled
     }
 }

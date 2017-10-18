@@ -1,6 +1,7 @@
 package pl.rmakowiecki.smartalarm.extensions
 
 import android.view.View
+import android.widget.EditText
 
 fun View.visible() {
     visibility = View.VISIBLE
@@ -20,4 +21,10 @@ fun View.enable() {
 
 fun View.disable() {
     isEnabled = false
+}
+
+fun EditText.setTextIfDifferent(text: String) {
+    if (this.text.toString() != text) {
+        this.setText(text)
+    }
 }

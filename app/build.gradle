@@ -60,12 +60,19 @@ dependencies {
 		transitive = false
 	}
 
+	compile("com.android.support:cardview-v7:$versions.support") {
+		force = true
+	}
+
 	compile "com.android.support:design:${versions.support}"
 
 	compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 	compile 'com.android.support.constraint:constraint-layout:1.0.2'
 	compile "com.jakewharton.rxbinding2:rxbinding:$versions.rxbinding"
 	compile "com.wang.avi:library:$versions.loader"
+
+	// Facebook SDK
+	compile 'com.facebook.android:facebook-android-sdk:4.23.0'
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.firebase-perf'

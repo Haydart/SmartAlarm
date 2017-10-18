@@ -1,19 +1,58 @@
 package pl.rmakowiecki.smartalarm.ui.screens.auth
 
 import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 
 class AuthInteractor : Auth.Interactor {
 
-    override val mergedIntentStream: Observable<AuthViewState>
-        get() = PublishSubject.create<AuthViewState>()
+    private val viewStateIntentsObservable: Observable<AuthViewStateChange> = Observable.empty()
 
-    override fun harnessUserIntents(
-            facebookButtonIntentObservable: Observable<Unit>,
-            googleButtonIntentObservable: Observable<Unit>,
-            emailInputIntentObservable: Observable<String>,
-            continueButtonIntentObservable: Observable<Unit>,
-            forgotPasswordIntentObservable: Observable<Unit>) {
-        //todo implement business logic
+    private val useCaseChangesObservable: Observable<AuthUseCaseChange> = Observable.empty()
+
+    override val viewStateStream: Observable<AuthViewState> = viewStateIntentsObservable
+            .scan(AuthViewState.createInitial(), AuthStateReducer::reduce)
+
+    override fun harnessFacebookAuthIntent(intentObservable: Observable<Unit>) {
+        //todo implement
+    }
+
+    override fun harnessGoogleAuthIntent(intentObservable: Observable<Unit>) {
+        //todo implement
+    }
+
+    override fun harnessEmailInputIntent(intentObservable: Observable<String>) {
+        viewStateIntentsObservable.mergeWith(
+                intentObservable.map { AuthViewStateChange.EmailInput(it) }
+        )
+    }
+
+    override fun harnessPasswordInputIntent(intentObservable: Observable<String>) {
+        viewStateIntentsObservable.mergeWith(
+                intentObservable.map { AuthViewStateChange.PasswordInput(it) }
+        )
+    }
+
+    override fun harnessRepeatPasswordInputIntent(intentObservable: Observable<String>) {
+        viewStateIntentsObservable.mergeWith(
+                intentObservable.map { AuthViewStateChange.RepeatPasswordInput(it) }
+        )
+    }
+
+    override fun harnessCredentialsSubmitIntent(intentObservable: Observable<Unit>) {
+        viewStateIntentsObservable.mergeWith(
+                intentObservable.map { AuthViewStateChange.CredentialsSubmit() }
+        )
+    }
+
+    override fun harnessEmailRegistrationIntent(intentObservable: Observable<Unit>) {
+        viewStateIntentsObservable.mergeWith(
+                intentObservable.map { AuthViewStateChange.PerspectiveSwitch() }
+        )
+    }
+
+    override fun harnessForgotPasswordIntent(intentObservable: Observable<Unit>) {
+        useCaseChangesObservable.mergeWith(
+                intentObservable.map { AuthUseCaseChange.ForgotPasswordClick() }
+        )
     }
 }
+

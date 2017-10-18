@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:animateLayoutChanges="true">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.25"
+        android:layout_weight="0.20"
         android:orientation="vertical">
 
         <ImageView
@@ -30,11 +31,10 @@
         android:id="@+id/contentLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.75"
+        android:layout_weight="0.80"
         android:gravity="center"
         android:orientation="vertical"
-        android:transitionName="@string/transition_auth_content"
-        android:paddingBottom="@dimen/margin_xxlarge">
+        android:transitionName="@string/transition_auth_content">
 
         <Button
             android:id="@+id/googleButton"
@@ -46,6 +46,7 @@
             android:paddingEnd="@dimen/auth_screen_button_padding"
             android:paddingStart="@dimen/auth_screen_button_padding"
             android:paddingTop="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_large"
             android:text="@string/facebook_sign_in"
             android:textAllCaps="false"
             android:textColor="@color/textSecondary"
@@ -67,6 +68,7 @@
             android:textSize="@dimen/text_size_large" />
 
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/emailInputLayout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/text_input_height"
             android:layout_marginLeft="@dimen/text_input_side_margin"
@@ -77,12 +79,43 @@
                 android:id="@+id/emailInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/text_input_hint_email"
+                android:hint="@string/input_hint_repeat_password"
                 android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
 
-        <pl.rmakowiecki.smartalarm.ui.screens.customView.ActionButton
-            android:id="@+id/continueButton"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/passwordInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_input_height"
+            android:layout_marginLeft="@dimen/text_input_side_margin"
+            android:layout_marginRight="@dimen/text_input_side_margin">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/passwordInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/input_hint_password"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/repeatPasswordInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_input_height"
+            android:layout_marginLeft="@dimen/text_input_side_margin"
+            android:layout_marginRight="@dimen/text_input_side_margin"
+            android:visibility="gone">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/repeatPasswordInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/input_hint_repeat_password"
+                android:inputType="textEmailAddress" />
+        </android.support.design.widget.TextInputLayout>
+
+        <pl.rmakowiecki.smartalarm.ui.customView.ActionButton
+            android:id="@+id/credentialsSubmitButton"
             android:layout_width="match_parent"
             android:layout_height="@dimen/action_button_height"
             android:layout_margin="@dimen/margin_large"
@@ -91,17 +124,34 @@
             app:failure_color="@color/failureRed"
             app:failure_icon="@drawable/icon_failure_pill_button"
             app:success_icon="@drawable/icon_success_pill_button"
-            app:text="Continue"
+            app:text="@string/login"
             app:text_color="@android:color/white" />
 
-        <TextView
-            android:id="@+id/forgotPasswordText"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/forgot_password"
-            android:textAllCaps="true"
-            android:textStyle="bold"
-            android:textColor="@color/accent" />
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
 
+            <TextView
+                android:id="@+id/registerText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/register_with_email"
+                android:layout_margin="@dimen/margin_medium"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textColor="@color/accent" />
+
+            <TextView
+                android:id="@+id/forgotPasswordText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/forgot_password"
+                android:layout_margin="@dimen/margin_medium"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textColor="@color/accent" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
