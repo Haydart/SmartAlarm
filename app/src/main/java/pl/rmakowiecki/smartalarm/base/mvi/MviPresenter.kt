@@ -8,6 +8,7 @@ import io.reactivex.disposables.Disposables
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import pl.rmakowiecki.smartalarm.base.Contracts
+import pl.rmakowiecki.smartalarm.extensions.applyComputationSchedulers
 import java.util.*
 
 abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>() : Contracts.Presenter {
@@ -80,9 +81,9 @@ abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>() : Co
 
         viewStateConsumer = consumerFunction
 
-        viewStateDisposable = viewStateObservable.subscribeWith(
-                DisposableViewStateObserver(viewStateBehaviorSubject)
-        )
+        viewStateDisposable = viewStateObservable
+                .applyComputationSchedulers()
+                .subscribeWith(DisposableViewStateObserver(viewStateBehaviorSubject))
     }
 
     private inner class IntentRelayBinderPair<I>(

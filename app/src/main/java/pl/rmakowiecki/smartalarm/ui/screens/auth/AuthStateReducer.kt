@@ -11,7 +11,7 @@ class AuthStateReducer {
             currentState.copy(emailInputError = change.emailError)
         }
         is PasswordInput -> {
-            currentState.copy(passwordInputText = change.password)
+            currentState.copy(passwordInputText = change.password, passwordInputError = "")
         }
         is PasswordValidation -> {
             currentState.copy(passwordInputError = change.passwordError)

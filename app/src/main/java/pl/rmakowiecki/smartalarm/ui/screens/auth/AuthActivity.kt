@@ -52,7 +52,12 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
         headerBackgroundImage.background = tilingDrawable
     }
 
-    override fun createPresenter() = AuthPresenter(AuthInteractor(this, AuthStateReducer()))
+    override fun createPresenter() = AuthPresenter(
+            AuthInteractor(
+                    this,
+                    AuthStateReducer(),
+                    CredentialsValidator()
+            ))
 
     override fun render(authViewState: AuthViewState) = with(authViewState) {
         emailInput.setTextIfDifferent(emailInputText)
@@ -62,5 +67,8 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
 
         emailInputLayout.isErrorEnabled = emailInputError.isNotBlank()
         emailInputLayout.error = emailInputError
+
+        passwordInputLayout.isErrorEnabled = passwordInputError.isNotBlank()
+        passwordInputLayout.error = passwordInputError
     }
 }
