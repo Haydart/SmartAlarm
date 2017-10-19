@@ -15,20 +15,20 @@ class AuthInteractor(
     override fun getViewStateObservable(): Observable<AuthViewState> = viewStateIntentsObservable
             .scan(AuthViewState.createInitial(), reducer::reduce)
 
-    override fun harnessFacebookAuthIntent(intentObservable: Observable<Unit>) {
+    override fun attachFacebookAuthIntent(intentObservable: Observable<Unit>) {
         //todo implement
     }
 
-    override fun harnessGoogleAuthIntent(intentObservable: Observable<Unit>) {
+    override fun attachGoogleAuthIntent(intentObservable: Observable<Unit>) {
         //todo implement
     }
 
-    override fun harnessEmailInputIntent(intentObservable: Observable<String>) {
+    override fun attachEmailInputIntent(intentObservable: Observable<String>) {
         viewStateIntentsObservable = viewStateIntentsObservable
                 .mergeWith(intentObservable
                         .map { AuthViewStateChange.EmailInput(it) })
                 .mergeWith(intentObservable
-                        .switchMapSingle { validateEmail(it) }
+                        .switchMapSingle(this::validateEmail)
                         .debounce(1, TimeUnit.SECONDS))
     }
 
@@ -37,12 +37,12 @@ class AuthInteractor(
                     if (validator.isValidEmail(inputEmail) || inputEmail.isBlank()) "" else "Invalid email"
             ))
 
-    override fun harnessPasswordInputIntent(intentObservable: Observable<String>) {
+    override fun attachPasswordInputIntent(intentObservable: Observable<String>) {
         viewStateIntentsObservable = viewStateIntentsObservable
                 .mergeWith(
                         intentObservable.map { AuthViewStateChange.PasswordInput(it) })
                 .mergeWith(intentObservable
-                        .switchMapSingle { validatePassword(it) }
+                        .switchMapSingle(this::validatePassword)
                         .debounce(1, TimeUnit.SECONDS))
     }
 
@@ -51,25 +51,25 @@ class AuthInteractor(
                     if (validator.isValidPassword(inputPassword) || inputPassword.isBlank()) "" else "Invalid password"
             ))
 
-    override fun harnessRepeatPasswordInputIntent(intentObservable: Observable<String>) {
+    override fun attachRepeatPasswordInputIntent(intentObservable: Observable<String>) {
         viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
                 intentObservable.map { AuthViewStateChange.RepeatPasswordInput(it) }
         )
     }
 
-    override fun harnessCredentialsSubmitIntent(intentObservable: Observable<Unit>) {
+    override fun attachCredentialsSubmitIntent(intentObservable: Observable<Unit>) {
         viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
                 intentObservable.map { AuthViewStateChange.CredentialsSubmit() }
         )
     }
 
-    override fun harnessEmailRegistrationIntent(intentObservable: Observable<Unit>) {
+    override fun attachEmailRegistrationIntent(intentObservable: Observable<Unit>) {
         viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
                 intentObservable.map { AuthViewStateChange.PerspectiveSwitch() }
         )
     }
 
-    override fun harnessForgotPasswordIntent(intentObservable: Observable<Unit>) {
+    override fun attachForgotPasswordIntent(intentObservable: Observable<Unit>) {
         //todo implement
     }
 }

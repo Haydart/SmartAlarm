@@ -22,13 +22,13 @@ interface Auth {
     interface Interactor : Contracts.Interactor {
         fun getViewStateObservable(): Observable<AuthViewState>
 
-        fun harnessFacebookAuthIntent(intentObservable: Observable<Unit>)
-        fun harnessGoogleAuthIntent(intentObservable: Observable<Unit>)
-        fun harnessEmailInputIntent(intentObservable: Observable<String>)
-        fun harnessPasswordInputIntent(intentObservable: Observable<String>)
-        fun harnessRepeatPasswordInputIntent(intentObservable: Observable<String>)
-        fun harnessCredentialsSubmitIntent(intentObservable: Observable<Unit>)
-        fun harnessEmailRegistrationIntent(intentObservable: Observable<Unit>)
-        fun harnessForgotPasswordIntent(intentObservable: Observable<Unit>)
+        fun attachFacebookAuthIntent(intentObservable: Observable<Unit>)
+        fun attachGoogleAuthIntent(intentObservable: Observable<Unit>)
+        fun attachEmailInputIntent(intentObservable: Observable<String>)
+        fun attachPasswordInputIntent(intentObservable: Observable<String>)
+        fun attachRepeatPasswordInputIntent(intentObservable: Observable<String>)
+        fun attachCredentialsSubmitIntent(intentObservable: Observable<Unit>)
+        fun attachEmailRegistrationIntent(intentObservable: Observable<Unit>)
+        fun attachForgotPasswordIntent(intentObservable: Observable<Unit>)
     }
 }
