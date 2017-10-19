@@ -7,23 +7,23 @@ class AuthPresenter(
 ) : MviPresenter<Auth.View, AuthViewState>() {
 
     override fun bindIntents() = with(interactor) {
-        harnessFacebookAuthIntent(
+        attachFacebookAuthIntent(
                 bindIntent(Auth.View::facebookAuthIntent))
-        harnessGoogleAuthIntent(
+        attachGoogleAuthIntent(
                 bindIntent(Auth.View::googleAuthIntent))
-        harnessEmailInputIntent(
+        attachEmailInputIntent(
                 bindIntent(Auth.View::emailInputIntent))
-        harnessPasswordInputIntent(
+        attachPasswordInputIntent(
                 bindIntent(Auth.View::passwordInputIntent))
-        harnessRepeatPasswordInputIntent(
+        attachRepeatPasswordInputIntent(
                 bindIntent(Auth.View::repeatPasswordInputIntent))
-        harnessCredentialsSubmitIntent(
+        attachCredentialsSubmitIntent(
                 bindIntent(Auth.View::credentialsSubmitIntent))
-        harnessEmailRegistrationIntent(
+        attachEmailRegistrationIntent(
                 bindIntent(Auth.View::emailRegistrationIntent))
-        harnessForgotPasswordIntent(
+        attachForgotPasswordIntent(
                 bindIntent(Auth.View::forgotPasswordIntent))
 
-        subscribeViewState(interactor.viewStateStream, Auth.View::render)
+        subscribeViewState(interactor.getViewStateObservable(), Auth.View::render)
     }
 }

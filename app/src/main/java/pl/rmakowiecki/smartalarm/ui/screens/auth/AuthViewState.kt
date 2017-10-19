@@ -26,8 +26,11 @@ enum class AuthPerspective {
 
 sealed class AuthViewStateChange {
     class EmailInput(val email: String) : AuthViewStateChange()
+    class EmailValidation(val emailError: String) : AuthViewStateChange()
     class PasswordInput(val password: String) : AuthViewStateChange()
+    class PasswordValidation(val passwordError: String) : AuthViewStateChange()
     class RepeatPasswordInput(val repeatedPassword: String) : AuthViewStateChange()
+    class RepeatPasswordValidation(val repeatedPasswordError: String) : AuthViewStateChange()
     class PerspectiveSwitch : AuthViewStateChange()
     class CredentialsSubmit : AuthViewStateChange()
 }

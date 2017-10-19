@@ -14,6 +14,12 @@ fun <T> Observable<T>.applyIoSchedulers(): Observable<T> =
 fun <T> Single<T>.applyIoSchedulers(): Single<T> =
         subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 
+fun <T> Single<T>.applyComputationSchedulers(): Single<T> =
+        subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread())
+
+fun <T> Observable<T>.applyComputationSchedulers(): Observable<T> =
+        subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread())
+
 infix fun CompositeDisposable.handle(disposable: Disposable) {
     this += disposable
 }

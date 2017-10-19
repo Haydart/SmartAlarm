@@ -5,14 +5,14 @@ import pl.rmakowiecki.smartalarm.base.Contracts
 
 interface Auth {
     interface View : Contracts.View {
-        fun facebookAuthIntent(): Observable<Unit>
-        fun googleAuthIntent(): Observable<Unit>
-        fun emailInputIntent(): Observable<String>
-        fun passwordInputIntent(): Observable<String>
-        fun repeatPasswordInputIntent(): Observable<String>
-        fun credentialsSubmitIntent(): Observable<Unit>
-        fun emailRegistrationIntent(): Observable<Unit>
-        fun forgotPasswordIntent(): Observable<Unit>
+        val facebookAuthIntent: Observable<Unit>
+        val googleAuthIntent: Observable<Unit>
+        val emailInputIntent: Observable<String>
+        val passwordInputIntent: Observable<String>
+        val repeatPasswordInputIntent: Observable<String>
+        val credentialsSubmitIntent: Observable<Unit>
+        val emailRegistrationIntent: Observable<Unit>
+        val forgotPasswordIntent: Observable<Unit>
 
         fun render(authViewState: AuthViewState)
     }
@@ -20,15 +20,15 @@ interface Auth {
     interface Navigator : Contracts.Navigator
 
     interface Interactor : Contracts.Interactor {
-        val viewStateStream: Observable<AuthViewState>
+        fun getViewStateObservable(): Observable<AuthViewState>
 
-        fun harnessFacebookAuthIntent(intentObservable: Observable<Unit>)
-        fun harnessGoogleAuthIntent(intentObservable: Observable<Unit>)
-        fun harnessEmailInputIntent(intentObservable: Observable<String>)
-        fun harnessPasswordInputIntent(intentObservable: Observable<String>)
-        fun harnessRepeatPasswordInputIntent(intentObservable: Observable<String>)
-        fun harnessCredentialsSubmitIntent(intentObservable: Observable<Unit>)
-        fun harnessEmailRegistrationIntent(intentObservable: Observable<Unit>)
-        fun harnessForgotPasswordIntent(intentObservable: Observable<Unit>)
+        fun attachFacebookAuthIntent(intentObservable: Observable<Unit>)
+        fun attachGoogleAuthIntent(intentObservable: Observable<Unit>)
+        fun attachEmailInputIntent(intentObservable: Observable<String>)
+        fun attachPasswordInputIntent(intentObservable: Observable<String>)
+        fun attachRepeatPasswordInputIntent(intentObservable: Observable<String>)
+        fun attachCredentialsSubmitIntent(intentObservable: Observable<Unit>)
+        fun attachEmailRegistrationIntent(intentObservable: Observable<Unit>)
+        fun attachForgotPasswordIntent(intentObservable: Observable<Unit>)
     }
 }

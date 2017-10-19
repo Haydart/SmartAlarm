@@ -2,8 +2,8 @@ package pl.rmakowiecki.smartalarm.ui.screens.auth
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import com.jakewharton.rxbinding2.view.RxView
-import com.jakewharton.rxbinding2.widget.RxTextView
+import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding2.widget.textChanges
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_auth.*
 import pl.rmakowiecki.smartalarm.R
@@ -15,6 +15,30 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
         Auth.View, Auth.Navigator {
 
     override val layoutRes = R.layout.activity_auth
+
+    override val facebookAuthIntent
+        get() = facebookButton.clicks()
+
+    override val googleAuthIntent
+        get() = googleButton.clicks()
+
+    override val emailInputIntent: Observable<String>
+        get() = emailInput.textChanges().map(CharSequence::toString)
+
+    override val passwordInputIntent: Observable<String>
+        get() = passwordInput.textChanges().map(CharSequence::toString)
+
+    override val repeatPasswordInputIntent: Observable<String>
+        get() = repeatPasswordInput.textChanges().map(CharSequence::toString)
+
+    override val credentialsSubmitIntent
+        get() = credentialsSubmitButton.clicks()
+
+    override val emailRegistrationIntent: Observable<Unit>
+        get() = registerText.clicks()
+
+    override val forgotPasswordIntent: Observable<Unit>
+        get() = forgotPasswordText.clicks()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,36 +52,23 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
         headerBackgroundImage.background = tilingDrawable
     }
 
-    override fun createPresenter() = AuthPresenter(AuthInteractor())
-
-    override fun facebookAuthIntent(): Observable<Unit> =
-            RxView.clicks(facebookButton).map { Unit }
-
-    override fun googleAuthIntent(): Observable<Unit> =
-            RxView.clicks(googleButton).map { Unit }
-
-    override fun emailInputIntent(): Observable<String> =
-            RxTextView.textChanges(emailInput).map { it.toString() }
-
-    override fun passwordInputIntent(): Observable<String> =
-            RxTextView.textChanges(emailInput).map { it.toString() }
-
-    override fun repeatPasswordInputIntent(): Observable<String> =
-            RxTextView.textChanges(emailInput).map { it.toString() }
-
-    override fun credentialsSubmitIntent(): Observable<Unit> =
-            RxView.clicks(credentialsSubmitButton).map { Unit }
-
-    override fun emailRegistrationIntent(): Observable<Unit> =
-            RxView.clicks(registerText).map { Unit }
-
-    override fun forgotPasswordIntent(): Observable<Unit> =
-            RxView.clicks(forgotPasswordText).map { Unit }
+    override fun createPresenter() = AuthPresenter(
+            AuthInteractor(
+                    this,
+                    AuthStateReducer(),
+                    CredentialsValidator()
+            ))
 
     override fun render(authViewState: AuthViewState) = with(authViewState) {
         emailInput.setTextIfDifferent(emailInputText)
         passwordInput.setTextIfDifferent(passwordInputText)
         repeatPasswordInput.setTextIfDifferent(repeatPasswordInputText)
         credentialsSubmitButton.isEnabled = credentialsSubmitButtonEnabled
+
+        emailInputLayout.isErrorEnabled = emailInputError.isNotBlank()
+        emailInputLayout.error = emailInputError
+
+        passwordInputLayout.isErrorEnabled = passwordInputError.isNotBlank()
+        passwordInputLayout.error = passwordInputError
     }
 }
