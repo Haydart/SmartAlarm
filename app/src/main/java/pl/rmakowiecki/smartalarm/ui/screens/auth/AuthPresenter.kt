@@ -24,6 +24,6 @@ class AuthPresenter(
         harnessForgotPasswordIntent(
                 bindIntent(Auth.View::forgotPasswordIntent))
 
-        subscribeViewState(interactor.viewStateStream, Auth.View::render)
+        subscribeViewState(interactor.getViewStateObservable(), Auth.View::render)
     }
 }
