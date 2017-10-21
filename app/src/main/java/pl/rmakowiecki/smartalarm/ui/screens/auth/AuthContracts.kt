@@ -12,6 +12,7 @@ interface Auth {
         val repeatPasswordInputIntent: Observable<String>
         val credentialsSubmitIntent: Observable<Unit>
         val emailRegistrationIntent: Observable<Unit>
+        val backButtonIntent: Observable<Unit>
         val forgotPasswordIntent: Observable<Unit>
 
         fun render(authViewState: AuthViewState)
@@ -29,6 +30,7 @@ interface Auth {
         fun attachRepeatPasswordInputIntent(intentObservable: Observable<String>)
         fun attachCredentialsSubmitIntent(intentObservable: Observable<Unit>)
         fun attachEmailRegistrationIntent(intentObservable: Observable<Unit>)
+        fun attachBackButtonClickIntent(intentObservable: Observable<Unit>)
         fun attachForgotPasswordIntent(intentObservable: Observable<Unit>)
     }
 }

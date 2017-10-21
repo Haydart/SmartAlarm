@@ -5,10 +5,14 @@ import android.support.v4.content.ContextCompat
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_auth.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
+import pl.rmakowiecki.smartalarm.extensions.gone
+import pl.rmakowiecki.smartalarm.extensions.logD
 import pl.rmakowiecki.smartalarm.extensions.setTextIfDifferent
+import pl.rmakowiecki.smartalarm.extensions.visible
 import pl.rmakowiecki.smartalarm.ui.customView.TilingDrawable
 
 class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
@@ -35,7 +39,12 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
         get() = credentialsSubmitButton.clicks()
 
     override val emailRegistrationIntent: Observable<Unit>
-        get() = registerText.clicks()
+        get() = registerText.clicks().doOnEach { logD("email register button click") }
+
+    private val backButtonPublishSubject = PublishSubject.create<Unit>()
+
+    override val backButtonIntent: Observable<Unit>
+        get() = backButtonPublishSubject.doOnEach { logD("back button click") }
 
     override val forgotPasswordIntent: Observable<Unit>
         get() = forgotPasswordText.clicks()
@@ -59,6 +68,8 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
                     CredentialsValidator()
             ))
 
+    override fun onBackPressed() = backButtonPublishSubject.onNext(Unit)
+
     override fun render(authViewState: AuthViewState) = with(authViewState) {
         emailInput.setTextIfDifferent(emailInputText)
         passwordInput.setTextIfDifferent(passwordInputText)
@@ -70,5 +81,28 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
 
         passwordInputLayout.isErrorEnabled = passwordInputError.isNotBlank()
         passwordInputLayout.error = passwordInputError
+
+        repeatPasswordInputLayout.isErrorEnabled = repeatPasswordInputError.isNotBlank()
+        repeatPasswordInputLayout.error = repeatPasswordInputError
+
+        if (screenPerspective == AuthPerspective.LOGIN) {
+            facebookButton.visible()
+            googleButton.visible()
+            repeatPasswordInputLayout.gone()
+
+            registerText.visible()
+            forgotPasswordText.visible()
+
+            credentialsSubmitButton.setText(getString(R.string.login))
+        } else {
+            facebookButton.gone()
+            googleButton.gone()
+            repeatPasswordInputLayout.visible()
+
+            registerText.gone()
+            forgotPasswordText.gone()
+
+            credentialsSubmitButton.setText(getString(R.string.register))
+        }
     }
 }

@@ -1,6 +1,7 @@
 package pl.rmakowiecki.smartalarm.ui.screens.auth
 
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class AuthInteractor(
@@ -9,10 +10,11 @@ class AuthInteractor(
         private val validator: CredentialsValidator
 ) : Auth.Interactor {
 
-    private var viewStateIntentsObservable: Observable<AuthViewStateChange> = Observable.empty()
+    private var viewStateIntentsObservable: Observable<AuthViewStateChange> = Observable.empty<AuthViewStateChange>()
 
     override fun getViewStateObservable(): Observable<AuthViewState> = viewStateIntentsObservable
             .scan(AuthViewState.createInitial(), reducer::reduce)
+            .subscribeOn(Schedulers.io())
 
     override fun attachFacebookAuthIntent(intentObservable: Observable<Unit>) {
         //todo implement
@@ -71,7 +73,13 @@ class AuthInteractor(
 
     override fun attachEmailRegistrationIntent(intentObservable: Observable<Unit>) {
         viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
-                intentObservable.map { AuthViewStateChange.PerspectiveSwitch() }
+                intentObservable.map { AuthViewStateChange.PerspectiveSwitch(AuthPerspective.REGISTER) }
+        )
+    }
+
+    override fun attachBackButtonClickIntent(intentObservable: Observable<Unit>) {
+        viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
+                intentObservable.map { AuthViewStateChange.PerspectiveSwitch(AuthPerspective.LOGIN) }
         )
     }
 

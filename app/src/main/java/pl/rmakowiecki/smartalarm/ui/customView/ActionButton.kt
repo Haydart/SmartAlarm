@@ -23,6 +23,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import com.wang.avi.AVLoadingIndicatorView
+import kotlinx.android.synthetic.main.action_button.view.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.extensions.invisible
 import pl.rmakowiecki.smartalarm.extensions.visible
@@ -127,6 +128,10 @@ class ActionButton @JvmOverloads constructor(
         this.enabled = enabled
         isClickable = enabled
         alpha = if (this.enabled) 1f else inactiveAlpha
+    }
+
+    fun setText(text: String) {
+        buttonActionText.text = text
     }
 
     fun showSuccess() {
