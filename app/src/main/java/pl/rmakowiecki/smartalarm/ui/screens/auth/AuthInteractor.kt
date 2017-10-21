@@ -1,7 +1,6 @@
 package pl.rmakowiecki.smartalarm.ui.screens.auth
 
 import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class AuthInteractor(
@@ -12,9 +11,30 @@ class AuthInteractor(
 
     private var viewStateIntentsObservable: Observable<AuthViewStateChange> = Observable.empty<AuthViewStateChange>()
 
+    private var needsToRevalidateInput = false
+
     override fun getViewStateObservable(): Observable<AuthViewState> = viewStateIntentsObservable
             .scan(AuthViewState.createInitial(), reducer::reduce)
-            .subscribeOn(Schedulers.io())
+            .flatMap(this::changeCredentialsSubmitButtonStateIfNeeded)
+
+    private fun changeCredentialsSubmitButtonStateIfNeeded(authViewState: AuthViewState): Observable<AuthViewState> = Observable.just(authViewState)
+            .mergeWith(
+                    if (needsToRevalidateInput) Observable
+                            .just(reducer.reduce(authViewState, AuthViewStateChange.CredentialsButtonChange(
+                                    isCredentialInputValid(authViewState)
+                            )))
+                    else Observable.empty<AuthViewState>()
+            )
+
+    private fun isCredentialInputValid(currentViewState: AuthViewState) = with(currentViewState) {
+        when (currentViewState.screenPerspective) {
+            AuthPerspective.LOGIN -> validator
+                    .areLoginCredentialsValid(emailInputText, passwordInputText)
+
+            AuthPerspective.REGISTER -> validator
+                    .areRegisterCredentialsValid(emailInputText, passwordInputText, repeatPasswordInputText)
+        }
+    }
 
     override fun attachFacebookAuthIntent(intentObservable: Observable<Unit>) {
         //todo implement
@@ -27,7 +47,8 @@ class AuthInteractor(
     override fun attachEmailInputIntent(intentObservable: Observable<String>) {
         viewStateIntentsObservable = viewStateIntentsObservable
                 .mergeWith(intentObservable
-                        .map(AuthViewStateChange::EmailInput))
+                        .map(AuthViewStateChange::EmailInput)
+                        .doOnEach { needsToRevalidateInput = true })
                 .mergeWith(intentObservable
                         .switchMapSingle(validator::validateEmail)
                         .map(this::mapToEmailError)
@@ -42,28 +63,32 @@ class AuthInteractor(
     override fun attachPasswordInputIntent(intentObservable: Observable<String>) {
         viewStateIntentsObservable = viewStateIntentsObservable
                 .mergeWith(intentObservable
-                        .map(AuthViewStateChange::PasswordInput))
+                        .map(AuthViewStateChange::PasswordInput)
+                        .doOnEach { needsToRevalidateInput = true })
                 .mergeWith(intentObservable
                         .switchMapSingle(validator::validatePassword)
                         .map(this::mapToPasswordError)
                         .delayInputValidation())
     }
 
-    private fun mapToPasswordError(isValid: Boolean) =
-            AuthViewStateChange.PasswordValidation(if (isValid) "" else "Password must be at least 8 characters")
+    private fun mapToPasswordError(isValid: Boolean) = AuthViewStateChange.PasswordValidation(
+            if (isValid) "" else "Password must be at least 8 characters long"
+    )
 
     override fun attachRepeatPasswordInputIntent(intentObservable: Observable<String>) {
         viewStateIntentsObservable = viewStateIntentsObservable
                 .mergeWith(intentObservable
-                        .map(AuthViewStateChange::RepeatPasswordInput))
+                        .map(AuthViewStateChange::RepeatPasswordInput)
+                        .doOnEach { needsToRevalidateInput = true })
                 .mergeWith(intentObservable
                         .switchMapSingle(validator::validatePasswordRepeat)
                         .map(this::mapToRepeatPasswordError)
                         .delayInputValidation())
     }
 
-    private fun mapToRepeatPasswordError(arePasswordsIdentical: Boolean) =
-            AuthViewStateChange.RepeatPasswordValidation(if (arePasswordsIdentical) "" else "Password must be at least 8 characters")
+    private fun mapToRepeatPasswordError(arePasswordsIdentical: Boolean) = AuthViewStateChange.RepeatPasswordValidation(
+            if (arePasswordsIdentical) "" else "Passwords are not identical"
+    )
 
     override fun attachCredentialsSubmitIntent(intentObservable: Observable<Unit>) {
         viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(

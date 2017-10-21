@@ -74,7 +74,6 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
         emailInput.setTextIfDifferent(emailInputText)
         passwordInput.setTextIfDifferent(passwordInputText)
         repeatPasswordInput.setTextIfDifferent(repeatPasswordInputText)
-        credentialsSubmitButton.isEnabled = credentialsSubmitButtonEnabled
 
         emailInputLayout.isErrorEnabled = emailInputError.isNotBlank()
         emailInputLayout.error = emailInputError
@@ -84,6 +83,8 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
 
         repeatPasswordInputLayout.isErrorEnabled = repeatPasswordInputError.isNotBlank()
         repeatPasswordInputLayout.error = repeatPasswordInputError
+
+        credentialsSubmitButton.isEnabled = credentialsSubmitButtonEnabled
 
         if (screenPerspective == AuthPerspective.LOGIN) {
             facebookButton.visible()

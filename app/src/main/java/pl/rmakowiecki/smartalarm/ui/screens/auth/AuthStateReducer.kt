@@ -28,5 +28,8 @@ class AuthStateReducer {
         is PerspectiveSwitch -> {
             currentState.copy(screenPerspective = change.authPerspective)
         }
+        is AuthViewStateChange.CredentialsButtonChange -> {
+            currentState.copy(credentialsSubmitButtonEnabled = change.credentialsSubmitButtonEnabled)
+        }
     }
 }

@@ -37,7 +37,7 @@ private const val SLIDE_DELAY = 300
 private const val SLIDE_IN_Y_DELTA = 500
 private const val SLIDE_OUT_Y_DELTA = -500
 private const val ERROR_DISPLAY_DURATION = 1500
-private const val DEFAULT_INACTIVE_ALPHA = .75f
+private const val DEFAULT_INACTIVE_ALPHA = .5f
 private const val START_NO_DELAY = 0
 
 class ActionButton @JvmOverloads constructor(
