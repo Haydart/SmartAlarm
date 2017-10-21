@@ -35,8 +35,13 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
     override val repeatPasswordInputIntent: Observable<String>
         get() = repeatPasswordInput.textChanges().map(CharSequence::toString)
 
-    override val credentialsSubmitIntent
-        get() = credentialsSubmitButton.clicks()
+    override val credentialsSubmitIntent: Observable<Credentials>
+        get() = credentialsSubmitButton.clicks().map {
+            Credentials(
+                    emailInput.text.toString(),
+                    passwordInput.text.toString(),
+                    repeatPasswordInput.text.toString())
+        }
 
     override val emailRegistrationIntent: Observable<Unit>
         get() = registerText.clicks().doOnEach { logD("email register button click") }

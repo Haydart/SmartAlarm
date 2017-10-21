@@ -90,7 +90,7 @@ class AuthInteractor(
             if (arePasswordsIdentical) "" else "Passwords are not identical"
     )
 
-    override fun attachCredentialsSubmitIntent(intentObservable: Observable<Unit>) {
+    override fun attachCredentialsSubmitIntent(intentObservable: Observable<Credentials>) {
         viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
                 intentObservable.map { AuthViewStateChange.CredentialsSubmit() }
         )
@@ -112,4 +112,10 @@ class AuthInteractor(
         //todo implement
     }
 }
+
+data class Credentials(
+        val email: String,
+        val password: String,
+        val repeatPassword: String
+)
 
