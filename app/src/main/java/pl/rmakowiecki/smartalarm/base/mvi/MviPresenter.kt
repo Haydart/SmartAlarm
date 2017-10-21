@@ -8,70 +8,83 @@ import io.reactivex.disposables.Disposables
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import pl.rmakowiecki.smartalarm.base.Contracts
-import pl.rmakowiecki.smartalarm.extensions.applyComputationSchedulers
+import pl.rmakowiecki.smartalarm.extensions.applyIoSchedulers
 import java.util.*
 
 abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>() : Contracts.Presenter {
 
-    private var viewStateBehaviorSubject: BehaviorSubject<VS> = BehaviorSubject.create()
-    private var subscribeViewStateMethodCalled = false
-    private val intentRelaysBinders = ArrayList<IntentRelayBinderPair<*>>()
-    private var intentsDisposables = CompositeDisposable()
-    private var viewRelayConsumerDisposable = Disposables.disposed()
-    private var viewStateDisposable = Disposables.disposed()
-    private var viewAttachedFirstTime = true
-    private var viewStateConsumer: ((view: V, viewState: VS) -> Unit)? = null
+    private var viewStateRenderBehaviorSubject: BehaviorSubject<VS> = BehaviorSubject.create()
 
-    @CallSuper fun attachView(view: V) {
-        if (viewAttachedFirstTime) {
+    private var viewStateRenderConsumer: ((V, VS) -> Unit)? = null
+
+    private val intentRelaysBinders = ArrayList<IntentRelayBinderPair<*>>()
+
+    private var viewIntentsDisposables = CompositeDisposable()
+
+    private var viewRenderRelayDisposable = Disposables.disposed()
+    private var eventHandleDisposable = Disposables.disposed()
+
+    private var viewStateDisposable = Disposables.disposed()
+    private var eventDisposable = Disposables.disposed()
+
+    private var subscribeViewStateMethodCalled = false
+    private var subscribeEventMethodCalled = false
+
+    private var viewAttachedForTheFirstTime = true
+
+    @CallSuper
+    fun attachView(view: V) {
+        if (viewAttachedForTheFirstTime) {
             bindIntents()
         }
 
-        viewStateConsumer?.let {
-            subscribeViewStateConsumerActually(view)
-        }
+        performViewStateSubscription(view)
 
-        intentRelaysBinders.forEach {
-            bindIntentActually(view, it)
-        }
+        intentRelaysBinders.forEach { bindViewStateIntentActually(view, it) }
 
-        viewAttachedFirstTime = false
+        viewAttachedForTheFirstTime = false
     }
 
     protected abstract fun bindIntents()
 
-    @MainThread private fun subscribeViewStateConsumerActually(view: V) {
-        viewRelayConsumerDisposable = viewStateBehaviorSubject.subscribe { viewState ->
-            viewStateConsumer?.invoke(view, viewState)
-        }
+    @MainThread private fun performViewStateSubscription(view: V) {
+        viewRenderRelayDisposable = viewStateRenderBehaviorSubject
+                .subscribe { viewState ->
+                    viewStateRenderConsumer?.invoke(view, viewState)
+                }
     }
 
     @CallSuper
     fun detachView() {
-        viewRelayConsumerDisposable.dispose()
-        intentsDisposables.dispose()
+        viewRenderRelayDisposable.dispose()
+        viewIntentsDisposables.clear()
     }
 
-    protected fun unbindIntents() = Unit
+    fun detachNavigator() {
+        eventHandleDisposable.dispose()
+    }
 
-    @MainThread private fun <I> bindIntentActually(view: V, relayBinderPair: IntentRelayBinderPair<I>): Observable<I> {
+    protected fun unbindIntents() {
+        viewIntentsDisposables.clear()
+        viewStateDisposable.dispose()
+    }
 
+    @MainThread private fun <I> bindViewStateIntentActually(view: V, relayBinderPair: IntentRelayBinderPair<I>) {
         val intentRelay = relayBinderPair.intentRelaySubject
-        val binderFunction = relayBinderPair.binderFunc
-        val intent = binderFunction(view)
+        val intentObservable = relayBinderPair.binderFunction(view)
 
-        intentsDisposables.add(intent.subscribeWith(DisposableIntentObserver(intentRelay)))
-        return intentRelay
+        viewIntentsDisposables.add(intentObservable
+                .subscribeWith(DisposableIntentObserver(intentRelay))
+        )
     }
 
     @MainThread protected fun <I> bindIntent(binderFunction: (V) -> Observable<I>): Observable<I> {
-
         val intentRelay = PublishSubject.create<I>()
         intentRelaysBinders.add(IntentRelayBinderPair(intentRelay, binderFunction))
         return intentRelay
     }
 
-    @MainThread protected fun subscribeViewState(viewStateObservable: Observable<VS>, consumerFunction: (view: V, viewState: VS) -> Unit) {
+    @MainThread protected fun subscribeViewState(viewStateObservable: Observable<out VS>, consumerFunction: ((view: V, viewState: VS) -> Unit)? = null) {
         if (subscribeViewStateMethodCalled) {
             throw IllegalStateException(
                     "subscribeViewState() method is only allowed to be called once"
@@ -79,15 +92,15 @@ abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>() : Co
         }
         subscribeViewStateMethodCalled = true
 
-        viewStateConsumer = consumerFunction
+        viewStateRenderConsumer = consumerFunction
 
         viewStateDisposable = viewStateObservable
-                .applyComputationSchedulers()
-                .subscribeWith(DisposableViewStateObserver(viewStateBehaviorSubject))
+                .applyIoSchedulers()
+                .subscribeWith(DisposableViewStateObserver(viewStateRenderBehaviorSubject))
     }
 
     private inner class IntentRelayBinderPair<I>(
             val intentRelaySubject: PublishSubject<I>,
-            val binderFunc: (V) -> Observable<I>
+            val binderFunction: (V) -> Observable<I>
     )
 }

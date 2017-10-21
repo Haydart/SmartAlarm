@@ -31,10 +31,7 @@ sealed class AuthViewStateChange {
     class PasswordValidation(val passwordError: String) : AuthViewStateChange()
     class RepeatPasswordInput(val repeatedPassword: String) : AuthViewStateChange()
     class RepeatPasswordValidation(val repeatedPasswordError: String) : AuthViewStateChange()
-    class PerspectiveSwitch : AuthViewStateChange()
+    class PerspectiveSwitch(val authPerspective: AuthPerspective) : AuthViewStateChange()
+    class CredentialsButtonChange(val credentialsSubmitButtonEnabled: Boolean) : AuthViewStateChange()
     class CredentialsSubmit : AuthViewStateChange()
-}
-
-sealed class AuthUseCaseChange {
-    class ForgotPasswordClick : AuthUseCaseChange()
 }

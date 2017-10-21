@@ -9,11 +9,13 @@
     <string name="transition_auth_content">auth_content</string>
     <string name="transition_background">transition_background</string>
     <string name="transition_logo">transition_logo</string>
-    <string name="input_hint_repeat_password">Email</string>
+    <string name="input_hint_repeat_password">Repeat password</string>
     <string name="facebook_sign_in">Sign in with Facebook</string>
     <string name="google_sign_in">Sign in with Google</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="login">Login</string>
     <string name="input_hint_password">Password</string>
     <string name="register_with_email">Register with email</string>
+    <string name="register">Register</string>
+    <string name="input_hint_email">Email</string>
 </resources>

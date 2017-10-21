@@ -34,7 +34,8 @@
         android:layout_weight="0.80"
         android:gravity="center"
         android:orientation="vertical"
-        android:transitionName="@string/transition_auth_content">
+        android:transitionName="@string/transition_auth_content"
+        android:animateLayoutChanges="true">
 
         <Button
             android:id="@+id/googleButton"
@@ -79,7 +80,7 @@
                 android:id="@+id/emailInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/input_hint_repeat_password"
+                android:hint="@string/input_hint_email"
                 android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
 

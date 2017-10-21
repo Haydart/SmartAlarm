@@ -27,7 +27,6 @@
 
         <activity
             android:name=".ui.screens.auth.AuthActivity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity

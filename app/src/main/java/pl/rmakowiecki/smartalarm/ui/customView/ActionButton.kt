@@ -23,6 +23,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import com.wang.avi.AVLoadingIndicatorView
+import kotlinx.android.synthetic.main.action_button.view.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.extensions.invisible
 import pl.rmakowiecki.smartalarm.extensions.visible
@@ -36,7 +37,7 @@ private const val SLIDE_DELAY = 300
 private const val SLIDE_IN_Y_DELTA = 500
 private const val SLIDE_OUT_Y_DELTA = -500
 private const val ERROR_DISPLAY_DURATION = 1500
-private const val DEFAULT_INACTIVE_ALPHA = .75f
+private const val DEFAULT_INACTIVE_ALPHA = .5f
 private const val START_NO_DELAY = 0
 
 class ActionButton @JvmOverloads constructor(
@@ -127,6 +128,10 @@ class ActionButton @JvmOverloads constructor(
         this.enabled = enabled
         isClickable = enabled
         alpha = if (this.enabled) 1f else inactiveAlpha
+    }
+
+    fun setText(text: String) {
+        buttonActionText.text = text
     }
 
     fun showSuccess() {
