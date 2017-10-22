@@ -9,11 +9,9 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_auth.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
-import pl.rmakowiecki.smartalarm.extensions.gone
-import pl.rmakowiecki.smartalarm.extensions.logD
-import pl.rmakowiecki.smartalarm.extensions.setTextIfDifferent
-import pl.rmakowiecki.smartalarm.extensions.visible
+import pl.rmakowiecki.smartalarm.extensions.*
 import pl.rmakowiecki.smartalarm.ui.customView.TilingDrawable
+import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthPerspective.*
 
 class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
         Auth.View, Auth.Navigator {
@@ -91,24 +89,48 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
 
         credentialsSubmitButton.isEnabled = credentialsSubmitButtonEnabled
 
-        if (screenPerspective == AuthPerspective.LOGIN) {
-            facebookButton.visible()
-            googleButton.visible()
-            repeatPasswordInputLayout.gone()
+        if (isLoading) credentialsSubmitButton.showProcessing()
 
-            registerText.visible()
-            forgotPasswordText.visible()
-
-            credentialsSubmitButton.setText(getString(R.string.login))
-        } else {
-            facebookButton.gone()
-            googleButton.gone()
-            repeatPasswordInputLayout.visible()
-
-            registerText.gone()
-            forgotPasswordText.gone()
-
-            credentialsSubmitButton.setText(getString(R.string.register))
+        when (screenPerspective) {
+            LOGIN -> showLoginPerspective()
+            REGISTER -> showRegisterPerspective()
+            FORGOT_PASSWORD -> showForgotPasswordPerspective()
         }
+    }
+
+    private fun showLoginPerspective() {
+        facebookButton.visible()
+        googleButton.visible()
+        passwordInputLayout.visible()
+        repeatPasswordInputLayout.gone()
+
+        registerText.visible()
+        forgotPasswordText.visible()
+
+        credentialsSubmitButton.setText(getString(R.string.login))
+    }
+
+    private fun showRegisterPerspective() {
+        facebookButton.gone()
+        googleButton.gone()
+        passwordInputLayout.visible()
+        repeatPasswordInputLayout.visible()
+
+        registerText.gone()
+        forgotPasswordText.gone()
+
+        credentialsSubmitButton.setText(getString(R.string.register))
+    }
+
+    private fun showForgotPasswordPerspective() {
+        facebookButton.gone()
+        googleButton.gone()
+        passwordInputLayout.invisible()
+        repeatPasswordInputLayout.gone()
+
+        registerText.gone()
+        forgotPasswordText.gone()
+
+        credentialsSubmitButton.setText(getString(R.string.remind_password))
     }
 }

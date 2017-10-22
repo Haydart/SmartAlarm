@@ -32,4 +32,6 @@ class CredentialsValidator {
 
     fun areRegisterCredentialsValid(email: String, password: String, repeatPassword: String) =
             isValidEmail(email) && isValidPassword(password) && isValidRepeatPassword(repeatPassword)
+
+    fun areRemindPasswordCredentialsValid(inputEmail: String) = isValidEmail(inputEmail)
 }

@@ -21,7 +21,8 @@ data class AuthViewState private constructor(
 
 enum class AuthPerspective {
     LOGIN,
-    REGISTER
+    REGISTER,
+    FORGOT_PASSWORD
 }
 
 sealed class AuthViewStateChange {

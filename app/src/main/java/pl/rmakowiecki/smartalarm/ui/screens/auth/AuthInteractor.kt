@@ -1,6 +1,7 @@
 package pl.rmakowiecki.smartalarm.ui.screens.auth
 
 import io.reactivex.Observable
+import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthPerspective.*
 import java.util.concurrent.TimeUnit
 
 class AuthInteractor(
@@ -28,11 +29,9 @@ class AuthInteractor(
 
     private fun isCredentialInputValid(currentViewState: AuthViewState) = with(currentViewState) {
         when (currentViewState.screenPerspective) {
-            AuthPerspective.LOGIN -> validator
-                    .areLoginCredentialsValid(emailInputText, passwordInputText)
-
-            AuthPerspective.REGISTER -> validator
-                    .areRegisterCredentialsValid(emailInputText, passwordInputText, repeatPasswordInputText)
+            LOGIN -> validator.areLoginCredentialsValid(emailInputText, passwordInputText)
+            REGISTER -> validator.areRegisterCredentialsValid(emailInputText, passwordInputText, repeatPasswordInputText)
+            FORGOT_PASSWORD -> validator.areRemindPasswordCredentialsValid(emailInputText)
         }
     }
 
@@ -98,18 +97,20 @@ class AuthInteractor(
 
     override fun attachEmailRegistrationIntent(intentObservable: Observable<Unit>) {
         viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
-                intentObservable.map { AuthViewStateChange.PerspectiveSwitch(AuthPerspective.REGISTER) }
+                intentObservable.map { AuthViewStateChange.PerspectiveSwitch(REGISTER) }
         )
     }
 
     override fun attachBackButtonClickIntent(intentObservable: Observable<Unit>) {
         viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
-                intentObservable.map { AuthViewStateChange.PerspectiveSwitch(AuthPerspective.LOGIN) }
+                intentObservable.map { AuthViewStateChange.PerspectiveSwitch(LOGIN) }
         )
     }
 
     override fun attachForgotPasswordIntent(intentObservable: Observable<Unit>) {
-        //todo implement
+        viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
+                intentObservable.map { AuthViewStateChange.PerspectiveSwitch(FORGOT_PASSWORD) }
+        )
     }
 }
 
