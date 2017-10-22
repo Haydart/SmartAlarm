@@ -7,7 +7,8 @@ import java.util.concurrent.TimeUnit
 class AuthInteractor(
         private val navigator: Auth.Navigator,
         private val reducer: AuthStateReducer,
-        private val validator: CredentialsValidator
+        private val validator: CredentialsValidator,
+        private val auth: AuthService
 ) : Auth.Interactor {
 
     private var viewStateIntentsObservable: Observable<AuthViewStateChange> = Observable.empty<AuthViewStateChange>()
