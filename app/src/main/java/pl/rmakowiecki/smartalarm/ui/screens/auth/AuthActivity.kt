@@ -33,13 +33,29 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
     override val repeatPasswordInputIntent: Observable<String>
         get() = repeatPasswordInput.textChanges().map(CharSequence::toString)
 
-    override val credentialsSubmitIntent: Observable<Credentials>
-        get() = credentialsSubmitButton.clicks().map {
-            Credentials(
-                    emailInput.text.toString(),
-                    passwordInput.text.toString(),
-                    repeatPasswordInput.text.toString())
-        }
+    override val loginIntent: Observable<LoginCredentials>
+        get() = credentialsSubmitButton.clicks()
+                .filter { !loginIntentBlocked }
+                .map {
+                    LoginCredentials(
+                            emailInput.text.toString(),
+                            passwordInput.text.toString())
+                }
+
+    override val registerIntent: Observable<RegisterCredentials>
+        get() = credentialsSubmitButton.clicks()
+                .filter { !registerIntentBlocked }
+                .map {
+                    RegisterCredentials(
+                            emailInput.text.toString(),
+                            passwordInput.text.toString(),
+                            repeatPasswordInput.text.toString())
+                }
+
+    override val remindPasswordIntent: Observable<RemindPasswordCredentials>
+        get() = credentialsSubmitButton.clicks()
+                .filter { !remindPasswordIntentBlocked }
+                .map { RemindPasswordCredentials(emailInput.text.toString()) }
 
     override val emailRegistrationIntent: Observable<Unit>
         get() = registerText.clicks().doOnEach { logD("email register button click") }
@@ -51,6 +67,10 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
 
     override val forgotPasswordIntent: Observable<Unit>
         get() = forgotPasswordText.clicks()
+
+    private var loginIntentBlocked = true
+    private var registerIntentBlocked = true
+    private var remindPasswordIntentBlocked = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,6 +128,10 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
         forgotPasswordText.visible()
 
         credentialsSubmitButton.setText(getString(R.string.login))
+
+        loginIntentBlocked = false
+        registerIntentBlocked = true
+        remindPasswordIntentBlocked = true
     }
 
     private fun showRegisterPerspective() {
@@ -120,6 +144,10 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
         forgotPasswordText.gone()
 
         credentialsSubmitButton.setText(getString(R.string.register))
+
+        loginIntentBlocked = true
+        registerIntentBlocked = false
+        remindPasswordIntentBlocked = true
     }
 
     private fun showForgotPasswordPerspective() {
@@ -132,5 +160,9 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
         forgotPasswordText.gone()
 
         credentialsSubmitButton.setText(getString(R.string.remind_password))
+
+        loginIntentBlocked = true
+        registerIntentBlocked = true
+        remindPasswordIntentBlocked = false
     }
 }

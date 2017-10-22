@@ -23,8 +23,8 @@ class AuthPresenter(
         attachRepeatPasswordInputIntent(
                 bindIntent(Auth.View::repeatPasswordInputIntent))
 
-        attachCredentialsSubmitIntent(
-                bindIntent(Auth.View::credentialsSubmitIntent))
+        attachRegisterIntent(
+                bindIntent(Auth.View::loginIntent))
 
         attachEmailRegistrationIntent(
                 bindIntent(Auth.View::emailRegistrationIntent).doOnEach { logD("email register click presenter") })

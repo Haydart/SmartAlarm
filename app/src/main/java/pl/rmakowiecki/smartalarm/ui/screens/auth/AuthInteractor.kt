@@ -89,10 +89,28 @@ class AuthInteractor(
             if (arePasswordsIdentical) "" else "Passwords are not identical"
     )
 
-    override fun attachCredentialsSubmitIntent(intentObservable: Observable<Credentials>) {
-        viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
-                intentObservable.map { AuthViewStateChange.CredentialsSubmit() }
-        )
+    override fun attachLoginIntent(intentObservable: Observable<LoginCredentials>) {
+        viewStateIntentsObservable = viewStateIntentsObservable
+                .mergeWith(intentObservable
+                        .map { AuthViewStateChange.CredentialsSubmit() })
+                .mergeWith(intentObservable
+                        .flatMap(auth::login))
+    }
+
+    override fun attachRegisterIntent(intentObservable: Observable<RegisterCredentials>) {
+        viewStateIntentsObservable = viewStateIntentsObservable
+                .mergeWith(intentObservable
+                        .map { AuthViewStateChange.CredentialsSubmit() })
+                .mergeWith(intentObservable
+                        .flatMap(auth::register))
+    }
+
+    override fun attachRemindPasswordIntent(intentObservable: Observable<RemindPasswordCredentials>) {
+        viewStateIntentsObservable = viewStateIntentsObservable
+                .mergeWith(intentObservable
+                        .map { AuthViewStateChange.CredentialsSubmit() })
+                .mergeWith(intentObservable
+                        .flatMap(auth::remindPassword))
     }
 
     override fun attachEmailRegistrationIntent(intentObservable: Observable<Unit>) {
@@ -114,9 +132,18 @@ class AuthInteractor(
     }
 }
 
-data class Credentials(
+data class LoginCredentials(
+        val email: String,
+        val password: String
+)
+
+data class RegisterCredentials(
         val email: String,
         val password: String,
         val repeatPassword: String
+)
+
+data class RemindPasswordCredentials(
+        val email: String
 )
 
