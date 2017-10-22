@@ -1,12 +1,14 @@
 package pl.rmakowiecki.smartalarm.ui.screens.auth
 
 import io.reactivex.Observable
+import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthPerspective.*
 import java.util.concurrent.TimeUnit
 
 class AuthInteractor(
         private val navigator: Auth.Navigator,
         private val reducer: AuthStateReducer,
-        private val validator: CredentialsValidator
+        private val validator: CredentialsValidator,
+        private val authService: AuthService
 ) : Auth.Interactor {
 
     private var viewStateIntentsObservable: Observable<AuthViewStateChange> = Observable.empty<AuthViewStateChange>()
@@ -28,11 +30,9 @@ class AuthInteractor(
 
     private fun isCredentialInputValid(currentViewState: AuthViewState) = with(currentViewState) {
         when (currentViewState.screenPerspective) {
-            AuthPerspective.LOGIN -> validator
-                    .areLoginCredentialsValid(emailInputText, passwordInputText)
-
-            AuthPerspective.REGISTER -> validator
-                    .areRegisterCredentialsValid(emailInputText, passwordInputText, repeatPasswordInputText)
+            LOGIN -> validator.areLoginCredentialsValid(emailInputText, passwordInputText)
+            REGISTER -> validator.areRegisterCredentialsValid(emailInputText, passwordInputText, repeatPasswordInputText)
+            FORGOT_PASSWORD -> validator.areRemindPasswordCredentialsValid(emailInputText)
         }
     }
 
@@ -90,32 +90,77 @@ class AuthInteractor(
             if (arePasswordsIdentical) "" else "Passwords are not identical"
     )
 
-    override fun attachCredentialsSubmitIntent(intentObservable: Observable<Credentials>) {
-        viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
-                intentObservable.map { AuthViewStateChange.CredentialsSubmit() }
-        )
+    override fun attachLoginIntent(intentObservable: Observable<LoginCredentials>) {
+        viewStateIntentsObservable = viewStateIntentsObservable
+                .mergeWith(intentObservable
+                        .map { AuthViewStateChange.CredentialsSubmit() })
+                .mergeWith(intentObservable
+                        .flatMapSingle(authService::login)
+                        .map(this::mapToAuthStateChange)
+                        .flatMap(this::recoverNeutralViewState))
+    }
+
+    private fun recoverNeutralViewState(viewStateChange: AuthViewStateChange): Observable<AuthViewStateChange> = Observable.merge(
+            Observable.just(viewStateChange),
+            Observable.just(AuthViewStateChange.Neutral())
+                    .delay(2, TimeUnit.SECONDS)
+    )
+
+    private fun mapToAuthStateChange(response: AuthResponse): AuthViewStateChange =
+            if (response.isSuccessful) AuthViewStateChange.AuthSuccess()
+            else AuthViewStateChange.AuthFailure(response.error?.localizedMessage ?: "Unknown error")
+
+    override fun attachRegisterIntent(intentObservable: Observable<RegisterCredentials>) {
+        viewStateIntentsObservable = viewStateIntentsObservable
+                .mergeWith(intentObservable
+                        .map { AuthViewStateChange.CredentialsSubmit() })
+                .mergeWith(intentObservable
+                        .flatMapSingle(authService::register)
+                        .map(this::mapToAuthStateChange)
+                        .flatMap(this::recoverNeutralViewState))
+    }
+
+    override fun attachResetPasswordIntent(intentObservable: Observable<RemindPasswordCredentials>) {
+        viewStateIntentsObservable = viewStateIntentsObservable
+                .mergeWith(intentObservable
+                        .map { AuthViewStateChange.CredentialsSubmit() })
+                .mergeWith(intentObservable
+                        .flatMapSingle(authService::resetPassword)
+                        .map(this::mapToAuthStateChange)
+                        .flatMap(this::recoverNeutralViewState))
     }
 
     override fun attachEmailRegistrationIntent(intentObservable: Observable<Unit>) {
         viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
-                intentObservable.map { AuthViewStateChange.PerspectiveSwitch(AuthPerspective.REGISTER) }
+                intentObservable.map { AuthViewStateChange.PerspectiveSwitch(REGISTER) }
         )
     }
 
     override fun attachBackButtonClickIntent(intentObservable: Observable<Unit>) {
         viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
-                intentObservable.map { AuthViewStateChange.PerspectiveSwitch(AuthPerspective.LOGIN) }
+                intentObservable.map { AuthViewStateChange.PerspectiveSwitch(LOGIN) }
         )
     }
 
     override fun attachForgotPasswordIntent(intentObservable: Observable<Unit>) {
-        //todo implement
+        viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
+                intentObservable.map { AuthViewStateChange.PerspectiveSwitch(FORGOT_PASSWORD) }
+        )
     }
 }
 
-data class Credentials(
+data class LoginCredentials(
+        val email: String,
+        val password: String
+)
+
+data class RegisterCredentials(
         val email: String,
         val password: String,
         val repeatPassword: String
+)
+
+data class RemindPasswordCredentials(
+        val email: String
 )
 

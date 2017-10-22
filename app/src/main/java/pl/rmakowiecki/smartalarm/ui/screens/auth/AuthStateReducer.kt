@@ -23,13 +23,26 @@ class AuthStateReducer {
             currentState.copy(repeatPasswordInputError = change.repeatedPasswordError)
         }
         is CredentialsSubmit -> {
-            currentState.copy(isLoading = true)
+            if (!currentState.isLoading)
+                currentState.copy(isLoading = true)
+            else currentState
         }
         is PerspectiveSwitch -> {
-            currentState.copy(screenPerspective = change.authPerspective)
+            if (!currentState.isLoading)
+                currentState.copy(screenPerspective = change.authPerspective)
+            else currentState
         }
         is AuthViewStateChange.CredentialsButtonChange -> {
             currentState.copy(credentialsSubmitButtonEnabled = change.credentialsSubmitButtonEnabled)
+        }
+        is AuthViewStateChange.AuthSuccess -> {
+            currentState.copy(isLoading = false, isShowingSuccess = true)
+        }
+        is AuthViewStateChange.AuthFailure -> {
+            currentState.copy(isLoading = false, generalError = change.errorMessage)
+        }
+        is AuthViewStateChange.Neutral -> {
+            currentState.copy(isLoading = false, isShowingSuccess = false, generalError = "")
         }
     }
 }

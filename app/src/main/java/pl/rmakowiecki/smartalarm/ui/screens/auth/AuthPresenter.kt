@@ -23,14 +23,20 @@ class AuthPresenter(
         attachRepeatPasswordInputIntent(
                 bindIntent(Auth.View::repeatPasswordInputIntent))
 
-        attachCredentialsSubmitIntent(
-                bindIntent(Auth.View::credentialsSubmitIntent))
+        attachLoginIntent(
+                bindIntent(Auth.View::loginIntent).doOnEach { logD("login intent presenter") })
+
+        attachRegisterIntent(
+                bindIntent(Auth.View::registerIntent).doOnEach { logD("register intent presenter") })
+
+        attachResetPasswordIntent(
+                bindIntent(Auth.View::resetPasswordIntent).doOnEach { logD("password reset intent presenter") })
 
         attachEmailRegistrationIntent(
-                bindIntent(Auth.View::emailRegistrationIntent).doOnEach { logD("email register click presenter") })
+                bindIntent(Auth.View::emailRegistrationIntent))
 
         attachBackButtonClickIntent(
-                bindIntent(Auth.View::backButtonIntent).doOnEach { logD("back button click presenter") })
+                bindIntent(Auth.View::backButtonIntent))
 
         attachForgotPasswordIntent(
                 bindIntent(Auth.View::forgotPasswordIntent))
