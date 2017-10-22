@@ -96,11 +96,19 @@ class AuthInteractor(
                         .map { AuthViewStateChange.CredentialsSubmit() })
                 .mergeWith(intentObservable
                         .flatMapSingle(authService::login)
-                        .map {
-                            if (it.isSuccessful) AuthViewStateChange.AuthSuccess()
-                            else AuthViewStateChange.AuthFailure(it.error?.localizedMessage ?: "Unknown error")
-                        })
+                        .map(this::mapToAuthStateChange)
+                        .flatMap(this::recoverNeutralViewState))
     }
+
+    private fun recoverNeutralViewState(viewStateChange: AuthViewStateChange): Observable<AuthViewStateChange> = Observable.merge(
+            Observable.just(viewStateChange),
+            Observable.just(AuthViewStateChange.Neutral())
+                    .delay(2, TimeUnit.SECONDS)
+    )
+
+    private fun mapToAuthStateChange(response: AuthResponse): AuthViewStateChange =
+            if (response.isSuccessful) AuthViewStateChange.AuthSuccess()
+            else AuthViewStateChange.AuthFailure(response.error?.localizedMessage ?: "Unknown error")
 
     override fun attachRegisterIntent(intentObservable: Observable<RegisterCredentials>) {
         viewStateIntentsObservable = viewStateIntentsObservable
@@ -108,10 +116,8 @@ class AuthInteractor(
                         .map { AuthViewStateChange.CredentialsSubmit() })
                 .mergeWith(intentObservable
                         .flatMapSingle(authService::register)
-                        .map {
-                            if (it.isSuccessful) AuthViewStateChange.AuthSuccess()
-                            else AuthViewStateChange.AuthFailure(it.error?.localizedMessage ?: "Unknown error")
-                        })
+                        .map(this::mapToAuthStateChange)
+                        .flatMap(this::recoverNeutralViewState))
     }
 
     override fun attachResetPasswordIntent(intentObservable: Observable<RemindPasswordCredentials>) {
@@ -119,11 +125,9 @@ class AuthInteractor(
                 .mergeWith(intentObservable
                         .map { AuthViewStateChange.CredentialsSubmit() })
                 .mergeWith(intentObservable
-                        .flatMapSingle(authService::remindPassword)
-                        .map {
-                            if (it.isSuccessful) AuthViewStateChange.AuthSuccess()
-                            else AuthViewStateChange.AuthFailure(it.error?.localizedMessage ?: "Unknown error")
-                        })
+                        .flatMapSingle(authService::resetPassword)
+                        .map(this::mapToAuthStateChange)
+                        .flatMap(this::recoverNeutralViewState))
     }
 
     override fun attachEmailRegistrationIntent(intentObservable: Observable<Unit>) {

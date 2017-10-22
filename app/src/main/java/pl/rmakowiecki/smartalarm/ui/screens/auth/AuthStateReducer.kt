@@ -41,5 +41,8 @@ class AuthStateReducer {
         is AuthViewStateChange.AuthFailure -> {
             currentState.copy(isLoading = false, generalError = change.errorMessage)
         }
+        is AuthViewStateChange.Neutral -> {
+            currentState.copy(isLoading = false, isShowingSuccess = false, generalError = "")
+        }
     }
 }

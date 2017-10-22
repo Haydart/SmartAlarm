@@ -38,4 +38,5 @@ sealed class AuthViewStateChange {
     class CredentialsSubmit : AuthViewStateChange()
     class AuthSuccess : AuthViewStateChange()
     class AuthFailure(val errorMessage: String) : AuthViewStateChange()
+    class Neutral : AuthViewStateChange()
 }

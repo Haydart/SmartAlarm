@@ -33,8 +33,12 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
     override val repeatPasswordInputIntent: Observable<String>
         get() = repeatPasswordInput.textChanges().map(CharSequence::toString)
 
+    private val credentialsButtonClicksObservable
+        get() = credentialsSubmitButton.clicks().share()
+
     override val loginIntent: Observable<LoginCredentials>
-        get() = credentialsSubmitButton.clicks()
+        get() = credentialsButtonClicksObservable
+                .doOnEach { logD("login intent ") }
                 .filter { !loginIntentBlocked }
                 .map {
                     LoginCredentials(
@@ -43,7 +47,8 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
                 }
 
     override val registerIntent: Observable<RegisterCredentials>
-        get() = credentialsSubmitButton.clicks()
+        get() = credentialsButtonClicksObservable
+                .doOnEach { logD("register intent ") }
                 .filter { !registerIntentBlocked }
                 .map {
                     RegisterCredentials(
@@ -53,22 +58,23 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
                 }
 
     override val resetPasswordIntent: Observable<RemindPasswordCredentials>
-        get() = credentialsSubmitButton.clicks()
+        get() = credentialsButtonClicksObservable
+                .doOnEach { logD("password reset intent ") }
                 .filter { !resetPasswordIntentBlocked }
                 .map { RemindPasswordCredentials(emailInput.text.toString()) }
 
     override val emailRegistrationIntent: Observable<Unit>
-        get() = registerText.clicks().doOnEach { logD("email register button click") }
+        get() = registerText.clicks()
 
     private val backButtonPublishSubject = PublishSubject.create<Unit>()
 
     override val backButtonIntent: Observable<Unit>
-        get() = backButtonPublishSubject.doOnEach { logD("back button click") }
+        get() = backButtonPublishSubject
 
     override val forgotPasswordIntent: Observable<Unit>
         get() = forgotPasswordText.clicks()
 
-    private var loginIntentBlocked = true
+    private var loginIntentBlocked = false
     private var registerIntentBlocked = true
     private var resetPasswordIntentBlocked = true
 
@@ -95,6 +101,7 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
     override fun onBackPressed() = backButtonPublishSubject.onNext(Unit)
 
     override fun render(authViewState: AuthViewState) = with(authViewState) {
+
         emailInput.setTextIfDifferent(emailInputText)
         passwordInput.setTextIfDifferent(passwordInputText)
         repeatPasswordInput.setTextIfDifferent(repeatPasswordInputText)
@@ -110,7 +117,11 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
 
         credentialsSubmitButton.isEnabled = credentialsSubmitButtonEnabled
 
-        if (isLoading) credentialsSubmitButton.showProcessing()
+        when {
+            isLoading -> credentialsSubmitButton.showProcessing()
+            isShowingSuccess -> credentialsSubmitButton.showSuccess()
+            generalError.isNotBlank() -> credentialsSubmitButton.showFailure(generalError)
+        }
 
         when (screenPerspective) {
             LOGIN -> showLoginPerspective()
@@ -160,7 +171,7 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
         registerText.gone()
         forgotPasswordText.gone()
 
-        credentialsSubmitButton.setText(getString(R.string.remind_password))
+        credentialsSubmitButton.setText(getString(R.string.reset_password))
 
         loginIntentBlocked = true
         registerIntentBlocked = true

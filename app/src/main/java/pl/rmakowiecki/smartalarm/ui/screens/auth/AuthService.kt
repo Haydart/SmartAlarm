@@ -22,7 +22,7 @@ class FirebaseAuthService : AuthService {
                 }
     }
 
-    override fun remindPassword(credentials: RemindPasswordCredentials): Single<AuthResponse> = Single.create { emitter ->
+    override fun resetPassword(credentials: RemindPasswordCredentials): Single<AuthResponse> = Single.create { emitter ->
         FirebaseAuth.getInstance()
                 .sendPasswordResetEmail(credentials.email)
                 .addOnCompleteListener {
@@ -44,7 +44,7 @@ class FirebaseAuthService : AuthService {
 interface AuthService {
     fun login(credentials: LoginCredentials): Single<AuthResponse>
     fun register(credentials: RegisterCredentials): Single<AuthResponse>
-    fun remindPassword(credentials: RemindPasswordCredentials): Single<AuthResponse>
+    fun resetPassword(credentials: RemindPasswordCredentials): Single<AuthResponse>
     fun signInWithFacebook(credential: AuthCredential): Single<AuthResponse>
     fun signInWithGoogle(credential: AuthCredential): Single<AuthResponse>
 }
