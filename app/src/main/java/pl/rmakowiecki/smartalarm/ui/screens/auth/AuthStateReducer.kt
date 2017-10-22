@@ -35,5 +35,11 @@ class AuthStateReducer {
         is AuthViewStateChange.CredentialsButtonChange -> {
             currentState.copy(credentialsSubmitButtonEnabled = change.credentialsSubmitButtonEnabled)
         }
+        is AuthViewStateChange.AuthSuccess -> {
+            currentState.copy(isLoading = false, isShowingSuccess = true)
+        }
+        is AuthViewStateChange.AuthFailure -> {
+            currentState.copy(isLoading = false, generalError = change.errorMessage)
+        }
     }
 }

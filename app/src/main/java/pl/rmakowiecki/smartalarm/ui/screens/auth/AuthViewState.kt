@@ -12,6 +12,7 @@ data class AuthViewState private constructor(
         val credentialsSubmitButtonEnabled: Boolean = false,
         val screenPerspective: AuthPerspective = AuthPerspective.LOGIN,
         val isLoading: Boolean = false,
+        val isShowingSuccess: Boolean = false,
         val generalError: String = ""
 ) : Contracts.ViewState {
     companion object {
@@ -35,4 +36,6 @@ sealed class AuthViewStateChange {
     class PerspectiveSwitch(val authPerspective: AuthPerspective) : AuthViewStateChange()
     class CredentialsButtonChange(val credentialsSubmitButtonEnabled: Boolean) : AuthViewStateChange()
     class CredentialsSubmit : AuthViewStateChange()
+    class AuthSuccess : AuthViewStateChange()
+    class AuthFailure(val errorMessage: String) : AuthViewStateChange()
 }

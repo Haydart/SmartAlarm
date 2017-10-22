@@ -8,7 +8,7 @@ class AuthInteractor(
         private val navigator: Auth.Navigator,
         private val reducer: AuthStateReducer,
         private val validator: CredentialsValidator,
-        private val auth: AuthService
+        private val authService: AuthService
 ) : Auth.Interactor {
 
     private var viewStateIntentsObservable: Observable<AuthViewStateChange> = Observable.empty<AuthViewStateChange>()
@@ -95,7 +95,11 @@ class AuthInteractor(
                 .mergeWith(intentObservable
                         .map { AuthViewStateChange.CredentialsSubmit() })
                 .mergeWith(intentObservable
-                        .flatMap(auth::login))
+                        .flatMapSingle(authService::login)
+                        .map {
+                            if (it.isSuccessful) AuthViewStateChange.AuthSuccess()
+                            else AuthViewStateChange.AuthFailure(it.error?.localizedMessage ?: "Unknown error")
+                        })
     }
 
     override fun attachRegisterIntent(intentObservable: Observable<RegisterCredentials>) {
@@ -103,15 +107,23 @@ class AuthInteractor(
                 .mergeWith(intentObservable
                         .map { AuthViewStateChange.CredentialsSubmit() })
                 .mergeWith(intentObservable
-                        .flatMap(auth::register))
+                        .flatMapSingle(authService::register)
+                        .map {
+                            if (it.isSuccessful) AuthViewStateChange.AuthSuccess()
+                            else AuthViewStateChange.AuthFailure(it.error?.localizedMessage ?: "Unknown error")
+                        })
     }
 
-    override fun attachRemindPasswordIntent(intentObservable: Observable<RemindPasswordCredentials>) {
+    override fun attachResetPasswordIntent(intentObservable: Observable<RemindPasswordCredentials>) {
         viewStateIntentsObservable = viewStateIntentsObservable
                 .mergeWith(intentObservable
                         .map { AuthViewStateChange.CredentialsSubmit() })
                 .mergeWith(intentObservable
-                        .flatMap(auth::remindPassword))
+                        .flatMapSingle(authService::remindPassword)
+                        .map {
+                            if (it.isSuccessful) AuthViewStateChange.AuthSuccess()
+                            else AuthViewStateChange.AuthFailure(it.error?.localizedMessage ?: "Unknown error")
+                        })
     }
 
     override fun attachEmailRegistrationIntent(intentObservable: Observable<Unit>) {

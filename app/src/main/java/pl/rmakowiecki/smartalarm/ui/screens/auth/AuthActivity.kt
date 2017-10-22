@@ -52,9 +52,9 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
                             repeatPasswordInput.text.toString())
                 }
 
-    override val remindPasswordIntent: Observable<RemindPasswordCredentials>
+    override val resetPasswordIntent: Observable<RemindPasswordCredentials>
         get() = credentialsSubmitButton.clicks()
-                .filter { !remindPasswordIntentBlocked }
+                .filter { !resetPasswordIntentBlocked }
                 .map { RemindPasswordCredentials(emailInput.text.toString()) }
 
     override val emailRegistrationIntent: Observable<Unit>
@@ -70,7 +70,7 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
 
     private var loginIntentBlocked = true
     private var registerIntentBlocked = true
-    private var remindPasswordIntentBlocked = true
+    private var resetPasswordIntentBlocked = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +88,8 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
             AuthInteractor(
                     this,
                     AuthStateReducer(),
-                    CredentialsValidator()
+                    CredentialsValidator(),
+                    FirebaseAuthService()
             ))
 
     override fun onBackPressed() = backButtonPublishSubject.onNext(Unit)
@@ -131,7 +132,7 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
 
         loginIntentBlocked = false
         registerIntentBlocked = true
-        remindPasswordIntentBlocked = true
+        resetPasswordIntentBlocked = true
     }
 
     private fun showRegisterPerspective() {
@@ -147,7 +148,7 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
 
         loginIntentBlocked = true
         registerIntentBlocked = false
-        remindPasswordIntentBlocked = true
+        resetPasswordIntentBlocked = true
     }
 
     private fun showForgotPasswordPerspective() {
@@ -163,6 +164,6 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
 
         loginIntentBlocked = true
         registerIntentBlocked = true
-        remindPasswordIntentBlocked = false
+        resetPasswordIntentBlocked = false
     }
 }
