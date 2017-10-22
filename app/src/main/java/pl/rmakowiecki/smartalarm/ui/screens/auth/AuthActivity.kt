@@ -9,7 +9,10 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_auth.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
-import pl.rmakowiecki.smartalarm.extensions.*
+import pl.rmakowiecki.smartalarm.extensions.gone
+import pl.rmakowiecki.smartalarm.extensions.invisible
+import pl.rmakowiecki.smartalarm.extensions.setTextIfDifferent
+import pl.rmakowiecki.smartalarm.extensions.visible
 import pl.rmakowiecki.smartalarm.ui.customView.TilingDrawable
 import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthPerspective.*
 
@@ -33,12 +36,8 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
     override val repeatPasswordInputIntent: Observable<String>
         get() = repeatPasswordInput.textChanges().map(CharSequence::toString)
 
-    private val credentialsButtonClicksObservable
-        get() = credentialsSubmitButton.clicks().share()
-
     override val loginIntent: Observable<LoginCredentials>
-        get() = credentialsButtonClicksObservable
-                .doOnEach { logD("login intent ") }
+        get() = loginButton.clicks()
                 .filter { !loginIntentBlocked }
                 .map {
                     LoginCredentials(
@@ -47,8 +46,7 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
                 }
 
     override val registerIntent: Observable<RegisterCredentials>
-        get() = credentialsButtonClicksObservable
-                .doOnEach { logD("register intent ") }
+        get() = registerButton.clicks()
                 .filter { !registerIntentBlocked }
                 .map {
                     RegisterCredentials(
@@ -58,8 +56,7 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
                 }
 
     override val resetPasswordIntent: Observable<RemindPasswordCredentials>
-        get() = credentialsButtonClicksObservable
-                .doOnEach { logD("password reset intent ") }
+        get() = resetPasswordButton.clicks()
                 .filter { !resetPasswordIntentBlocked }
                 .map { RemindPasswordCredentials(emailInput.text.toString()) }
 
@@ -115,63 +112,91 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
         repeatPasswordInputLayout.isErrorEnabled = repeatPasswordInputError.isNotBlank()
         repeatPasswordInputLayout.error = repeatPasswordInputError
 
-        credentialsSubmitButton.isEnabled = credentialsSubmitButtonEnabled
-
-        when {
-            isLoading -> credentialsSubmitButton.showProcessing()
-            isShowingSuccess -> credentialsSubmitButton.showSuccess()
-            generalError.isNotBlank() -> credentialsSubmitButton.showFailure(generalError)
-        }
-
         when (screenPerspective) {
-            LOGIN -> showLoginPerspective()
-            REGISTER -> showRegisterPerspective()
-            FORGOT_PASSWORD -> showForgotPasswordPerspective()
+            LOGIN -> showLoginPerspective(this)
+            REGISTER -> showRegisterPerspective(this)
+            FORGOT_PASSWORD -> showForgotPasswordPerspective(this)
         }
     }
 
-    private fun showLoginPerspective() {
+    private fun showLoginPerspective(authViewState: AuthViewState) {
         facebookButton.visible()
         googleButton.visible()
         passwordInputLayout.visible()
         repeatPasswordInputLayout.gone()
 
+        loginButton.visible()
+        registerButton.invisible()
+        resetPasswordButton.invisible()
+
         registerText.visible()
         forgotPasswordText.visible()
 
-        credentialsSubmitButton.setText(getString(R.string.login))
+        with(authViewState) {
+            loginButton.isEnabled = credentialsSubmitButtonEnabled
+
+            when {
+                isLoading -> loginButton.showProcessing()
+                isShowingSuccess -> loginButton.showSuccess()
+                generalError.isNotBlank() -> loginButton.showFailure(generalError)
+            }
+        }
 
         loginIntentBlocked = false
         registerIntentBlocked = true
         resetPasswordIntentBlocked = true
     }
 
-    private fun showRegisterPerspective() {
+    private fun showRegisterPerspective(authViewState: AuthViewState) {
         facebookButton.gone()
         googleButton.gone()
         passwordInputLayout.visible()
         repeatPasswordInputLayout.visible()
 
+        loginButton.invisible()
+        registerButton.visible()
+        resetPasswordButton.invisible()
+
         registerText.gone()
         forgotPasswordText.gone()
 
-        credentialsSubmitButton.setText(getString(R.string.register))
+        with(authViewState) {
+            registerButton.isEnabled = credentialsSubmitButtonEnabled
+
+            when {
+                isLoading -> registerButton.showProcessing()
+                isShowingSuccess -> registerButton.showSuccess()
+                generalError.isNotBlank() -> registerButton.showFailure(generalError)
+            }
+        }
 
         loginIntentBlocked = true
         registerIntentBlocked = false
         resetPasswordIntentBlocked = true
     }
 
-    private fun showForgotPasswordPerspective() {
+    private fun showForgotPasswordPerspective(authViewState: AuthViewState) {
         facebookButton.gone()
         googleButton.gone()
         passwordInputLayout.invisible()
         repeatPasswordInputLayout.gone()
 
+        loginButton.invisible()
+        registerButton.invisible()
+        resetPasswordButton.visible()
+
         registerText.gone()
         forgotPasswordText.gone()
 
-        credentialsSubmitButton.setText(getString(R.string.reset_password))
+        with(authViewState) {
+            resetPasswordButton.isEnabled = credentialsSubmitButtonEnabled
+
+            when {
+                isLoading -> resetPasswordButton.showProcessing()
+                isShowingSuccess -> resetPasswordButton.showSuccess()
+                generalError.isNotBlank() -> resetPasswordButton.showFailure(generalError)
+            }
+        }
 
         loginIntentBlocked = true
         registerIntentBlocked = true
