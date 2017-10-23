@@ -17,8 +17,8 @@ interface Splash {
     }
 
     interface Interactor : Contracts.Interactor {
-        fun attachTransitionIntent(intentObservable: Observable<Unit>)
+        val viewStateIntentObservable: Observable<SplashViewState>
 
-        fun getViewStateObservable(): Observable<SplashViewState>
+        fun attachTransitionIntent(intentObservable: Observable<Unit>)
     }
 }

@@ -10,7 +10,6 @@ import android.view.View
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_splash.*
 import pl.rmakowiecki.smartalarm.R
-import pl.rmakowiecki.smartalarm.base.Contracts
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
 import pl.rmakowiecki.smartalarm.extensions.Extra
 import pl.rmakowiecki.smartalarm.extensions.startActivity
@@ -19,11 +18,11 @@ import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthActivity
 import pl.rmakowiecki.smartalarm.ui.screens.auth.FirebaseAuthService
 import pl.rmakowiecki.smartalarm.ui.screens.main.HomeActivity
 
-class SplashActivity : MviActivity<Contracts.View, Contracts.ViewState, SplashPresenter>(),
+class SplashActivity : MviActivity<Splash.View, SplashViewState, SplashPresenter>(),
         Splash.View, Splash.Navigator {
 
-    override val splashTransitionIntent: Observable<Unit>
-        get() = Observable.just(Unit)
+    override val splashTransitionIntent: Observable<Unit> =
+            Observable.just(Unit)
 
     override val layoutRes = R.layout.activity_splash
 

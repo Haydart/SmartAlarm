@@ -9,18 +9,18 @@ class SplashInteractor(
         private val navigator: Splash.Navigator
 ) : Splash.Interactor {
 
-    override fun getViewStateObservable(): Observable<SplashViewState> = Observable.empty()
+    override var viewStateIntentObservable: Observable<SplashViewState> = Observable.empty()
+        private set
 
     override fun attachTransitionIntent(intentObservable: Observable<Unit>) {
-        getViewStateObservable()
+        viewStateIntentObservable = viewStateIntentObservable
                 .mergeWith(intentObservable
+                        .map { SplashViewState.afterTransition() })
+                .mergeWith(Observable
+                        .timer(3, TimeUnit.SECONDS)
+                        .flatMapSingle { authService.isUserLoggedIn() }
+                        .doOnNext(this::navigateToProperScreen)
                         .map { SplashViewState.afterTransition() }
-                        .delay(1, TimeUnit.SECONDS))
-                .mergeWith(
-                        Observable.timer(2, TimeUnit.SECONDS)
-                                .flatMapSingle { authService.isUserLoggedIn() }
-                                .doOnNext(this::navigateToProperScreen)
-                                .map { SplashViewState.afterTransition() }
                 )
     }
 
