@@ -1,6 +1,7 @@
 package pl.rmakowiecki.smartalarm.ui.screens.splash
 
 import io.reactivex.Observable
+import pl.rmakowiecki.smartalarm.extensions.applyIoSchedulers
 import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthService
 import java.util.concurrent.TimeUnit
 
@@ -15,13 +16,14 @@ class SplashInteractor(
     override fun attachTransitionIntent(intentObservable: Observable<Unit>) {
         viewStateIntentObservable = viewStateIntentObservable
                 .mergeWith(intentObservable
-                        .map { SplashViewState.afterTransition() })
+                        .map { SplashViewState.afterTransition() }
+                        .delay(1, TimeUnit.SECONDS))
                 .mergeWith(Observable
                         .timer(3, TimeUnit.SECONDS)
                         .flatMapSingle { authService.isUserLoggedIn() }
+                        .applyIoSchedulers()
                         .doOnNext(this::navigateToProperScreen)
-                        .map { SplashViewState.afterTransition() }
-                )
+                        .map { SplashViewState.afterTransition() })
     }
 
     private fun navigateToProperScreen(isUserLoggedIn: Boolean) =
