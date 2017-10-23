@@ -22,7 +22,9 @@ interface Auth {
         fun render(authViewState: AuthViewState)
     }
 
-    interface Navigator : Contracts.Navigator
+    interface Navigator : Contracts.Navigator {
+        fun showHomeScreen()
+    }
 
     interface Interactor : Contracts.Interactor {
         fun getViewStateObservable(): Observable<AuthViewState>
