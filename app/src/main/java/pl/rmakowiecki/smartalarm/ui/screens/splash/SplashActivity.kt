@@ -1,29 +1,42 @@
 package pl.rmakowiecki.smartalarm.ui.screens.splash
 
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.transition.Explode
 import android.transition.TransitionInflater
 import android.transition.TransitionManager
 import android.transition.TransitionSet
 import android.view.View
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_splash.*
 import pl.rmakowiecki.smartalarm.R
+import pl.rmakowiecki.smartalarm.base.Contracts
+import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
 import pl.rmakowiecki.smartalarm.extensions.Extra
 import pl.rmakowiecki.smartalarm.extensions.startActivity
 import pl.rmakowiecki.smartalarm.ui.customView.TilingDrawable
 import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthActivity
+import pl.rmakowiecki.smartalarm.ui.screens.auth.FirebaseAuthService
+import pl.rmakowiecki.smartalarm.ui.screens.main.HomeActivity
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : MviActivity<Contracts.View, Contracts.ViewState, SplashPresenter>(),
+        Splash.View, Splash.Navigator {
+
+    override val splashTransitionIntent: Observable<Unit>
+        get() = Observable.just(Unit)
+
+    override val layoutRes = R.layout.activity_splash
+
+    override fun createPresenter() = SplashPresenter(
+            SplashInteractor(
+                    FirebaseAuthService(),
+                    this
+            )
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
         setActivityBackground()
-        Handler().postDelayed({ startLogoAnimation() }, 750)
-        Handler().postDelayed({ startAuthActivity() }, 1500)
     }
 
     private fun setActivityBackground() {
@@ -31,6 +44,10 @@ class SplashActivity : AppCompatActivity() {
 
         val tilingDrawable = TilingDrawable(rawDrawable)
         contentLayout.background = tilingDrawable
+    }
+
+    override fun render(viewState: SplashViewState) {
+        if (viewState.afterTransition) startLogoAnimation()
     }
 
     private fun startLogoAnimation() {
@@ -41,11 +58,17 @@ class SplashActivity : AppCompatActivity() {
         splashLogoInscription.visibility = View.VISIBLE
     }
 
-    private fun startAuthActivity() {
+    override fun showAuthScreen() {
         startActivity<AuthActivity>(
                 Extra.SharedView(splashLogo),
                 Extra.SharedView(contentView)
         )
+        overridePendingTransition(0, 0)
+        window.exitTransition = Explode()
+    }
+
+    override fun showHomeScreen() {
+        startActivity<HomeActivity>()
         overridePendingTransition(0, 0)
         window.exitTransition = Explode()
     }

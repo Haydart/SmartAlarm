@@ -6,5 +6,4 @@ interface Contracts {
     interface Interactor
     interface Presenter
     interface Navigator
-    interface Intents
 }

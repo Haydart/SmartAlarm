@@ -6,6 +6,10 @@ import io.reactivex.Single
 
 class FirebaseAuthService : AuthService {
 
+    override fun isUserLoggedIn(): Single<Boolean> = Single.just(
+            FirebaseAuth.getInstance().currentUser != null
+    )
+
     override fun login(credentials: LoginCredentials): Single<AuthResponse> = Single.create { emitter ->
         FirebaseAuth.getInstance()
                 .signInWithEmailAndPassword(credentials.email, credentials.password)
@@ -47,6 +51,7 @@ interface AuthService {
     fun resetPassword(credentials: RemindPasswordCredentials): Single<AuthResponse>
     fun signInWithFacebook(credential: AuthCredential): Single<AuthResponse>
     fun signInWithGoogle(credential: AuthCredential): Single<AuthResponse>
+    fun isUserLoggedIn(): Single<Boolean>
 }
 
 class AuthResponse(

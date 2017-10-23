@@ -11,7 +11,7 @@ class AuthInteractor(
         private val authService: AuthService
 ) : Auth.Interactor {
 
-    private var viewStateIntentsObservable: Observable<AuthViewStateChange> = Observable.empty<AuthViewStateChange>()
+    private var viewStateIntentsObservable: Observable<AuthViewStateChange> = Observable.empty()
 
     private var needsToRevalidateInput = false
 
