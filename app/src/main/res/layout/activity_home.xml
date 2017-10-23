@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pl.rmakowiecki.smartalarm.ui.screens.main.HomeActivity">
+    tools:context="pl.rmakowiecki.smartalarm.ui.screens.main.HomeActivity"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <ToggleButton
         android:id="@+id/alarmArmingButton"
@@ -12,4 +14,11 @@
         android:textOn="@string/button_text_disarm"
         android:textOff="@string/button_text_arm"
         android:layout_gravity="center" />
-</FrameLayout>
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="logout"
+        android:layout_gravity="center" />
+</LinearLayout>

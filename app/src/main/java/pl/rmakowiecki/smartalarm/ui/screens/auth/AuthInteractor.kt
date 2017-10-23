@@ -11,7 +11,7 @@ class AuthInteractor(
         private val authService: AuthService
 ) : Auth.Interactor {
 
-    private var viewStateIntentsObservable: Observable<AuthViewStateChange> = Observable.empty<AuthViewStateChange>()
+    private var viewStateIntentsObservable: Observable<AuthViewStateChange> = Observable.empty()
 
     private var needsToRevalidateInput = false
 
@@ -96,19 +96,21 @@ class AuthInteractor(
                         .map { AuthViewStateChange.CredentialsSubmit() })
                 .mergeWith(intentObservable
                         .flatMapSingle(authService::login)
-                        .map(this::mapToAuthStateChange)
-                        .flatMap(this::recoverNeutralViewState))
+                        .flatMap(this::navigateToProperScreenIfSuccessful))
     }
 
-    private fun recoverNeutralViewState(viewStateChange: AuthViewStateChange): Observable<AuthViewStateChange> = Observable.merge(
+    private fun navigateToProperScreenIfSuccessful(response: AuthResponse): Observable<AuthViewStateChange> =
+            if (response.isSuccessful) {
+                applyChangeAndDelayedNeutralViewState(AuthViewStateChange.AuthSuccess())
+                        .doOnNext { navigator.showHomeScreen() }
+            } else Observable.just(
+                    AuthViewStateChange.AuthFailure(response.error?.localizedMessage ?: "Unknown error"))
+
+    private fun applyChangeAndDelayedNeutralViewState(viewStateChange: AuthViewStateChange): Observable<AuthViewStateChange> = Observable.merge(
             Observable.just(viewStateChange),
             Observable.just(AuthViewStateChange.Neutral())
                     .delay(2, TimeUnit.SECONDS)
     )
-
-    private fun mapToAuthStateChange(response: AuthResponse): AuthViewStateChange =
-            if (response.isSuccessful) AuthViewStateChange.AuthSuccess()
-            else AuthViewStateChange.AuthFailure(response.error?.localizedMessage ?: "Unknown error")
 
     override fun attachRegisterIntent(intentObservable: Observable<RegisterCredentials>) {
         viewStateIntentsObservable = viewStateIntentsObservable
@@ -116,8 +118,7 @@ class AuthInteractor(
                         .map { AuthViewStateChange.CredentialsSubmit() })
                 .mergeWith(intentObservable
                         .flatMapSingle(authService::register)
-                        .map(this::mapToAuthStateChange)
-                        .flatMap(this::recoverNeutralViewState))
+                        .flatMap(this::navigateToProperScreenIfSuccessful))
     }
 
     override fun attachResetPasswordIntent(intentObservable: Observable<RemindPasswordCredentials>) {
@@ -126,8 +127,7 @@ class AuthInteractor(
                         .map { AuthViewStateChange.CredentialsSubmit() })
                 .mergeWith(intentObservable
                         .flatMapSingle(authService::resetPassword)
-                        .map(this::mapToAuthStateChange)
-                        .flatMap(this::recoverNeutralViewState))
+                        .flatMap(this::navigateToProperScreenIfSuccessful))
     }
 
     override fun attachEmailRegistrationIntent(intentObservable: Observable<Unit>) {
