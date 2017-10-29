@@ -14,16 +14,20 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        setupBottomNavigationBar()
+    }
+
+    private fun setupBottomNavigationBar() {
+
         bottomNavigationBar.accentColor = ContextCompat.getColor(this, R.color.accent)
-
-        val stateItem = AHBottomNavigationItem(R.string.bottom_bar_state, R.drawable.ic_settings_power_white_24px, R.color.primary)
-        val historyItem = AHBottomNavigationItem(R.string.bottom_bar_history, R.drawable.ic_history_white_24px, R.color.primary)
-        val settingsItem = AHBottomNavigationItem(R.string.bottom_bar_settings, R.drawable.ic_settings_white_24px, R.color.primary)
-
-        bottomNavigationBar.addItem(stateItem)
-        bottomNavigationBar.addItem(historyItem)
-        bottomNavigationBar.addItem(settingsItem)
-
         bottomNavigationBar.titleState = AHBottomNavigation.TitleState.ALWAYS_HIDE
+
+        arrayListOf<AHBottomNavigationItem>().apply {
+            add(AHBottomNavigationItem(R.string.bottom_bar_state, R.drawable.ic_settings_power_white_24px, R.color.primary))
+            add(AHBottomNavigationItem(R.string.bottom_bar_history, R.drawable.ic_history_white_24px, R.color.primary))
+            add(AHBottomNavigationItem(R.string.bottom_bar_settings, R.drawable.ic_settings_white_24px, R.color.primary))
+        }.forEach {
+            bottomNavigationBar.addItem(it)
+        }
     }
 }
