@@ -3,12 +3,13 @@ package pl.rmakowiecki.smartalarm.ui.screens.auth
 import io.reactivex.Observable
 import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthPerspective.*
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class AuthInteractor(
-        private val navigator: Auth.Navigator,
+class AuthInteractor @Inject constructor(
+        private val navigator: AuthNavigator,
         private val reducer: AuthStateReducer,
         private val validator: CredentialsValidator,
-        private val authService: AuthService
+        private val authService: FirebaseAuthService
 ) : Auth.Interactor {
 
     private var viewStateIntentsObservable: Observable<AuthViewStateChange> = Observable.empty()

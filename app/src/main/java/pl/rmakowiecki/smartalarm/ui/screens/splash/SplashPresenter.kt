@@ -1,9 +1,10 @@
 package pl.rmakowiecki.smartalarm.ui.screens.splash
 
 import pl.rmakowiecki.smartalarm.base.mvi.MviPresenter
+import javax.inject.Inject
 
-class SplashPresenter(
-        private val interactor: Splash.Interactor
+class SplashPresenter @Inject constructor(
+        private val interactor: SplashInteractor
 ) : MviPresenter<Splash.View, SplashViewState>() {
 
     override fun bindIntents() = with(interactor) {

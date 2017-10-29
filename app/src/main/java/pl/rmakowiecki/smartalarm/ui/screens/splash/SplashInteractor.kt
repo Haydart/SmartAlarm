@@ -2,12 +2,13 @@ package pl.rmakowiecki.smartalarm.ui.screens.splash
 
 import io.reactivex.Observable
 import pl.rmakowiecki.smartalarm.extensions.applyIoSchedulers
-import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthService
+import pl.rmakowiecki.smartalarm.ui.screens.auth.FirebaseAuthService
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class SplashInteractor(
-        private val authService: AuthService,
-        private val navigator: Splash.Navigator
+class SplashInteractor @Inject constructor(
+        private val authService: FirebaseAuthService,
+        private val navigator: SplashNavigator
 ) : Splash.Interactor {
 
     override var viewStateIntentObservable: Observable<SplashViewState> = Observable.empty()

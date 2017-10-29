@@ -3,8 +3,11 @@ package pl.rmakowiecki.smartalarm.ui.screens.auth
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Single
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class FirebaseAuthService : AuthService {
+@Singleton
+class FirebaseAuthService @Inject constructor() : AuthService {
 
     override fun isUserLoggedIn(): Single<Boolean> = Single.just(
             FirebaseAuth.getInstance().currentUser != null

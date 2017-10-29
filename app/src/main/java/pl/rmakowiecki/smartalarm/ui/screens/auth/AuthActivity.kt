@@ -9,13 +9,18 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_auth.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
-import pl.rmakowiecki.smartalarm.extensions.*
+import pl.rmakowiecki.smartalarm.extensions.gone
+import pl.rmakowiecki.smartalarm.extensions.invisible
+import pl.rmakowiecki.smartalarm.extensions.setTextIfDifferent
+import pl.rmakowiecki.smartalarm.extensions.visible
 import pl.rmakowiecki.smartalarm.ui.customView.TilingDrawable
 import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthPerspective.*
-import pl.rmakowiecki.smartalarm.ui.screens.main.HomeActivity
+import javax.inject.Inject
 
 class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
-        Auth.View, Auth.Navigator {
+        Auth.View {
+
+    @Inject lateinit var presenter: AuthPresenter
 
     override val layoutRes = R.layout.activity_auth
 
@@ -69,6 +74,10 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
     override val forgotPasswordIntent: Observable<Unit>
         get() = forgotPasswordText.clicks()
 
+    override fun retrievePresenter() = presenter
+
+    override fun injectComponents() = activityComponent.inject(this)
+
     private var loginIntentBlocked = false
     private var registerIntentBlocked = true
     private var resetPasswordIntentBlocked = true
@@ -84,14 +93,6 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
         val tilingDrawable = TilingDrawable(rawDrawable)
         headerBackgroundImage.background = tilingDrawable
     }
-
-    override fun createPresenter() = AuthPresenter(
-            AuthInteractor(
-                    this,
-                    AuthStateReducer(),
-                    CredentialsValidator(),
-                    FirebaseAuthService()
-            ))
 
     override fun onBackPressed() = backButtonPublishSubject.onNext(Unit)
 
@@ -200,6 +201,4 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
         registerIntentBlocked = true
         resetPasswordIntentBlocked = false
     }
-
-    override fun showHomeScreen() = startActivity<HomeActivity>()
 }
