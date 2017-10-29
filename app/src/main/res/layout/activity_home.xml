@@ -1,24 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pl.rmakowiecki.smartalarm.ui.screens.main.HomeActivity"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="pl.rmakowiecki.smartalarm.ui.screens.main.HomeActivity">
 
-    <ToggleButton
-        android:id="@+id/alarmArmingButton"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textOn="@string/button_text_disarm"
-        android:textOff="@string/button_text_arm"
-        android:layout_gravity="center" />
+        android:background="@android:color/transparent"
+        android:theme="@style/ToolbarTheme">
 
-    <Button
-        android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/white">
+
+            <TextView
+                android:id="@+id/toolbarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/bottom_bar_state"
+                android:textAlignment="center"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/text_size_extra_large"/>
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
+        android:id="@+id/bottomNavigationBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="logout"
-        android:layout_gravity="center" />
-</LinearLayout>
+        android:layout_gravity="bottom"/>
+</FrameLayout>

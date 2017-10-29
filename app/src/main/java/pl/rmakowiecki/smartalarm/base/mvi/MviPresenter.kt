@@ -3,32 +3,28 @@ package pl.rmakowiecki.smartalarm.base.mvi
 import android.support.annotation.CallSuper
 import android.support.annotation.MainThread
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposables
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import pl.rmakowiecki.smartalarm.base.Contracts
-import pl.rmakowiecki.smartalarm.extensions.applyIoSchedulers
 import java.util.*
 
-abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>() : Contracts.Presenter {
+abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState> : Contracts.Presenter {
 
     private var viewStateRenderBehaviorSubject: BehaviorSubject<VS> = BehaviorSubject.create()
-
     private var viewStateRenderConsumer: ((V, VS) -> Unit)? = null
 
     private val intentRelaysBinders = ArrayList<IntentRelayBinderPair<*>>()
 
     private var viewIntentsDisposables = CompositeDisposable()
-
     private var viewRenderRelayDisposable = Disposables.disposed()
-    private var eventHandleDisposable = Disposables.disposed()
-
     private var viewStateDisposable = Disposables.disposed()
-    private var eventDisposable = Disposables.disposed()
+    private var strayDisposables = CompositeDisposable()
 
     private var subscribeViewStateMethodCalled = false
-    private var subscribeEventMethodCalled = false
 
     private var viewAttachedForTheFirstTime = true
 
@@ -60,13 +56,10 @@ abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>() : Co
         viewIntentsDisposables.clear()
     }
 
-    fun detachNavigator() {
-        eventHandleDisposable.dispose()
-    }
-
     protected fun unbindIntents() {
-        viewIntentsDisposables.clear()
+        //todo actually UNBIND them
         viewStateDisposable.dispose()
+        strayDisposables.clear()
     }
 
     @MainThread private fun <I> bindViewStateIntentActually(view: V, relayBinderPair: IntentRelayBinderPair<I>) {
@@ -95,7 +88,8 @@ abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState>() : Co
         viewStateRenderConsumer = consumerFunction
 
         viewStateDisposable = viewStateObservable
-                .applyIoSchedulers()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .subscribeWith(DisposableViewStateObserver(viewStateRenderBehaviorSubject))
     }
 
