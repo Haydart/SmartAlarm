@@ -9,6 +9,10 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_home.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
+import pl.rmakowiecki.smartalarm.extensions.inTransaction
+import pl.rmakowiecki.smartalarm.ui.screens.main.alarmhistory.AlarmHistoryFragment
+import pl.rmakowiecki.smartalarm.ui.screens.main.alarmstate.AlarmStateFragment
+import pl.rmakowiecki.smartalarm.ui.screens.main.settings.SettingsFragment
 import javax.inject.Inject
 
 class HomeActivity : MviActivity<Home.View, HomeViewState, HomePresenter>(), Home.View {
@@ -34,7 +38,7 @@ class HomeActivity : MviActivity<Home.View, HomeViewState, HomePresenter>(), Hom
         accentColor = ContextCompat.getColor(this@HomeActivity, R.color.accent)
         titleState = AHBottomNavigation.TitleState.ALWAYS_HIDE
         addItems(createNavigationItems())
-        this.setOnTabSelectedListener { position, wasSelected ->
+        setOnTabSelectedListener { position, wasSelected ->
             if (!wasSelected) tabSwitchPublishSubject.onNext(position)
             true
         }
@@ -49,5 +53,14 @@ class HomeActivity : MviActivity<Home.View, HomeViewState, HomePresenter>(), Hom
     override fun render(viewState: HomeViewState) = with(viewState) {
         bottomNavigationBar.setCurrentItem(selectedTabPosition, false)
         toolbarTitle.text = bottomNavigationBar.getItem(selectedTabPosition).getTitle(this@HomeActivity)
+
+        supportFragmentManager.inTransaction {
+            replace(R.id.fragmentContentFrame, when (selectedTabPosition) {
+                0 -> AlarmStateFragment.newInstance()
+                1 -> AlarmHistoryFragment.newInstance()
+                2 -> SettingsFragment.newInstance()
+                else -> throw IllegalStateException("Invalid menu position chosen")
+            })
+        }
     }
 }

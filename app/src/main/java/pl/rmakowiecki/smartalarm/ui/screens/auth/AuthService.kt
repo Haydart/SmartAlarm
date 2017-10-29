@@ -46,6 +46,11 @@ class FirebaseAuthService @Inject constructor() : AuthService {
         //todo implement
         return Single.just(AuthResponse(false, Throwable()))
     }
+
+    override fun logoutUser(): Single<Boolean> {
+        FirebaseAuth.getInstance().signOut()
+        return Single.just(true)
+    }
 }
 
 interface AuthService {
@@ -55,6 +60,7 @@ interface AuthService {
     fun signInWithFacebook(credential: AuthCredential): Single<AuthResponse>
     fun signInWithGoogle(credential: AuthCredential): Single<AuthResponse>
     fun isUserLoggedIn(): Single<Boolean>
+    fun logoutUser(): Single<Boolean>
 }
 
 class AuthResponse(

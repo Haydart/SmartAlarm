@@ -1,5 +1,7 @@
 package pl.rmakowiecki.smartalarm.extensions
 
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentTransaction
 import android.view.View
 import android.widget.EditText
 
@@ -27,4 +29,10 @@ fun EditText.setTextIfDifferent(text: String) {
     if (this.text.toString() != text) {
         this.setText(text)
     }
+}
+
+inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> Unit) {
+    val fragmentTransaction = beginTransaction()
+    fragmentTransaction.func()
+    fragmentTransaction.commit()
 }
