@@ -9,7 +9,7 @@ class SmartAlarmApp : Application() {
     override fun onCreate() {
         super.onCreate()
         FirebaseApp.initializeApp(this)
-        FirebaseMessaging.getInstance().subscribeToTopic("8XwDg5Fxo0WszCCEaMCWusoq0vu1")
+        FirebaseMessaging.getInstance().subscribeToTopic("NiLVrDuQU6exqaPK9WZzfx5VIzZ2")
 
         FacebookSdk.sdkInitialize(applicationContext)
     }
