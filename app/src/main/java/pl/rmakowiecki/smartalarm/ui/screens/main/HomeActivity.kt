@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.activity_home.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
 import pl.rmakowiecki.smartalarm.extensions.inTransaction
+import pl.rmakowiecki.smartalarm.ui.screens.main.alarmhistory.AlarmHistoryFragment
 import pl.rmakowiecki.smartalarm.ui.screens.main.settings.SettingsFragment
 import javax.inject.Inject
 
@@ -55,8 +56,8 @@ class HomeActivity : MviActivity<Home.View, HomeViewState, HomePresenter>(), Hom
         supportFragmentManager.inTransaction {
             replace(R.id.fragmentContentFrame, when (selectedTabPosition) {
                 0 -> SettingsFragment()
-                1 -> SettingsFragment()
-                2 -> SettingsFragment()
+                1 -> AlarmHistoryFragment.newInstance()
+                2 -> SettingsFragment.newInstance()
                 else -> throw IllegalStateException("Invalid menu position chosen")
             })
         }

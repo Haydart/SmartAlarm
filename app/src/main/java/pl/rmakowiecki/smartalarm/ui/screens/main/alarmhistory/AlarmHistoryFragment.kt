@@ -15,6 +15,10 @@ class AlarmHistoryFragment : MviFragment<AlarmHistory.View, Contracts.ViewState,
     override fun injectComponents() = fragmentComponent.inject(this)
 
     override fun retrievePresenter() = presenter
+
+    companion object {
+        fun newInstance() = AlarmHistoryFragment()
+    }
 }
 
 class AlarmHistoryPresenter @Inject constructor() : MviPresenter<AlarmHistory.View, Contracts.ViewState>() {
