@@ -1,7 +1,6 @@
 package pl.rmakowiecki.smartalarm.ui.screens.auth
 
 import pl.rmakowiecki.smartalarm.base.mvi.MviPresenter
-import pl.rmakowiecki.smartalarm.extensions.logD
 
 class AuthPresenter(
         private val interactor: Auth.Interactor
@@ -24,13 +23,13 @@ class AuthPresenter(
                 bindIntent(Auth.View::repeatPasswordInputIntent))
 
         attachLoginIntent(
-                bindIntent(Auth.View::loginIntent).doOnEach { logD("login intent presenter") })
+                bindIntent(Auth.View::loginIntent))
 
         attachRegisterIntent(
-                bindIntent(Auth.View::registerIntent).doOnEach { logD("register intent presenter") })
+                bindIntent(Auth.View::registerIntent))
 
         attachResetPasswordIntent(
-                bindIntent(Auth.View::resetPasswordIntent).doOnEach { logD("password reset intent presenter") })
+                bindIntent(Auth.View::resetPasswordIntent))
 
         attachEmailRegistrationIntent(
                 bindIntent(Auth.View::emailRegistrationIntent))
