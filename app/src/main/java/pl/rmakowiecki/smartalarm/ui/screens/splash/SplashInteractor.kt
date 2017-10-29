@@ -2,12 +2,16 @@ package pl.rmakowiecki.smartalarm.ui.screens.splash
 
 import io.reactivex.Observable
 import pl.rmakowiecki.smartalarm.extensions.applyIoSchedulers
-import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthService
+import pl.rmakowiecki.smartalarm.ui.screens.auth.FirebaseAuthService
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class SplashInteractor(
-        private val authService: AuthService,
-        private val navigator: Splash.Navigator
+private const val TRANSITION_DELAY = 1L
+private const val NAVIGATION_DELAY = 3L
+
+class SplashInteractor @Inject constructor(
+        private val authService: FirebaseAuthService,
+        private val navigator: SplashNavigator
 ) : Splash.Interactor {
 
     override var viewStateIntentObservable: Observable<SplashViewState> = Observable.empty()
@@ -17,9 +21,9 @@ class SplashInteractor(
         viewStateIntentObservable = viewStateIntentObservable
                 .mergeWith(intentObservable
                         .map { SplashViewState.afterTransition() }
-                        .delay(1, TimeUnit.SECONDS))
+                        .delay(TRANSITION_DELAY, TimeUnit.SECONDS))
                 .mergeWith(Observable
-                        .timer(3, TimeUnit.SECONDS)
+                        .timer(NAVIGATION_DELAY, TimeUnit.SECONDS)
                         .flatMapSingle { authService.isUserLoggedIn() }
                         .applyIoSchedulers()
                         .doOnNext(this::performNavigation)

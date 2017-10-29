@@ -2,7 +2,6 @@ package pl.rmakowiecki.smartalarm.ui.screens.splash
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.transition.Explode
 import android.transition.TransitionInflater
 import android.transition.TransitionManager
 import android.transition.TransitionSet
@@ -11,27 +10,22 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_splash.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
-import pl.rmakowiecki.smartalarm.extensions.Extra
-import pl.rmakowiecki.smartalarm.extensions.startActivity
 import pl.rmakowiecki.smartalarm.ui.customView.TilingDrawable
-import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthActivity
-import pl.rmakowiecki.smartalarm.ui.screens.auth.FirebaseAuthService
-import pl.rmakowiecki.smartalarm.ui.screens.main.HomeActivity
+import javax.inject.Inject
 
 class SplashActivity : MviActivity<Splash.View, SplashViewState, SplashPresenter>(),
-        Splash.View, Splash.Navigator {
+        Splash.View {
+
+    @Inject lateinit var presenter: SplashPresenter
+
+    override val layoutRes = R.layout.activity_splash
 
     override val splashTransitionIntent: Observable<Unit> =
             Observable.just(Unit)
 
-    override val layoutRes = R.layout.activity_splash
+    override fun retrievePresenter() = presenter
 
-    override fun createPresenter() = SplashPresenter(
-            SplashInteractor(
-                    FirebaseAuthService(),
-                    this
-            )
-    )
+    override fun injectComponents() = activityComponent.inject(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,20 +49,5 @@ class SplashActivity : MviActivity<Splash.View, SplashViewState, SplashPresenter
                 .inflateTransition(R.transition.splash_logo) as TransitionSet
         TransitionManager.beginDelayedTransition(rootLayout, transitionSet)
         splashLogoInscription.visibility = View.VISIBLE
-    }
-
-    override fun showAuthScreen() {
-        startActivity<AuthActivity>(
-                Extra.SharedView(splashLogo),
-                Extra.SharedView(contentView)
-        )
-        overridePendingTransition(0, 0)
-        window.exitTransition = Explode()
-    }
-
-    override fun showHomeScreen() {
-        startActivity<HomeActivity>()
-        overridePendingTransition(0, 0)
-        window.exitTransition = Explode()
     }
 }

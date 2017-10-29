@@ -3,7 +3,10 @@ package pl.rmakowiecki.smartalarm.base.mvi
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
+import pl.rmakowiecki.smartalarm.SmartAlarmApp
 import pl.rmakowiecki.smartalarm.base.Contracts
+import pl.rmakowiecki.smartalarm.di.component.ActivityComponent
+import pl.rmakowiecki.smartalarm.di.module.ActivityModule
 
 abstract class MviActivity<V : Contracts.View, VS : Contracts.ViewState, out P : MviPresenter<V, VS>> :
         AppCompatActivity(), Contracts.View {
@@ -11,24 +14,32 @@ abstract class MviActivity<V : Contracts.View, VS : Contracts.ViewState, out P :
     @get:LayoutRes
     protected abstract val layoutRes: Int
 
-    private lateinit var presenter: P
+    lateinit var activityComponent: ActivityComponent
+        private set
 
+    @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layoutRes)
-        presenter = createPresenter()
+        activityComponent = SmartAlarmApp.get(this)
+                .applicationComponent
+                .activityComponent(ActivityModule(this))
+
+        injectComponents()
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun onStart() {
         super.onStart()
-        presenter.attachView(this as V)
+        retrievePresenter().attachView(this as V)
     }
 
     override fun onStop() {
-        presenter.detachView()
+        retrievePresenter().detachView()
         super.onStop()
     }
 
-    protected abstract fun createPresenter(): P
+    protected abstract fun retrievePresenter(): P
+
+    protected abstract fun injectComponents()
 }

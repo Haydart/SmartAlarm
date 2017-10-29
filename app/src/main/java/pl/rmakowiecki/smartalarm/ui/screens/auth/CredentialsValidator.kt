@@ -1,11 +1,12 @@
 package pl.rmakowiecki.smartalarm.ui.screens.auth
 
 import io.reactivex.Single
+import javax.inject.Inject
 
 private const val EMAIL_PATTERN = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,63}"
 private const val PASSWORD_MINIMUM_LENGTH = 8
 
-class CredentialsValidator {
+class CredentialsValidator @Inject constructor() {
 
     private var password: String = ""
 

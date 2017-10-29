@@ -1,9 +1,10 @@
 package pl.rmakowiecki.smartalarm.ui.screens.auth
 
 import pl.rmakowiecki.smartalarm.base.mvi.MviPresenter
+import javax.inject.Inject
 
-class AuthPresenter(
-        private val interactor: Auth.Interactor
+class AuthPresenter @Inject constructor(
+        private val interactor: AuthInteractor
 ) : MviPresenter<Auth.View, AuthViewState>() {
 
     override fun bindIntents() = with(interactor) {

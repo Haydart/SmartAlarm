@@ -1,8 +1,10 @@
 package pl.rmakowiecki.smartalarm.ui.screens.auth
 
 import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthViewStateChange.*
+import javax.inject.Inject
 
-class AuthStateReducer {
+class AuthStateReducer @Inject constructor() {
+
     fun reduce(currentState: AuthViewState, change: AuthViewStateChange) = when (change) {
         is EmailInput -> {
             currentState.copy(emailInputText = change.email, emailInputError = "")
