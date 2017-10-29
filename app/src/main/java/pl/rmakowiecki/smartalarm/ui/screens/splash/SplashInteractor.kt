@@ -26,11 +26,11 @@ class SplashInteractor @Inject constructor(
                         .timer(NAVIGATION_DELAY, TimeUnit.SECONDS)
                         .flatMapSingle { authService.isUserLoggedIn() }
                         .applyIoSchedulers()
-                        .doOnNext(this::navigateToProperScreen)
+                        .doOnNext(this::performNavigation)
                         .map { SplashViewState.afterTransition() })
     }
 
-    private fun navigateToProperScreen(isUserLoggedIn: Boolean) =
+    private fun performNavigation(isUserLoggedIn: Boolean) =
             if (isUserLoggedIn) navigator.showHomeScreen()
             else navigator.showAuthScreen()
 }
