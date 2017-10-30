@@ -2,8 +2,12 @@ package pl.rmakowiecki.smartalarm.ui.screens.main.alarmhistory
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_alarm_history.*
@@ -43,20 +47,6 @@ class AlarmHistoryFragment : MviFragment<AlarmHistory.View, Contracts.ViewState,
         registerForContextMenu(this)
     }
 
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        var position = (recyclerView.adapter as AlarmHistoryAdapter).menuPosition
-
-        when (item.itemId) {
-            R.id.action_archive -> {
-                logD("archive $position")
-            }
-            R.id.action_delete -> {
-            }
-        }
-
-        return super.onContextItemSelected(item)
-    }
-
     companion object {
         fun newInstance() = AlarmHistoryFragment()
     }
@@ -66,13 +56,18 @@ class AlarmHistoryAdapter(
         private val items: MutableList<AlarmHistoryItem>
 ) : RecyclerView.Adapter<AlarmHistoryViewHolder>() {
 
-    var menuPosition = 0
-        private set
+    override fun onBindViewHolder(holder: AlarmHistoryViewHolder, position: Int) = with(holder.overflowMenuButton) {
+        setOnClickListener {
+            PopupMenu(context, this).apply {
+                inflate(R.menu.alarm_history_item_popup_menu)
 
-    override fun onBindViewHolder(holder: AlarmHistoryViewHolder, position: Int) {
-        holder.itemView.setOnLongClickListener {
-            menuPosition = holder.adapterPosition
-            false
+                setOnMenuItemClickListener { menuItem ->
+                    val option = menuItem.title.toString()
+                    logD(option)
+                    true
+                }
+                show()
+            }
         }
         holder.bind(items[position])
     }
@@ -83,12 +78,6 @@ class AlarmHistoryAdapter(
         val view = LayoutInflater.from(parent.context).inflate(R.layout.history_list_item, parent, false)
         return AlarmHistoryViewHolder(view)
     }
-
-    override fun onViewRecycled(holder: AlarmHistoryViewHolder) {
-        holder.itemView.setOnLongClickListener(null)
-        super.onViewRecycled(holder)
-    }
-
 }
 
 class AlarmHistoryItem(
@@ -102,25 +91,17 @@ enum class AlarmTriggerReason {
     MOTION_SENSOR
 }
 
-class AlarmHistoryViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnCreateContextMenuListener {
+class AlarmHistoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     private val previewImage = view.findViewById<ImageView>(R.id.historyPreviewImage)
     private val dateText = view.findViewById<TextView>(R.id.triggerDateText)
     private val reasonText = view.findViewById<TextView>(R.id.triggerReasonText)
-
-    init {
-        view.setOnCreateContextMenuListener(this)
-    }
+    val overflowMenuButton: ImageButton = view.findViewById(R.id.popupMenuIcon)
 
     fun bind(alarmHistoryItem: AlarmHistoryItem) = with(alarmHistoryItem) {
         previewImage.loadImage(previewImageUrl)
         dateText.text = date.toString()
         reasonText.text = reason.toString()
-    }
-
-    override fun onCreateContextMenu(menu: ContextMenu, view: View, menuInfo: ContextMenu.ContextMenuInfo) {
-        menu.add(Menu.NONE, R.id.action_archive, Menu.NONE, R.string.action_archive)
-        menu.add(Menu.NONE, R.id.action_delete, Menu.NONE, R.string.action_delete)
     }
 }
 
