@@ -57,19 +57,21 @@ class AlarmHistoryAdapter(
 ) : RecyclerView.Adapter<AlarmHistoryViewHolder>() {
 
     override fun onBindViewHolder(holder: AlarmHistoryViewHolder, position: Int) = with(holder.overflowMenuButton) {
-        setOnClickListener {
-            PopupMenu(context, this).apply {
-                inflate(R.menu.alarm_history_item_popup_menu)
-
-                setOnMenuItemClickListener { menuItem ->
-                    val option = menuItem.title.toString()
-                    logD(option)
-                    true
-                }
-                show()
-            }
-        }
+        setOnClickListener { inflateAndShowPopupMenu(it) }
         holder.bind(items[position])
+    }
+
+    private fun inflateAndShowPopupMenu(view: View) {
+        PopupMenu(view.context, view).apply {
+            inflate(R.menu.alarm_history_item_popup_menu)
+
+            setOnMenuItemClickListener { menuItem ->
+                val option = menuItem.title.toString()
+                logD(option)
+                true
+            }
+            show()
+        }
     }
 
     override fun getItemCount() = items.size
