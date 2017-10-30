@@ -26,5 +26,6 @@
     <dimen name="auth_screen_button_padding">52dp</dimen>
 
     <dimen name="action_button_height">60dp</dimen>
+    <dimen name="alarm_history_item_preview_size">152dp</dimen>
 
 </resources>

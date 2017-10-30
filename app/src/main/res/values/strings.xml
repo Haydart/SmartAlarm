@@ -23,4 +23,6 @@
     <string name="bottom_bar_history">History</string>
     <string name="bottom_bar_settings">Settings</string>
     <string name="title_arming">Arming</string>
+    <string name="action_archive">Archive</string>
+    <string name="action_delete">Delete</string>
 </resources>

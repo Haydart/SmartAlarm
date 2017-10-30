@@ -1,5 +1,6 @@
 package pl.rmakowiecki.smartalarm.ui.screens.main.alarmstate
 
+import android.os.Bundle
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.Contracts
 import pl.rmakowiecki.smartalarm.base.mvi.MviFragment
@@ -14,6 +15,11 @@ class AlarmStateFragment : MviFragment<AlarmState.View, Contracts.ViewState, Ala
     override fun injectComponents() = fragmentComponent.inject(this)
 
     override fun retrievePresenter() = presenter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
 
     companion object {
         fun newInstance() = AlarmStateFragment()

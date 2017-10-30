@@ -59,7 +59,7 @@ class HomeActivity : MviActivity<Home.View, HomeViewState, HomePresenter>(), Hom
                 0 -> AlarmStateFragment.newInstance()
                 1 -> AlarmHistoryFragment.newInstance()
                 2 -> SettingsFragment.newInstance()
-                else -> throw IllegalStateException("Invalid menu position chosen")
+                else -> throw IllegalStateException("Invalid menu menuPosition chosen")
             })
         }
     }
