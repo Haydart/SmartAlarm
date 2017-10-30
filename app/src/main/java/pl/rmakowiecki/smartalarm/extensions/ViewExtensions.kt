@@ -4,6 +4,8 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.view.View
 import android.widget.EditText
+import android.widget.ImageView
+import com.squareup.picasso.Picasso
 
 fun View.visible() {
     visibility = View.VISIBLE
@@ -29,6 +31,23 @@ fun EditText.setTextIfDifferent(text: String) {
     if (this.text.toString() != text) {
         this.setText(text)
     }
+}
+
+fun ImageView.loadImage(path: String?, placeHolderResourceId: Int? = null, errorResourceId: Int? = null) {
+
+    val request = Picasso
+            .with(context)
+            .load(path)
+
+    if (placeHolderResourceId != null) {
+        request.placeholder(placeHolderResourceId)
+    }
+
+    if (errorResourceId != null) {
+        request.error(errorResourceId)
+    }
+
+    request.into(this)
 }
 
 inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> Unit) {
