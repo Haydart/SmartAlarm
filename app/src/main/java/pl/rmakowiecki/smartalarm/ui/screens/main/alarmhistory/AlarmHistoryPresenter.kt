@@ -1,10 +1,18 @@
 package pl.rmakowiecki.smartalarm.ui.screens.main.alarmhistory
 
-import pl.rmakowiecki.smartalarm.base.Contracts
 import pl.rmakowiecki.smartalarm.base.mvi.MviPresenter
 import javax.inject.Inject
 
-class AlarmHistoryPresenter @Inject constructor() : MviPresenter<AlarmHistory.View, Contracts.ViewState>() {
+class AlarmHistoryPresenter @Inject constructor(
+        private val interactor: AlarmHistoryInteractor
+) : MviPresenter<AlarmHistory.View, AlarmHistoryViewState>() {
 
-    override fun bindIntents() = Unit
+    override fun bindIntents() = with(interactor) {
+
+        attachArchiveIntent(bindIntent(AlarmHistory.View::incidentArchivingIntent))
+        attachDeletionIntent(bindIntent(AlarmHistory.View::incidentDeletionIntent))
+        attachDetailsIntent(bindIntent(AlarmHistory.View::incidentDetailsIntent))
+
+        subscribeViewState(getViewStateObservable(), AlarmHistory.View::render)
+    }
 }
