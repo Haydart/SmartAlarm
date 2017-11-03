@@ -20,4 +20,8 @@ interface AlarmHistory {
         fun attachDeletionIntent(intentObservable: Observable<Int>)
         fun attachDetailsIntent(intentObservable: Observable<Int>)
     }
+
+    interface Navigator : Contracts.Navigator {
+        fun showIncidentDetailsScreen()
+    }
 }
