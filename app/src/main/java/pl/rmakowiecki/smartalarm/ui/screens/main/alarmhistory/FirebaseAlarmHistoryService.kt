@@ -5,13 +5,9 @@ import javax.inject.Inject
 
 class FirebaseAlarmHistoryService @Inject constructor() : AlarmHistoryService {
 
-    override fun archiveIncident(): Single<Boolean> {
-        //todo implement
-        return Single.just(true)
-    }
+    override fun archiveIncident(): Single<Boolean> =//todo implement
+            Single.just(true)
 
-    override fun deleteIncident(): Single<Boolean> {
-        //todo implement
-        return Single.just(true)
-    }
+    override fun deleteIncident(): Single<Boolean> =//todo implement
+            Single.just(true)
 }
