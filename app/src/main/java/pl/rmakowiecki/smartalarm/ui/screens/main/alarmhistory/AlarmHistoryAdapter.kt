@@ -6,34 +6,36 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import pl.rmakowiecki.smartalarm.R
-import pl.rmakowiecki.smartalarm.extensions.logD
 
 class AlarmHistoryAdapter(
-        private val items: MutableList<AlarmHistoryItem>
+        private val items: MutableList<AlarmHistoryItem>,
+        private val onArchiveFunc: (Int) -> Unit,
+        private val onDeleteFunc: (Int) -> Unit,
+        private val onDetailsFuncs: (Int) -> Unit
 ) : RecyclerView.Adapter<AlarmHistoryViewHolder>() {
 
     override fun onBindViewHolder(holder: AlarmHistoryViewHolder, position: Int) = with(holder.overflowMenuButton) {
-        setOnClickListener { inflateAndShowPopupMenu(it) }
+        setOnClickListener { inflateAndShowPopupMenu(it, position) }
         holder.bind(items[position])
     }
 
-    private fun inflateAndShowPopupMenu(view: View) {
-        PopupMenu(view.context, view).apply {
-            inflate(R.menu.alarm_history_item_popup_menu)
+    private fun inflateAndShowPopupMenu(view: View, position: Int) = PopupMenu(view.context, view).apply {
+        inflate(R.menu.alarm_history_item_popup_menu)
 
-            setOnMenuItemClickListener { menuItem ->
-                val option = menuItem.title.toString()
-                logD(option)
-                true
+        setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_archive -> onArchiveFunc(position)
+                R.id.action_delete -> onDeleteFunc(position)
             }
-            show()
+            true
         }
+        show()
     }
 
     override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmHistoryViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.history_list_item, parent, false)
-        return AlarmHistoryViewHolder(view)
+        return AlarmHistoryViewHolder(view, onDetailsFuncs)
     }
 }

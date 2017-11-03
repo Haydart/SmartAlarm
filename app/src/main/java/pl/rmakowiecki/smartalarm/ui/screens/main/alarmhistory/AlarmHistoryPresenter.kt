@@ -11,6 +11,7 @@ class AlarmHistoryPresenter @Inject constructor(
 
         attachArchiveIntent(bindIntent(AlarmHistory.View::incidentArchivingIntent))
         attachDeletionIntent(bindIntent(AlarmHistory.View::incidentDeletionIntent))
+        attachDetailsIntent(bindIntent(AlarmHistory.View::incidentDetailsIntent))
 
         subscribeViewState(getViewStateObservable(), AlarmHistory.View::render)
     }

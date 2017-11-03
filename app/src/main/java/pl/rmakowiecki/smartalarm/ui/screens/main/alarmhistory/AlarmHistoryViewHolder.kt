@@ -8,7 +8,10 @@ import android.widget.TextView
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.extensions.loadImage
 
-class AlarmHistoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class AlarmHistoryViewHolder(
+        view: View,
+        private val onDetailsFuncs: (Int) -> Unit
+) : RecyclerView.ViewHolder(view) {
 
     private val previewImage = view.findViewById<ImageView>(R.id.historyPreviewImage)
     private val dateText = view.findViewById<TextView>(R.id.triggerDateText)
@@ -19,5 +22,7 @@ class AlarmHistoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         previewImage.loadImage(previewImageUrl)
         dateText.text = date.toString()
         reasonText.text = reason.toString()
+
+        previewImage.setOnClickListener { onDetailsFuncs(adapterPosition) }
     }
 }

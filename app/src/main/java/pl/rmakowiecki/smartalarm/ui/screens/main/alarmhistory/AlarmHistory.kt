@@ -8,6 +8,7 @@ interface AlarmHistory {
     interface View : Contracts.View {
         val incidentArchivingIntent: Observable<Int>
         val incidentDeletionIntent: Observable<Int>
+        val incidentDetailsIntent: Observable<Int>
 
         fun render(viewState: AlarmHistoryViewState)
     }
@@ -17,5 +18,6 @@ interface AlarmHistory {
 
         fun attachArchiveIntent(intentObservable: Observable<Int>)
         fun attachDeletionIntent(intentObservable: Observable<Int>)
+        fun attachDetailsIntent(intentObservable: Observable<Int>)
     }
 }
