@@ -4,6 +4,6 @@ import io.reactivex.Single
 
 interface AlarmHistoryService {
 
-    fun archiveIncident(): Single<Boolean>
-    fun deleteIncident(): Single<Boolean>
+    fun archiveIncident(securityIncident: SecurityIncident): Single<Boolean>
+    fun deleteIncident(securityIncident: SecurityIncident): Single<Boolean>
 }

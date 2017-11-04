@@ -16,9 +16,9 @@ interface AlarmHistory {
     interface Interactor : Contracts.Interactor {
         fun getViewStateObservable(): Observable<AlarmHistoryViewState>
 
-        fun attachArchiveIntent(intentObservable: Observable<Int>)
-        fun attachDeletionIntent(intentObservable: Observable<Int>)
-        fun attachDetailsIntent(intentObservable: Observable<Int>)
+        fun attachArchiveIntent(intentObservable: Observable<SecurityIncident>)
+        fun attachDeletionIntent(intentObservable: Observable<SecurityIncident>)
+        fun attachDetailsIntent(intentObservable: Observable<SecurityIncident>)
     }
 
     interface Navigator : Contracts.Navigator {
