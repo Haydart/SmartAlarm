@@ -9,8 +9,7 @@ import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.extensions.loadImage
 
 class AlarmHistoryViewHolder(
-        view: View,
-        private val onDetailsFuncs: (Int) -> Unit
+        view: View
 ) : RecyclerView.ViewHolder(view) {
 
     private val previewImage = view.findViewById<ImageView>(R.id.historyPreviewImage)
@@ -18,11 +17,9 @@ class AlarmHistoryViewHolder(
     private val reasonText = view.findViewById<TextView>(R.id.triggerReasonText)
     val overflowMenuButton: ImageButton = view.findViewById(R.id.popupMenuIcon)
 
-    fun bind(alarmHistoryItem: AlarmHistoryItem) = with(alarmHistoryItem) {
-        previewImage.loadImage(previewImageUrl)
+    fun bind(model: SecurityIncident) = with(model) {
+        previewImage.loadImage(thumbnailUrl)
         dateText.text = date.toString()
         reasonText.text = reason.toString()
-
-        previewImage.setOnClickListener { onDetailsFuncs(adapterPosition) }
     }
 }

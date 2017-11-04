@@ -5,6 +5,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import io.reactivex.Observable
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -21,6 +22,11 @@ class FirebaseAlarmHistoryService @Inject constructor() : AlarmHistoryService {
             .child(getCurrentBackendUser()?.uid)
 
     private fun getCurrentBackendUser() = FirebaseAuth.getInstance().currentUser
+
+    override fun registerForChanges(): Observable<List<SecurityIncident>> {
+        //todo implement
+        return Observable.just(emptyList())
+    }
 
     override fun archiveIncident(securityIncident: SecurityIncident): Single<Boolean> {
         return Single.just(false) //todo implement

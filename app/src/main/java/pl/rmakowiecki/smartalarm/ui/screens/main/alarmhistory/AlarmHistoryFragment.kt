@@ -19,19 +19,19 @@ class AlarmHistoryFragment : MviFragment<AlarmHistory.View, AlarmHistoryViewStat
 
     override val layout = R.layout.fragment_alarm_history
 
-    private val archiveIntentPublishSubject = PublishSubject.create<Int>()
+    private val archiveIntentPublishSubject = PublishSubject.create<SecurityIncident>()
 
-    override val incidentArchivingIntent: Observable<Int>
+    override val incidentArchivingIntent: Observable<SecurityIncident>
         get() = archiveIntentPublishSubject
 
-    private val deleteIntentPublishSubject = PublishSubject.create<Int>()
+    private val deleteIntentPublishSubject = PublishSubject.create<SecurityIncident>()
 
-    override val incidentDeletionIntent: Observable<Int>
+    override val incidentDeletionIntent: Observable<SecurityIncident>
         get() = deleteIntentPublishSubject
 
-    private val incidentsDetailsIntentPublishSubject = PublishSubject.create<Int>()
+    private val incidentsDetailsIntentPublishSubject = PublishSubject.create<SecurityIncident>()
 
-    override val incidentDetailsIntent: Observable<Int>
+    override val incidentDetailsIntent: Observable<SecurityIncident>
         get() = incidentsDetailsIntentPublishSubject
 
     override fun injectComponents() = fragmentComponent.inject(this)
@@ -40,15 +40,15 @@ class AlarmHistoryFragment : MviFragment<AlarmHistory.View, AlarmHistoryViewStat
 
     private val incidentsAdapter = AlarmHistoryAdapter(
             mutableListOf(
-                    AlarmHistoryItem("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", 100, BEAM_BREAK_DETECTOR),
-                    AlarmHistoryItem("https://googlechrome.github.io/samples/picture-element/images/butterfly.jpg", 200, MOTION_SENSOR),
-                    AlarmHistoryItem("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", 300, BEAM_BREAK_DETECTOR),
-                    AlarmHistoryItem("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", 400, BEAM_BREAK_DETECTOR),
-                    AlarmHistoryItem("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", 500, MOTION_SENSOR)
+                    SecurityIncident("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", 100, BEAM_BREAK_DETECTOR),
+                    SecurityIncident("https://googlechrome.github.io/samples/picture-element/images/butterfly.jpg", 200, MOTION_SENSOR),
+                    SecurityIncident("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", 300, BEAM_BREAK_DETECTOR),
+                    SecurityIncident("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", 400, BEAM_BREAK_DETECTOR),
+                    SecurityIncident("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", 500, MOTION_SENSOR)
             ),
-            { position -> archiveIntentPublishSubject.onNext(position) },
-            { position -> deleteIntentPublishSubject.onNext(position) },
-            { position -> incidentsDetailsIntentPublishSubject.onNext(position) }
+            { model -> archiveIntentPublishSubject.onNext(model) },
+            { model -> deleteIntentPublishSubject.onNext(model) },
+            { model -> incidentsDetailsIntentPublishSubject.onNext(model) }
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
