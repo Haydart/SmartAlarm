@@ -8,8 +8,6 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_alarm_history.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviFragment
-import pl.rmakowiecki.smartalarm.ui.screens.main.alarmhistory.AlarmTriggerReason.BEAM_BREAK_DETECTOR
-import pl.rmakowiecki.smartalarm.ui.screens.main.alarmhistory.AlarmTriggerReason.MOTION_SENSOR
 import javax.inject.Inject
 
 class AlarmHistoryFragment : MviFragment<AlarmHistory.View, AlarmHistoryViewState, AlarmHistoryPresenter>(),
@@ -40,15 +38,15 @@ class AlarmHistoryFragment : MviFragment<AlarmHistory.View, AlarmHistoryViewStat
 
     private val incidentsAdapter = AlarmHistoryAdapter(
             mutableListOf(
-                    AlarmHistoryItem("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", 100, BEAM_BREAK_DETECTOR),
-                    AlarmHistoryItem("https://googlechrome.github.io/samples/picture-element/images/butterfly.jpg", 200, MOTION_SENSOR),
-                    AlarmHistoryItem("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", 300, BEAM_BREAK_DETECTOR),
-                    AlarmHistoryItem("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", 400, BEAM_BREAK_DETECTOR),
-                    AlarmHistoryItem("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", 500, MOTION_SENSOR)
+                    SecurityIncidentItemViewState("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", "Motion sensor", "24.01.2017", "21:37"),
+                    SecurityIncidentItemViewState("https://googlechrome.github.io/samples/picture-element/images/butterfly.jpg", "Motion sensor", "24.01.2017", "18:14"),
+                    SecurityIncidentItemViewState("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", "Beam break detector", "24.01.2017", "14:32"),
+                    SecurityIncidentItemViewState("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", "Beam break detector", "24.01.2017", "12:20"),
+                    SecurityIncidentItemViewState("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", "Motion sensor", "24.01.2017", "11:01")
             ),
-            { position -> archiveIntentPublishSubject.onNext(position) },
-            { position -> deleteIntentPublishSubject.onNext(position) },
-            { position -> incidentsDetailsIntentPublishSubject.onNext(position) }
+            { model -> archiveIntentPublishSubject.onNext(model) },
+            { model -> deleteIntentPublishSubject.onNext(model) },
+            { model -> incidentsDetailsIntentPublishSubject.onNext(model) }
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

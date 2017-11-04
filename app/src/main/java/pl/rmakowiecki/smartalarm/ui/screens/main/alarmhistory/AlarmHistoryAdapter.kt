@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import pl.rmakowiecki.smartalarm.R
 
 class AlarmHistoryAdapter(
-        private val items: MutableList<AlarmHistoryItem>,
+        private val items: MutableList<SecurityIncidentItemViewState>,
         private val onArchiveFunc: (Int) -> Unit,
         private val onDeleteFunc: (Int) -> Unit,
         private val onDetailsFuncs: (Int) -> Unit
@@ -17,6 +17,7 @@ class AlarmHistoryAdapter(
     override fun onBindViewHolder(holder: AlarmHistoryViewHolder, position: Int) = with(holder.overflowMenuButton) {
         setOnClickListener { inflateAndShowPopupMenu(it, position) }
         holder.bind(items[position])
+        holder.itemView.setOnClickListener { onDetailsFuncs(position) }
     }
 
     private fun inflateAndShowPopupMenu(view: View, position: Int) = PopupMenu(view.context, view).apply {
@@ -36,6 +37,6 @@ class AlarmHistoryAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmHistoryViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.history_list_item, parent, false)
-        return AlarmHistoryViewHolder(view, onDetailsFuncs)
+        return AlarmHistoryViewHolder(view)
     }
 }

@@ -18,14 +18,14 @@ class AlarmHistoryInteractor @Inject constructor(
 
     override fun attachArchiveIntent(intentObservable: Observable<Int>) {
         viewStateObservable = viewStateObservable.mergeWith(intentObservable
-                .flatMapSingle { alarmHistoryService.archiveIncident() }
+                .flatMapSingle(alarmHistoryService::archiveIncident)
                 .flatMap { Observable.empty<AlarmViewStateChange>() } //state change will come from firebase
         )
     }
 
     override fun attachDeletionIntent(intentObservable: Observable<Int>) {
         viewStateObservable = viewStateObservable.mergeWith(intentObservable
-                .flatMapSingle { alarmHistoryService.deleteIncident() }
+                .flatMapSingle(alarmHistoryService::deleteIncident)
                 .flatMap { Observable.empty<AlarmViewStateChange>() }
         )
     }
