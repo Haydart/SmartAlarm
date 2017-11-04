@@ -17,9 +17,10 @@ class AlarmHistoryViewHolder(
     private val reasonText = view.findViewById<TextView>(R.id.triggerReasonText)
     val overflowMenuButton: ImageButton = view.findViewById(R.id.popupMenuIcon)
 
-    fun bind(model: SecurityIncident) = with(model) {
+    fun bind(model: SecurityIncidentItemViewState) = with(model) {
         previewImage.loadImage(thumbnailUrl)
-        dateText.text = date.toString()
-        reasonText.text = reason.toString()
+        dateText.text = date
+        hour
+        reasonText.text = launchReason
     }
 }

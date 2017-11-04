@@ -21,18 +21,19 @@ class FirebaseAlarmHistoryService @Inject constructor() : AlarmHistoryService {
             .child("users")
             .child(getCurrentBackendUser()?.uid)
 
-    private fun getCurrentBackendUser() = FirebaseAuth.getInstance().currentUser
+    private fun getCurrentBackendUser() = FirebaseAuth.getInstance().currentUser;
 
     override fun registerForChanges(): Observable<List<SecurityIncident>> {
         //todo implement
-        return Observable.just(emptyList())
+        return Observable.empty()
     }
 
-    override fun archiveIncident(securityIncident: SecurityIncident): Single<Boolean> {
-        return Single.just(false) //todo implement
+    override fun archiveIncident(listPosition: Int): Single<Boolean> {
+        //todo implement
+        return Single.just(false)
     }
 
-    override fun deleteIncident(securityIncident: SecurityIncident): Single<Boolean> = Single.create { emitter ->
+    override fun deleteIncident(listPosition: Int): Single<Boolean> = Single.create { emitter ->
         userDatabaseNode.child("coredevice")
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot?) {
@@ -40,7 +41,7 @@ class FirebaseAlarmHistoryService @Inject constructor() : AlarmHistoryService {
                                 .child(dataSnapshot?.value as String) //user's core device uid
                                 .child("incidents")
                                 .orderByChild("timestamp")
-                                .equalTo(securityIncident.timestamp as Double)
+                                .equalTo("") //todo implement
                                 .addListenerForSingleValueEvent(object : ValueEventListener {
                                     override fun onDataChange(p0: DataSnapshot?) {
                                         dataSnapshot.ref

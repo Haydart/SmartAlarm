@@ -6,9 +6,9 @@ import pl.rmakowiecki.smartalarm.base.Contracts
 interface AlarmHistory {
 
     interface View : Contracts.View {
-        val incidentArchivingIntent: Observable<SecurityIncident>
-        val incidentDeletionIntent: Observable<SecurityIncident>
-        val incidentDetailsIntent: Observable<SecurityIncident>
+        val incidentArchivingIntent: Observable<Int>
+        val incidentDeletionIntent: Observable<Int>
+        val incidentDetailsIntent: Observable<Int>
 
         fun render(viewState: AlarmHistoryViewState)
     }
@@ -16,9 +16,9 @@ interface AlarmHistory {
     interface Interactor : Contracts.Interactor {
         fun getViewStateObservable(): Observable<AlarmHistoryViewState>
 
-        fun attachArchiveIntent(intentObservable: Observable<SecurityIncident>)
-        fun attachDeletionIntent(intentObservable: Observable<SecurityIncident>)
-        fun attachDetailsIntent(intentObservable: Observable<SecurityIncident>)
+        fun attachArchiveIntent(intentObservable: Observable<Int>)
+        fun attachDeletionIntent(intentObservable: Observable<Int>)
+        fun attachDetailsIntent(intentObservable: Observable<Int>)
     }
 
     interface Navigator : Contracts.Navigator {

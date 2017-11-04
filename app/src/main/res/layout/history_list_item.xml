@@ -37,19 +37,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center_vertical">
 
                 <TextView
                     android:id="@+id/triggerDateText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="date"/>
+                    android:drawableStart="@drawable/ic_date_range_18px"
+                    android:drawablePadding="@dimen/margin_medium"
+                    android:layout_margin="@dimen/margin_medium"
+                    android:text="Date"/>
+
+                <TextView
+                    android:id="@+id/triggerHourText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_schedule_18px"
+                    android:drawablePadding="@dimen/margin_medium"
+                    android:layout_margin="@dimen/margin_medium"
+                    android:text="Hour"/>
 
                 <TextView
                     android:id="@+id/triggerReasonText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="reason"/>
+                    android:drawableStart="@drawable/ic_announcement_18px"
+                    android:drawablePadding="@dimen/margin_medium"
+                    android:layout_margin="@dimen/margin_medium"
+                    android:text="Launch reason"/>
 
             </LinearLayout>
         </FrameLayout>

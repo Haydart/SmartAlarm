@@ -6,6 +6,6 @@ import io.reactivex.Single
 interface AlarmHistoryService {
 
     fun registerForChanges(): Observable<List<SecurityIncident>>
-    fun archiveIncident(securityIncident: SecurityIncident): Single<Boolean>
-    fun deleteIncident(securityIncident: SecurityIncident): Single<Boolean>
+    fun archiveIncident(listPosition: Int): Single<Boolean>
+    fun deleteIncident(listPosition: Int): Single<Boolean>
 }
