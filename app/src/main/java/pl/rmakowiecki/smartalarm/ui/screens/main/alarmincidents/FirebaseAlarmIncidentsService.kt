@@ -1,4 +1,4 @@
-package pl.rmakowiecki.smartalarm.ui.screens.main.alarmhistory
+package pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -9,7 +9,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import javax.inject.Inject
 
-class FirebaseAlarmHistoryService @Inject constructor() : AlarmHistoryService {
+class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsService {
 
     private var coreDeviceUid: String? = null
 

@@ -1,21 +1,21 @@
-package pl.rmakowiecki.smartalarm.ui.screens.main.alarmhistory
+package pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.fragment_alarm_history.*
+import kotlinx.android.synthetic.main.fragment_alarm_incidents.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviFragment
 import javax.inject.Inject
 
-class AlarmHistoryFragment : MviFragment<AlarmHistory.View, AlarmHistoryViewState, AlarmHistoryPresenter>(),
-        AlarmHistory.View {
+class AlarmIncidentsFragment : MviFragment<AlarmIncidents.View, AlarmIncidentsViewState, AlarmIncidentsPresenter>(),
+        AlarmIncidents.View {
 
-    @Inject lateinit var presenter: AlarmHistoryPresenter
+    @Inject lateinit var presenter: AlarmIncidentsPresenter
 
-    override val layout = R.layout.fragment_alarm_history
+    override val layout = R.layout.fragment_alarm_incidents
 
     private val archiveIntentPublishSubject = PublishSubject.create<Int>()
 
@@ -36,7 +36,7 @@ class AlarmHistoryFragment : MviFragment<AlarmHistory.View, AlarmHistoryViewStat
 
     override fun retrievePresenter() = presenter
 
-    private val incidentsAdapter = AlarmHistoryAdapter(
+    private val incidentsAdapter = AlarmIncidentsAdapter(
             mutableListOf(
                     SecurityIncidentItemViewState("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", "Motion sensor", "24.01.2017", "21:37"),
                     SecurityIncidentItemViewState("https://googlechrome.github.io/samples/picture-element/images/butterfly.jpg", "Motion sensor", "24.01.2017", "18:14"),
@@ -60,11 +60,11 @@ class AlarmHistoryFragment : MviFragment<AlarmHistory.View, AlarmHistoryViewStat
         registerForContextMenu(this)
     }
 
-    override fun render(viewState: AlarmHistoryViewState) {
+    override fun render(viewState: AlarmIncidentsViewState) {
         //todo implement
     }
 
     companion object {
-        fun newInstance() = AlarmHistoryFragment()
+        fun newInstance() = AlarmIncidentsFragment()
     }
 }

@@ -19,9 +19,9 @@
     <string name="register">Register</string>
     <string name="input_hint_email">Email</string>
     <string name="reset_password">Reset password</string>
-    <string name="bottom_bar_state">Arming</string>
-    <string name="bottom_bar_history">History</string>
-    <string name="bottom_bar_settings">Settings</string>
+    <string name="title_alarm_state">Alarm State</string>
+    <string name="title_security_incidents">Security Incidents</string>
+    <string name="title_settings">Settings</string>
     <string name="title_arming">Arming</string>
     <string name="action_archive">Archive</string>
     <string name="action_delete">Delete</string>

@@ -1,20 +1,20 @@
-package pl.rmakowiecki.smartalarm.ui.screens.main.alarmhistory
+package pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents
 
 import io.reactivex.Observable
 import pl.rmakowiecki.smartalarm.base.Contracts
 
-interface AlarmHistory {
+interface AlarmIncidents {
 
     interface View : Contracts.View {
         val incidentArchivingIntent: Observable<Int>
         val incidentDeletionIntent: Observable<Int>
         val incidentDetailsIntent: Observable<Int>
 
-        fun render(viewState: AlarmHistoryViewState)
+        fun render(viewState: AlarmIncidentsViewState)
     }
 
     interface Interactor : Contracts.Interactor {
-        fun getViewStateObservable(): Observable<AlarmHistoryViewState>
+        fun getViewStateObservable(): Observable<AlarmIncidentsViewState>
 
         fun attachArchiveIntent(intentObservable: Observable<Int>)
         fun attachDeletionIntent(intentObservable: Observable<Int>)
