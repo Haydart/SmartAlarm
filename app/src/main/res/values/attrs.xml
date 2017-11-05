@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="ActionButton">
-        <attr name="text" format="string" />
-        <attr name="text_color" format="color|reference" />
-        <attr name="success_color" format="color|reference" />
-        <attr name="failure_color" format="color|reference" />
-        <attr name="default_color" format="color|reference" />
-        <attr name="success_icon" format="reference" />
-        <attr name="failure_icon" format="reference" />
-        <attr name="inactive_button_alpha" format="float" />
-        <attr name="dot_loader" format="reference" />
+        <attr name="text" format="string"/>
+        <attr name="text_color" format="color|reference"/>
+        <attr name="success_color" format="color|reference"/>
+        <attr name="failure_color" format="color|reference"/>
+        <attr name="default_color" format="color|reference"/>
+        <attr name="success_icon" format="reference"/>
+        <attr name="failure_icon" format="reference"/>
+        <attr name="inactive_button_alpha" format="float"/>
+        <attr name="dot_loader" format="reference"/>
     </declare-styleable>
 
     <declare-styleable name="PinInput">
-        <attr name="is_background_white" format="boolean" />
+        <attr name="is_background_white" format="boolean"/>
+    </declare-styleable>
+
+    <!-- Declare custom theme attributes that allow changing which styles are
+         used for button bars depending on the API level.
+         ?android:attr/buttonBarStyle is new as of API 11 so this is
+         necessary to support previous API levels. -->
+    <declare-styleable name="ButtonBarContainerTheme">
+        <attr name="metaButtonBarStyle" format="reference"/>
+        <attr name="metaButtonBarButtonStyle" format="reference"/>
     </declare-styleable>
 </resources>

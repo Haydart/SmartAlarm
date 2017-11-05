@@ -1,8 +1,6 @@
 package pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents
 
-import android.content.Context
 import io.reactivex.Observable
-import pl.rmakowiecki.smartalarm.di.qualifier.ActivityContext
 import javax.inject.Inject
 
 class AlarmIncidentsInteractor @Inject constructor(
@@ -35,14 +33,5 @@ class AlarmIncidentsInteractor @Inject constructor(
                 .doOnNext { navigator.showIncidentDetailsScreen() }
                 .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() }
         )
-    }
-}
-
-class AlarmIncidentsNavigator @Inject constructor(
-        @ActivityContext private val context: Context
-) : AlarmIncidents.Navigator {
-
-    override fun showIncidentDetailsScreen() {
-        //todo navigate to incident details screen
     }
 }

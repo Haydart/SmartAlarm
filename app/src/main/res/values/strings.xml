@@ -25,4 +25,8 @@
     <string name="title_arming">Arming</string>
     <string name="action_archive">Archive</string>
     <string name="action_delete">Delete</string>
+
+    <string name="title_activity_incident_details">IncidentDetailsActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
