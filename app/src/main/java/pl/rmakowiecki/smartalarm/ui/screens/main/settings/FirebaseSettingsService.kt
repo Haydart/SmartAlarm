@@ -9,17 +9,20 @@ class FirebaseSettingsService @Inject constructor() : SettingsService {
 
     override fun fetchPhotoCountValue(): Single<SingleSettingResult> {
         //todo implement
+        return Single.just(SingleSettingResult(true, 15))
     }
 
     override fun fetchPhotoSequenceIntervalValue(): Single<SingleSettingResult> {
-        //todo implement
+        return Single.just(SingleSettingResult(true, 250))
     }
 
     override fun sendPhotoCountValue(value: Int): Single<Boolean> {
         //todo implement
+        return Single.just(true)
     }
 
     override fun sendPhotoSequenceIntervalValue(value: Int): Single<Boolean> {
         //todo implement
+        return Single.just(true)
     }
 }
