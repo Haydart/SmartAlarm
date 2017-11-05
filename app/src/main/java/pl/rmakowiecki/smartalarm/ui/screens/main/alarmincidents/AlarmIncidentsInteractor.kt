@@ -21,9 +21,18 @@ class AlarmIncidentsInteractor @Inject constructor(
     private fun observeIncidentsChanges() {
         viewStateObservable = viewStateObservable
                 .mergeWith(alarmIncidentService
-                        .registerForChanges()
-                        .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() }
+                        .observeIncidentsChanges()
+                        .map(this::mapToLocalModel)
+                        .map(AlarmIncidentsViewStateChange::ItemsChanged)
                 )
+    }
+
+    private fun mapToLocalModel(remoteModelList: List<SecurityIncident>) = remoteModelList.map { remoteModel ->
+        SecurityIncidentItemViewState(
+                remoteModel.thumbnailUrl,
+                remoteModel.reason.toString(),
+                remoteModel.timestamp.toString(), //todo convert to displayable date
+                remoteModel.timestamp.toString()) //todo convert to displayable hour
     }
 
     override fun attachArchiveIntent(intentObservable: Observable<Int>) {

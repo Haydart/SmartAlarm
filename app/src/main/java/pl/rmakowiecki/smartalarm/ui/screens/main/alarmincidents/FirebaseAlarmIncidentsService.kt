@@ -1,12 +1,10 @@
 package pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents
 
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsService {
@@ -21,10 +19,37 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
             .child("users")
             .child(getCurrentBackendUser()?.uid)
 
-    private fun getCurrentBackendUser() = FirebaseAuth.getInstance().currentUser;
+    private val childEventsPublishSubject = PublishSubject.create<Pair<SecurityIncident, IncidentOperation>>()
 
-    override fun registerForChanges(): Observable<List<SecurityIncident>> {
-        //todo implement
+    private fun getCurrentBackendUser() = FirebaseAuth.getInstance().currentUser
+
+    override fun observeIncidentsChanges(): Observable<List<SecurityIncident>> {
+
+        rootDatabaseNode
+                .child("SgVIHNDQwsPj3lmS2jS1gS9Xz5r1")
+                .child("incidents")
+                .addChildEventListener(object : ChildEventListener {
+
+                    override fun onChildMoved(dataSnapshot: DataSnapshot?, predecessor: String?) = Unit
+
+                    override fun onChildChanged(dataSnapshot: DataSnapshot?, predecessor: String?) = childEventsPublishSubject.onNext(Pair(
+                            dataSnapshot?.getValue(SecurityIncident::class.java)!!,
+                            IncidentOperation.Updated())
+                    )
+
+                    override fun onChildAdded(dataSnapshot: DataSnapshot?, predecessor: String?) = childEventsPublishSubject.onNext(Pair(
+                            dataSnapshot?.getValue(SecurityIncident::class.java)!!,
+                            IncidentOperation.Added())
+                    )
+
+                    override fun onChildRemoved(dataSnapshot: DataSnapshot?) = childEventsPublishSubject.onNext(Pair(
+                            dataSnapshot?.getValue(SecurityIncident::class.java)!!,
+                            IncidentOperation.Removed())
+                    )
+
+                    override fun onCancelled(p0: DatabaseError?) = Unit
+                })
+
         return Observable.empty()
     }
 
@@ -56,4 +81,10 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
                     override fun onCancelled(databaseError: DatabaseError) = Unit
                 })
     }
+}
+
+sealed class IncidentOperation {
+    class Added : IncidentOperation()
+    class Removed : IncidentOperation()
+    class Updated : IncidentOperation()
 }
