@@ -83,6 +83,7 @@ dependencies {
 	compile "com.wang.avi:library:$versions.loader"
 	compile 'com.aurelhubert:ahbottomnavigation:2.1.0'
 	compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.sdsmdg.harjot:croller:1.0.7'
 
 }
 apply plugin: 'com.google.gms.google-services'
