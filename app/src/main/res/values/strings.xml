@@ -25,4 +25,7 @@
     <string name="title_arming">Arming</string>
     <string name="action_archive">Archive</string>
     <string name="action_delete">Delete</string>
+    <string name="logout">Logout</string>
+    <string name="photos_count">Photos count</string>
+    <string name="photo_sequence_interval">Photo interval</string>
 </resources>

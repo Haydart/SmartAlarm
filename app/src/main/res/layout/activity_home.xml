@@ -27,7 +27,7 @@
                 android:layout_gravity="center"
                 android:text="@string/bottom_bar_state"
                 android:textAlignment="center"
-                android:textColor="@color/textPrimary"
+                android:textColor="@color/accent"
                 android:textSize="@dimen/text_size_extra_large"/>
 
         </android.support.v7.widget.Toolbar>
