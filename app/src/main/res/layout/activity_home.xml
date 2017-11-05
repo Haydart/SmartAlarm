@@ -33,8 +33,8 @@
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
-        android:id="@+id/fragmentContentFrame"
+    <pl.rmakowiecki.smartalarm.ui.screens.main.CustomViewPager
+        android:id="@+id/fragmentViewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
