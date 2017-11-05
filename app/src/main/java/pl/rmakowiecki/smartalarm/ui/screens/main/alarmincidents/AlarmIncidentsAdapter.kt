@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import pl.rmakowiecki.smartalarm.R
 
 class AlarmIncidentsAdapter(
-        private val items: MutableList<SecurityIncidentItemViewState>,
+        var items: List<SecurityIncidentItemViewState>,
         private val onArchiveFunc: (Int) -> Unit,
         private val onDeleteFunc: (Int) -> Unit,
         private val onDetailsFuncs: (Int) -> Unit

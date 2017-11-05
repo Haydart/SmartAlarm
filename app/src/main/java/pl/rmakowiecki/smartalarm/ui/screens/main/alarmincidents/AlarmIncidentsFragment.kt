@@ -8,6 +8,8 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_alarm_incidents.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviFragment
+import pl.rmakowiecki.smartalarm.extensions.gone
+import pl.rmakowiecki.smartalarm.extensions.visible
 import javax.inject.Inject
 
 class AlarmIncidentsFragment : MviFragment<AlarmIncidents.View, AlarmIncidentsViewState, AlarmIncidentsPresenter>(),
@@ -37,13 +39,7 @@ class AlarmIncidentsFragment : MviFragment<AlarmIncidents.View, AlarmIncidentsVi
     override fun retrievePresenter() = presenter
 
     private val incidentsAdapter = AlarmIncidentsAdapter(
-            mutableListOf(
-                    SecurityIncidentItemViewState("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", "Motion sensor", "24.01.2017", "21:37"),
-                    SecurityIncidentItemViewState("https://googlechrome.github.io/samples/picture-element/images/butterfly.jpg", "Motion sensor", "24.01.2017", "18:14"),
-                    SecurityIncidentItemViewState("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", "Beam break detector", "24.01.2017", "14:32"),
-                    SecurityIncidentItemViewState("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", "Beam break detector", "24.01.2017", "12:20"),
-                    SecurityIncidentItemViewState("http://koncha.890m.com/wp-content/uploads/2016/06/2.jpg", "Motion sensor", "24.01.2017", "11:01")
-            ),
+            mutableListOf(),
             { model -> archiveIntentPublishSubject.onNext(model) },
             { model -> deleteIntentPublishSubject.onNext(model) },
             { model -> incidentsDetailsIntentPublishSubject.onNext(model) }
@@ -61,7 +57,11 @@ class AlarmIncidentsFragment : MviFragment<AlarmIncidents.View, AlarmIncidentsVi
     }
 
     override fun render(viewState: AlarmIncidentsViewState) {
-        //todo implement
+        incidentsAdapter.items = viewState.incidentsList
+
+        if (viewState.isLoading) {
+            progressBar.visible()
+        } else progressBar.gone()
     }
 
     companion object {
