@@ -23,7 +23,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/photos_count"/>
+                android:text="@string/photos_count"
+                android:drawableEnd="@drawable/ic_info"
+                android:drawablePadding="@dimen/margin_medium"/>
 
             <com.sdsmdg.harjot.crollerTest.Croller
                 android:id="@+id/photosCountSeekBar"
@@ -52,7 +54,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/photo_sequence_interval"/>
+                android:text="@string/photo_sequence_interval"
+                android:drawableEnd="@drawable/ic_info"
+                android:drawablePadding="@dimen/margin_medium"/>
 
             <com.sdsmdg.harjot.crollerTest.Croller
                 android:id="@+id/photosSequenceIntervalSeekBar"
@@ -79,7 +83,6 @@
         android:layout_gravity="bottom"
         android:layout_margin="@dimen/margin_large"
         android:layout_marginBottom="@dimen/margin_large"
-        android:enabled="true"
         android:visibility="visible"
         app:default_color="@color/accent"
         app:text="@string/logout"

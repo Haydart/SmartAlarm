@@ -101,7 +101,7 @@ class ActionButton @JvmOverloads constructor(
     }
 
     private fun initAfterViewBinding() {
-        isEnabled = false
+        isEnabled = enabled
         setWidgetBackground(this)
         background.setColorFilter(defaultColor, PorterDuff.Mode.ADD)
         buttonActionDescriptionTextView.text = buttonActionDescription
