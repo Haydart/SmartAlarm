@@ -25,8 +25,12 @@
     <string name="title_arming">Arming</string>
     <string name="action_archive">Archive</string>
     <string name="action_delete">Delete</string>
+    <string name="logout">Logout</string>
+    <string name="photos_count">Photos count</string>
+    <string name="photo_sequence_interval">Photo interval</string>
 
     <string name="title_activity_incident_details">IncidentDetailsActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+
 </resources>

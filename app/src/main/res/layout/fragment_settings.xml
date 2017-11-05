@@ -1,15 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="LOGOUT"
-        android:layout_margin="@dimen/margin_xx_large"/>
+        android:layout_gravity="center"
+        android:orientation="horizontal">
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/photoCountKnobInfoText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="?attr/selectableItemBackground"
+                android:drawableEnd="@drawable/ic_info"
+                android:drawablePadding="@dimen/margin_medium"
+                android:text="@string/photos_count"/>
+
+            <com.sdsmdg.harjot.crollerTest.Croller
+                android:id="@+id/photosCountSeekBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_medium"
+                app:back_circle_color="@color/lightGray"
+                app:indicator_color="@color/accent"
+                app:indicator_width="10"
+                app:is_continuous="true"
+                app:label_color="@color/textSecondary"
+                app:main_circle_color="#FFFFFF"
+                app:max="25"
+                app:progress_primary_color="@color/accent"
+                app:progress_secondary_color="#EEEEEE"
+                app:start_offset="45"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/intervalKnobInfoText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="?attr/selectableItemBackground"
+                android:drawableEnd="@drawable/ic_info"
+                android:drawablePadding="@dimen/margin_medium"
+                android:text="@string/photo_sequence_interval"/>
+
+            <com.sdsmdg.harjot.crollerTest.Croller
+                android:id="@+id/photosSequenceIntervalSeekBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_medium"
+                app:back_circle_color="@color/lightGray"
+                app:indicator_color="@color/accent"
+                app:indicator_width="10"
+                app:is_continuous="true"
+                app:label_color="@color/textSecondary"
+                app:main_circle_color="#FFFFFF"
+                app:max="1000"
+                app:progress_primary_color="@color/accent"
+                app:progress_secondary_color="#EEEEEE"
+                app:start_offset="45"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <pl.rmakowiecki.smartalarm.ui.customView.ActionButton
+        android:id="@+id/logoutButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/action_button_height"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/margin_large"
+        android:layout_marginBottom="@dimen/margin_large"
+        android:visibility="visible"
+        app:default_color="@color/accent"
+        app:text="@string/logout"
+        app:text_color="@android:color/white"/>
+</FrameLayout>
