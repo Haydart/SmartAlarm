@@ -1,11 +1,13 @@
 package pl.rmakowiecki.smartalarm.ui.screens.main.settings
 
 import io.reactivex.Observable
+import io.reactivex.Single
 import pl.rmakowiecki.smartalarm.ui.screens.auth.FirebaseAuthService
 import javax.inject.Inject
 
 class SettingsInteractor @Inject constructor(
         private val authService: FirebaseAuthService,
+        private val settingsService: FirebaseSettingsService,
         private val navigator: SettingsNavigator
 ) : Settings.Interactor {
 
@@ -23,18 +25,57 @@ class SettingsInteractor @Inject constructor(
     }
 
     override fun attachPhotoCountInfoIntent(intentObservable: Observable<Unit>) {
-        //todo implement
+        viewStateObservable = viewStateObservable.mergeWith(
+                intentObservable.map { SettingsViewState() }
+        )
     }
 
     override fun attachSequenceIntervalInfoIntent(intentObservable: Observable<Unit>) {
-        //todo implement
+        viewStateObservable = viewStateObservable.mergeWith(
+                intentObservable.map { SettingsViewState() }
+        )
     }
 
     override fun attachPhotoCountChangeIntent(intentObservable: Observable<Int>) {
-        //todo implement
+        viewStateObservable = viewStateObservable.mergeWith(
+                intentObservable.map { SettingsViewState() }
+        )
     }
 
     override fun attachPhotoSequenceIntervalChangeIntent(intentObservable: Observable<Int>) {
+        viewStateObservable = viewStateObservable.mergeWith(
+                intentObservable.map { SettingsViewState() }
+        )
+    }
+}
+
+class FirebaseSettingsService : SettingsService {
+    override fun fetchPhotoCountValue(): Single<SingleSettingResult> {
+        //todo implement
+    }
+
+    override fun fetchPhotoSequenceIntervalValue(): Single<SingleSettingResult> {
+        //todo implement
+    }
+
+    override fun sendPhotoCountValue(value: Int) {
+        //todo implement
+    }
+
+    override fun sendPhotoSequenceIntervalValue(value: Int) {
         //todo implement
     }
 }
+
+interface SettingsService {
+
+    fun sendPhotoCountValue(value: Int)
+    fun sendPhotoSequenceIntervalValue(value: Int)
+    fun fetchPhotoCountValue(): Single<SingleSettingResult>
+    fun fetchPhotoSequenceIntervalValue(): Single<SingleSettingResult>
+}
+
+class SingleSettingResult(
+        val isSuccessful: Boolean,
+        val singleValue: Int
+)
