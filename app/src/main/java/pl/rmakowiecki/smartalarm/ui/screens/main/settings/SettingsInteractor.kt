@@ -1,7 +1,6 @@
 package pl.rmakowiecki.smartalarm.ui.screens.main.settings
 
 import io.reactivex.Observable
-import io.reactivex.Single
 import pl.rmakowiecki.smartalarm.ui.screens.auth.FirebaseAuthService
 import javax.inject.Inject
 
@@ -37,45 +36,18 @@ class SettingsInteractor @Inject constructor(
     }
 
     override fun attachPhotoCountChangeIntent(intentObservable: Observable<Int>) {
-        viewStateObservable = viewStateObservable.mergeWith(
-                intentObservable.map { SettingsViewState() }
-        )
+        viewStateObservable = viewStateObservable
+                .mergeWith(intentObservable
+                        .switchMapSingle(settingsService::sendPhotoCountValue)
+                        .map { SettingsViewState() }
+                )
     }
 
     override fun attachPhotoSequenceIntervalChangeIntent(intentObservable: Observable<Int>) {
-        viewStateObservable = viewStateObservable.mergeWith(
-                intentObservable.map { SettingsViewState() }
-        )
+        viewStateObservable = viewStateObservable
+                .mergeWith(intentObservable
+                        .switchMapSingle(settingsService::sendPhotoSequenceIntervalValue)
+                        .map { SettingsViewState() }
+                )
     }
 }
-
-class FirebaseSettingsService : SettingsService {
-    override fun fetchPhotoCountValue(): Single<SingleSettingResult> {
-        //todo implement
-    }
-
-    override fun fetchPhotoSequenceIntervalValue(): Single<SingleSettingResult> {
-        //todo implement
-    }
-
-    override fun sendPhotoCountValue(value: Int) {
-        //todo implement
-    }
-
-    override fun sendPhotoSequenceIntervalValue(value: Int) {
-        //todo implement
-    }
-}
-
-interface SettingsService {
-
-    fun sendPhotoCountValue(value: Int)
-    fun sendPhotoSequenceIntervalValue(value: Int)
-    fun fetchPhotoCountValue(): Single<SingleSettingResult>
-    fun fetchPhotoSequenceIntervalValue(): Single<SingleSettingResult>
-}
-
-class SingleSettingResult(
-        val isSuccessful: Boolean,
-        val singleValue: Int
-)
