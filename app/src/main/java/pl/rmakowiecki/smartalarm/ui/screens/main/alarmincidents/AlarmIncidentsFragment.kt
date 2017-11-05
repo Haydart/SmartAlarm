@@ -59,6 +59,14 @@ class AlarmIncidentsFragment : MviFragment<AlarmIncidents.View, AlarmIncidentsVi
     override fun render(viewState: AlarmIncidentsViewState) {
         incidentsAdapter.items = viewState.incidentsList
 
+        if (viewState.incidentsList.isEmpty()) {
+            recyclerView.gone()
+            listPlaceholder.visible()
+        } else {
+            recyclerView.visible()
+            listPlaceholder.gone()
+        }
+
         if (viewState.isLoading) {
             progressBar.visible()
         } else progressBar.gone()

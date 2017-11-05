@@ -32,5 +32,6 @@
     <string name="title_activity_incident_details">IncidentDetailsActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="incidents_placeholder_text">No incidents reported.\nWhich is good, right?</string>
 
 </resources>

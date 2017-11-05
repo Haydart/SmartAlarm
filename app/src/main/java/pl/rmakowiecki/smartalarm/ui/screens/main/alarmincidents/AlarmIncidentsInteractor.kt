@@ -14,6 +14,18 @@ class AlarmIncidentsInteractor @Inject constructor(
     override fun getViewStateObservable(): Observable<AlarmIncidentsViewState> = viewStateObservable
             .scan(AlarmIncidentsViewState(), reducer::reduce)
 
+    init {
+        observeIncidentsChanges()
+    }
+
+    private fun observeIncidentsChanges() {
+        viewStateObservable = viewStateObservable
+                .mergeWith(alarmIncidentService
+                        .registerForChanges()
+                        .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() }
+                )
+    }
+
     override fun attachArchiveIntent(intentObservable: Observable<Int>) {
         viewStateObservable = viewStateObservable.mergeWith(intentObservable
                 .flatMapSingle(alarmIncidentService::archiveIncident)

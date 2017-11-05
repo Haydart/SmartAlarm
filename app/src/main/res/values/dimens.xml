@@ -28,5 +28,6 @@
     <dimen name="action_button_height">60dp</dimen>
     <dimen name="alarm_incident_item_preview_size">152dp</dimen>
     <dimen name="card_view_corner_radius">2dp</dimen>
+    <dimen name="incidents_placeholder_icon_size">80dp</dimen>
 
 </resources>
