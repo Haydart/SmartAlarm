@@ -7,6 +7,8 @@ interface Settings {
 
     interface View : Contracts.View {
         val logoutIntent: Observable<Unit>
+        val photoCountInfoIntent: Observable<Unit>
+        val sequenceIntervalInfoIntent: Observable<Unit>
         val photoCountChangeIntent: Observable<Int>
         val photoSequenceIntervalChangeIntent: Observable<Int>
 
@@ -17,6 +19,8 @@ interface Settings {
         fun getViewStateObservable(): Observable<SettingsViewState>
 
         fun attachLogoutIntent(intentObservable: Observable<Unit>)
+        fun attachPhotoCountInfoIntent(intentObservable: Observable<Unit>)
+        fun attachSequenceIntervalInfoIntent(intentObservable: Observable<Unit>)
         fun attachPhotoCountChangeIntent(intentObservable: Observable<Int>)
         fun attachPhotoSequenceIntervalChangeIntent(intentObservable: Observable<Int>)
     }

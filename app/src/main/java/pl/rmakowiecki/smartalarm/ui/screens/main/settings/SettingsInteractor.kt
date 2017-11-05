@@ -22,4 +22,19 @@ class SettingsInteractor @Inject constructor(
                 )
     }
 
+    override fun attachPhotoCountInfoIntent(intentObservable: Observable<Unit>) {
+        //todo implement
+    }
+
+    override fun attachSequenceIntervalInfoIntent(intentObservable: Observable<Unit>) {
+        //todo implement
+    }
+
+    override fun attachPhotoCountChangeIntent(intentObservable: Observable<Int>) {
+        //todo implement
+    }
+
+    override fun attachPhotoSequenceIntervalChangeIntent(intentObservable: Observable<Int>) {
+        //todo implement
+    }
 }

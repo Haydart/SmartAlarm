@@ -8,7 +8,22 @@ class SettingsPresenter @Inject constructor(
 ) : MviPresenter<Settings.View, SettingsViewState>() {
 
     override fun bindIntents() = with(interactor) {
-        attachLogoutIntent(bindIntent(Settings.View::logoutIntent))
+
+        attachLogoutIntent(
+                bindIntent(Settings.View::logoutIntent)
+        )
+        attachPhotoCountInfoIntent(
+                bindIntent(Settings.View::photoCountInfoIntent)
+        )
+        attachSequenceIntervalInfoIntent(
+                bindIntent(Settings.View::sequenceIntervalInfoIntent)
+        )
+        attachPhotoCountChangeIntent(
+                bindIntent(Settings.View::photoCountChangeIntent)
+        )
+        attachPhotoSequenceIntervalChangeIntent(
+                bindIntent(Settings.View::photoSequenceIntervalChangeIntent)
+        )
 
         subscribeViewState(getViewStateObservable(), Settings.View::render)
     }
