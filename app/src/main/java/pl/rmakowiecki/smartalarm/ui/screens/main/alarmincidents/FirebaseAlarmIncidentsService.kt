@@ -19,12 +19,25 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
             .child("users")
             .child(getCurrentBackendUser()?.uid)
 
+    private val incidentsList = mutableListOf<SecurityIncident>()
+
     private val childEventsPublishSubject = PublishSubject.create<Pair<SecurityIncident, IncidentOperation>>()
 
     private fun getCurrentBackendUser() = FirebaseAuth.getInstance().currentUser
 
-    override fun observeIncidentsChanges(): Observable<List<SecurityIncident>> {
+    override fun isIncidentsListEmpty(): Single<Boolean> = Single.create { emitter ->
+        rootDatabaseNode
+                .child("SgVIHNDQwsPj3lmS2jS1gS9Xz5r1")
+                .child("incidents")
+                .addListenerForSingleValueEvent(object : ValueEventListener {
 
+                    override fun onDataChange(dataSnapshot: DataSnapshot?) = emitter.onSuccess(dataSnapshot?.value == null)
+
+                    override fun onCancelled(p0: DatabaseError?) = Unit
+                })
+    }
+
+    override fun observeIncidentsChanges(): Observable<List<SecurityIncident>> = Observable.create { emitter ->
         rootDatabaseNode
                 .child("SgVIHNDQwsPj3lmS2jS1gS9Xz5r1")
                 .child("incidents")
@@ -37,10 +50,15 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
                             IncidentOperation.Updated())
                     )
 
-                    override fun onChildAdded(dataSnapshot: DataSnapshot?, predecessor: String?) = childEventsPublishSubject.onNext(Pair(
-                            dataSnapshot?.getValue(SecurityIncident::class.java)!!,
-                            IncidentOperation.Added())
-                    )
+                    override fun onChildAdded(dataSnapshot: DataSnapshot?, predecessor: String?) {
+                        incidentsList += dataSnapshot?.getValue(SecurityIncident::class.java)!!
+                        emitter.onNext(incidentsList)
+
+                        childEventsPublishSubject.onNext(Pair(
+                                dataSnapshot?.getValue(SecurityIncident::class.java)!!,
+                                IncidentOperation.Added())
+                        )
+                    }
 
                     override fun onChildRemoved(dataSnapshot: DataSnapshot?) = childEventsPublishSubject.onNext(Pair(
                             dataSnapshot?.getValue(SecurityIncident::class.java)!!,
@@ -49,8 +67,6 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
 
                     override fun onCancelled(p0: DatabaseError?) = Unit
                 })
-
-        return Observable.empty()
     }
 
     override fun archiveIncident(listPosition: Int): Single<Boolean> {

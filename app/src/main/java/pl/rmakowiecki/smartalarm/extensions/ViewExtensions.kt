@@ -33,7 +33,7 @@ fun EditText.setTextIfDifferent(text: String) {
     }
 }
 
-fun ImageView.loadImage(path: String?, placeHolderResourceId: Int? = null, errorResourceId: Int? = null) {
+fun ImageView.loadImage(path: String, placeHolderResourceId: Int? = null, errorResourceId: Int? = null) {
 
     val request = Picasso
             .with(context)

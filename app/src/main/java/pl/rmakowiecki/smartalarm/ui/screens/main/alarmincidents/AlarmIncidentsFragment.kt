@@ -56,20 +56,15 @@ class AlarmIncidentsFragment : MviFragment<AlarmIncidents.View, AlarmIncidentsVi
         registerForContextMenu(this)
     }
 
-    override fun render(viewState: AlarmIncidentsViewState) {
+    override fun render(viewState: AlarmIncidentsViewState) = with(viewState) {
         incidentsAdapter.items = viewState.incidentsList
+        incidentsAdapter.notifyDataSetChanged()
 
-        if (viewState.incidentsList.isEmpty()) {
-            recyclerView.gone()
-            listPlaceholder.visible()
-        } else {
-            recyclerView.visible()
-            listPlaceholder.gone()
-        }
+        if (isPlaceholderVisible) listPlaceholder.visible() else listPlaceholder.gone()
 
-        if (viewState.isLoading) {
-            progressBar.visible()
-        } else progressBar.gone()
+        if (incidentsList.isEmpty()) recyclerView.gone() else recyclerView.visible()
+
+        if (isLoading) progressBar.visible() else progressBar.gone()
     }
 
     companion object {

@@ -1,8 +1,8 @@
 package pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents
 
-class SecurityIncident(
-        val archived: Boolean,
-        val reason: AlarmTriggerReason,
-        val thumbnailUrl: String,
-        val timestamp: Long
+data class SecurityIncident(
+        val archived: Boolean = true,
+        val reason: AlarmTriggerReason? = null,
+        val thumbnailUrl: String = "",
+        val timestamp: Long = 0L
 )

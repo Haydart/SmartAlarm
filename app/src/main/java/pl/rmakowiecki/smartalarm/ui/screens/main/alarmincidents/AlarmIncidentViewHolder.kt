@@ -18,7 +18,7 @@ class AlarmIncidentViewHolder(
     val overflowMenuButton: ImageButton = view.findViewById(R.id.popupMenuIcon)
 
     fun bind(model: SecurityIncidentItemViewState) = with(model) {
-        previewImage.loadImage(thumbnailUrl)
+        previewImage.loadImage(thumbnailUrl.takeIf { it.isNotBlank() } ?: "https://www.diamondbodyimage.com/wp-content/themes/fortuna/images/no_img.jpg")
         dateText.text = date
         hour
         reasonText.text = launchReason

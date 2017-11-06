@@ -11,5 +11,13 @@ class AlarmViewStateReducer @Inject constructor() {
         is AlarmIncidentsViewStateChange.ItemDeleted -> {
             currentViewState
         }
+        is AlarmIncidentsViewStateChange.ItemsChanged -> {
+            currentViewState.copy(isLoading = false, incidentsList = change.newList, isPlaceholderVisible = false)
+        }
+        is AlarmIncidentsViewStateChange.ItemsEmpty -> {
+            if (change.isEmpty) {
+                currentViewState.copy(isLoading = false, isPlaceholderVisible = true, incidentsList = emptyList())
+            } else currentViewState
+        }
     }
 }

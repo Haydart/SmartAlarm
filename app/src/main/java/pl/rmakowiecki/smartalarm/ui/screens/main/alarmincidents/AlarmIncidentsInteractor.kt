@@ -15,7 +15,17 @@ class AlarmIncidentsInteractor @Inject constructor(
             .scan(AlarmIncidentsViewState(), reducer::reduce)
 
     init {
+        checkIncidentsAvailability()
         observeIncidentsChanges()
+    }
+
+    private fun checkIncidentsAvailability() {
+        viewStateObservable = viewStateObservable
+                .mergeWith(alarmIncidentService
+                        .isIncidentsListEmpty()
+                        .toObservable()
+                        .map(AlarmIncidentsViewStateChange::ItemsEmpty)
+                )
     }
 
     private fun observeIncidentsChanges() {
