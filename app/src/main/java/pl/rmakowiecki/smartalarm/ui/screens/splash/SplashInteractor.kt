@@ -1,6 +1,7 @@
 package pl.rmakowiecki.smartalarm.ui.screens.splash
 
 import io.reactivex.Observable
+import pl.rmakowiecki.smartalarm.base.Contracts
 import pl.rmakowiecki.smartalarm.extensions.applyIoSchedulers
 import pl.rmakowiecki.smartalarm.ui.screens.auth.FirebaseAuthService
 import java.util.concurrent.TimeUnit
@@ -14,21 +15,19 @@ class SplashInteractor @Inject constructor(
         private val navigator: SplashNavigator
 ) : Splash.Interactor {
 
-    override var viewStateIntentObservable: Observable<SplashViewState> = Observable.empty()
+    override var stubIntentObservable: Observable<Contracts.ViewState> = Observable.empty<Contracts.ViewState>()
+            .mergeWith(Observable
+                    .timer(TRANSITION_DELAY, TimeUnit.SECONDS)
+                    .applyIoSchedulers()
+                    .doOnNext { navigator.startLogoTransition() }
+                    .flatMap { Observable.empty<Contracts.ViewState>() })
+            .mergeWith(Observable
+                    .timer(NAVIGATION_DELAY, TimeUnit.SECONDS)
+                    .applyIoSchedulers()
+                    .flatMapSingle { authService.isUserLoggedIn() }
+                    .doOnNext(this::performNavigation)
+                    .flatMap { Observable.empty<Contracts.ViewState>() })
         private set
-
-    override fun attachTransitionIntent(intentObservable: Observable<Unit>) {
-        viewStateIntentObservable = viewStateIntentObservable
-                .mergeWith(intentObservable
-                        .delay(TRANSITION_DELAY, TimeUnit.SECONDS)
-                        .map { SplashViewState.afterTransition() })
-                .mergeWith(Observable
-                        .timer(NAVIGATION_DELAY, TimeUnit.SECONDS)
-                        .flatMapSingle { authService.isUserLoggedIn() }
-                        .applyIoSchedulers()
-                        .doOnNext(this::performNavigation)
-                        .flatMap { Observable.empty<SplashViewState>() })
-    }
 
     private fun performNavigation(isUserLoggedIn: Boolean) =
             if (isUserLoggedIn) navigator.showHomeScreen()
