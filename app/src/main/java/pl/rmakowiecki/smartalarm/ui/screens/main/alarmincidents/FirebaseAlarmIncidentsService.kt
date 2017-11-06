@@ -9,8 +9,6 @@ import javax.inject.Inject
 
 class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsService {
 
-    private var coreDeviceUid: String? = null
-
     private val rootDatabaseNode = FirebaseDatabase
             .getInstance()
             .reference
