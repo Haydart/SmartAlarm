@@ -46,9 +46,9 @@ class HomeActivity : MviActivity<Home.View, HomeViewState, HomePresenter>(), Hom
     }
 
     private fun createNavigationItems() = arrayListOf<AHBottomNavigationItem>().apply {
-        add(AHBottomNavigationItem(R.string.bottom_bar_state, R.drawable.ic_settings_power_white_24px, R.color.primary))
-        add(AHBottomNavigationItem(R.string.bottom_bar_history, R.drawable.ic_history_white_24px, R.color.primary))
-        add(AHBottomNavigationItem(R.string.bottom_bar_settings, R.drawable.ic_settings_white_24px, R.color.primary))
+        add(AHBottomNavigationItem(R.string.title_alarm_state, R.drawable.ic_settings_power_white_24px, R.color.primary))
+        add(AHBottomNavigationItem(R.string.title_security_incidents, R.drawable.ic_history_white_24px, R.color.primary))
+        add(AHBottomNavigationItem(R.string.title_settings, R.drawable.ic_settings_white_24px, R.color.primary))
     }
 
     override fun render(viewState: HomeViewState) = with(viewState) {

@@ -15,9 +15,9 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/historyPreviewImage"
-            android:layout_width="@dimen/alarm_history_item_preview_size"
-            android:layout_height="@dimen/alarm_history_item_preview_size"
+            android:id="@+id/incidentPreviewImage"
+            android:layout_width="@dimen/alarm_incident_item_preview_size"
+            android:layout_height="@dimen/alarm_incident_item_preview_size"
             android:scaleType="centerCrop"/>
 
         <FrameLayout

@@ -1,4 +1,4 @@
-package pl.rmakowiecki.smartalarm.ui.screens.main.alarmhistory
+package pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents
 
 import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
@@ -7,21 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import pl.rmakowiecki.smartalarm.R
 
-class AlarmHistoryAdapter(
-        private val items: MutableList<SecurityIncidentItemViewState>,
+class AlarmIncidentsAdapter(
+        var items: List<SecurityIncidentItemViewState>,
         private val onArchiveFunc: (Int) -> Unit,
         private val onDeleteFunc: (Int) -> Unit,
         private val onDetailsFuncs: (Int) -> Unit
-) : RecyclerView.Adapter<AlarmHistoryViewHolder>() {
+) : RecyclerView.Adapter<AlarmIncidentViewHolder>() {
 
-    override fun onBindViewHolder(holder: AlarmHistoryViewHolder, position: Int) = with(holder.overflowMenuButton) {
+    override fun onBindViewHolder(holder: AlarmIncidentViewHolder, position: Int) = with(holder.overflowMenuButton) {
         setOnClickListener { inflateAndShowPopupMenu(it, position) }
         holder.bind(items[position])
         holder.itemView.setOnClickListener { onDetailsFuncs(position) }
     }
 
     private fun inflateAndShowPopupMenu(view: View, position: Int) = PopupMenu(view.context, view).apply {
-        inflate(R.menu.alarm_history_item_popup_menu)
+        inflate(R.menu.alarm_incident_item_popup_menu)
 
         setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
@@ -35,8 +35,8 @@ class AlarmHistoryAdapter(
 
     override fun getItemCount() = items.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmHistoryViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.history_list_item, parent, false)
-        return AlarmHistoryViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmIncidentViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.alarm_incident_list_item, parent, false)
+        return AlarmIncidentViewHolder(view)
     }
 }
