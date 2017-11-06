@@ -45,7 +45,7 @@
                     app:is_continuous="true"
                     app:label_color="@color/textSecondary"
                     app:main_circle_color="#FFFFFF"
-                    app:max="20"
+                    app:max="21"
                     app:progress_primary_color="@color/accent"
                     app:progress_secondary_color="#EEEEEE"
                     app:start_offset="45"/>

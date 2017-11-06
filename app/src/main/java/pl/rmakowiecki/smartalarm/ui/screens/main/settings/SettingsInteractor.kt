@@ -5,6 +5,10 @@ import pl.rmakowiecki.smartalarm.ui.screens.auth.FirebaseAuthService
 import pl.rmakowiecki.smartalarm.ui.screens.main.settings.SettingsViewStateChange.*
 import javax.inject.Inject
 
+const val SEQUENCE_INTERVAL_MULTIPLIER = 50
+const val SEQUENCE_INTERVAL_OFFSET = 200
+const val PHOTO_COUNT_OFFSET = 4
+
 class SettingsInteractor @Inject constructor(
         private val authService: FirebaseAuthService,
         private val settingsService: FirebaseSettingsService,
@@ -46,9 +50,10 @@ class SettingsInteractor @Inject constructor(
     override fun attachPhotoCountChangeIntent(intentObservable: Observable<Int>) {
         viewStateObservable = viewStateObservable
                 .mergeWith(intentObservable
-                        .map { PhotoCountValueChange(it) }
+                        .map { PhotoCountValueChange(it + PHOTO_COUNT_OFFSET) }
                 )
                 .mergeWith(intentObservable
+                        .map { it + PHOTO_COUNT_OFFSET }
                         .switchMapSingle(settingsService::sendPhotoCountValue)
                         .map { PhotoCountChangeComplete() }
                 )
@@ -57,9 +62,10 @@ class SettingsInteractor @Inject constructor(
     override fun attachPhotoSequenceIntervalChangeIntent(intentObservable: Observable<Int>) {
         viewStateObservable = viewStateObservable
                 .mergeWith(intentObservable
-                        .map { SequenceIntervalValueChange(it) }
+                        .map { SequenceIntervalValueChange(it * SEQUENCE_INTERVAL_MULTIPLIER + SEQUENCE_INTERVAL_OFFSET) }
                 )
                 .mergeWith(intentObservable
+                        .map { it * SEQUENCE_INTERVAL_MULTIPLIER + SEQUENCE_INTERVAL_OFFSET }
                         .switchMapSingle(settingsService::sendPhotoSequenceIntervalValue)
                         .map { SequenceIntervalChangeComplete() }
                 )

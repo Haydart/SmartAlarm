@@ -53,7 +53,9 @@ class SettingsFragment : MviFragment<Settings.View, SettingsViewState, SettingsP
         logoutButton.isEnabled = true
 
         photosCountKnobWidget.setOnCrollerChangeListener(object : OnCrollerChangeListener {
-            override fun onProgressChanged(croller: Croller, progress: Int) = Unit
+            override fun onProgressChanged(croller: Croller, progress: Int) {
+                croller.label = (croller.progress + PHOTO_COUNT_OFFSET).toString()
+            }
 
             override fun onStartTrackingTouch(croller: Croller) = Unit
 
@@ -61,7 +63,9 @@ class SettingsFragment : MviFragment<Settings.View, SettingsViewState, SettingsP
         })
 
         photosSequenceIntervalKnobWidget.setOnCrollerChangeListener(object : OnCrollerChangeListener {
-            override fun onProgressChanged(croller: Croller, progress: Int) = Unit
+            override fun onProgressChanged(croller: Croller, progress: Int) {
+                croller.label = (croller.progress * SEQUENCE_INTERVAL_MULTIPLIER + SEQUENCE_INTERVAL_OFFSET).toString()
+            }
 
             override fun onStartTrackingTouch(croller: Croller) = Unit
 

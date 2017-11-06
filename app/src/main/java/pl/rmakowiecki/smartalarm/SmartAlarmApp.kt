@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import com.facebook.FacebookSdk
 import com.google.firebase.FirebaseApp
-import com.google.firebase.messaging.FirebaseMessaging
 import pl.rmakowiecki.smartalarm.di.component.ApplicationComponent
 import pl.rmakowiecki.smartalarm.di.component.DaggerApplicationComponent
 import pl.rmakowiecki.smartalarm.di.module.ApplicationModule
@@ -20,8 +19,6 @@ class SmartAlarmApp : Application() {
     override fun onCreate() {
         super.onCreate()
         FirebaseApp.initializeApp(this)
-        FirebaseMessaging.getInstance().subscribeToTopic("SgVIHNDQwsPj3lmS2jS1gS9Xz5r1")
-
         FacebookSdk.sdkInitialize(applicationContext)
     }
 
