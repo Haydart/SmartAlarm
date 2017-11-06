@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content">
 
                 <com.sdsmdg.harjot.crollerTest.Croller
-                    android:id="@+id/photosCountSeekBar"
+                    android:id="@+id/photosCountKnobWidget"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_medium"
@@ -45,7 +45,7 @@
                     app:is_continuous="true"
                     app:label_color="@color/textSecondary"
                     app:main_circle_color="#FFFFFF"
-                    app:max="25"
+                    app:max="20"
                     app:progress_primary_color="@color/accent"
                     app:progress_secondary_color="#EEEEEE"
                     app:start_offset="45"/>
@@ -54,7 +54,8 @@
                     android:id="@+id/photoCountProgressView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:visibility="invisible"/>
 
             </FrameLayout>
         </LinearLayout>
@@ -80,7 +81,7 @@
                 android:layout_height="wrap_content">
 
                 <com.sdsmdg.harjot.crollerTest.Croller
-                    android:id="@+id/photosSequenceIntervalSeekBar"
+                    android:id="@+id/photosSequenceIntervalKnobWidget"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_medium"
@@ -90,7 +91,7 @@
                     app:is_continuous="true"
                     app:label_color="@color/textSecondary"
                     app:main_circle_color="#FFFFFF"
-                    app:max="1000"
+                    app:max="20"
                     app:progress_primary_color="@color/accent"
                     app:progress_secondary_color="#EEEEEE"
                     app:start_offset="45"/>
@@ -99,7 +100,8 @@
                     android:id="@+id/sequenceIntervalProgressView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:visibility="invisible"/>
 
             </FrameLayout>
         </LinearLayout>

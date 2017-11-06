@@ -13,7 +13,7 @@ interface Settings {
         val photoCountInfoIntent: Observable<Unit>
         val sequenceIntervalInfoIntent: Observable<Unit>
 
-        fun render(viewState: Contracts.ViewState)
+        fun render(viewState: SettingsViewState)
     }
 
     interface Interactor : Contracts.Interactor {

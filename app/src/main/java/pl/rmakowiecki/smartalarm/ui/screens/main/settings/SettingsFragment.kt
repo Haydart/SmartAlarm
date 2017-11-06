@@ -3,12 +3,15 @@ package pl.rmakowiecki.smartalarm.ui.screens.main.settings
 import android.os.Bundle
 import android.view.View
 import com.jakewharton.rxbinding2.view.clicks
+import com.sdsmdg.harjot.crollerTest.Croller
+import com.sdsmdg.harjot.crollerTest.OnCrollerChangeListener
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_settings.*
 import pl.rmakowiecki.smartalarm.R
-import pl.rmakowiecki.smartalarm.base.Contracts
 import pl.rmakowiecki.smartalarm.base.mvi.MviFragment
+import pl.rmakowiecki.smartalarm.extensions.invisible
+import pl.rmakowiecki.smartalarm.extensions.visible
 import javax.inject.Inject
 
 class SettingsFragment : MviFragment<Settings.View, SettingsViewState, SettingsPresenter>(),
@@ -49,12 +52,31 @@ class SettingsFragment : MviFragment<Settings.View, SettingsViewState, SettingsP
     private fun setupView() {
         logoutButton.isEnabled = true
 
-        photosCountSeekBar.setOnProgressChangedListener { photoCountChangePublishSubject.onNext(it) }
-        photosCountSeekBar.setOnProgressChangedListener { sequenceIntervalChangePublishSubject.onNext(it) }
+        photosCountKnobWidget.setOnCrollerChangeListener(object : OnCrollerChangeListener {
+            override fun onProgressChanged(croller: Croller, progress: Int) = Unit
+
+            override fun onStartTrackingTouch(croller: Croller) = Unit
+
+            override fun onStopTrackingTouch(croller: Croller) = photoCountChangePublishSubject.onNext(croller.progress)
+        })
+
+        photosSequenceIntervalKnobWidget.setOnCrollerChangeListener(object : OnCrollerChangeListener {
+            override fun onProgressChanged(croller: Croller, progress: Int) = Unit
+
+            override fun onStartTrackingTouch(croller: Croller) = Unit
+
+            override fun onStopTrackingTouch(croller: Croller) = sequenceIntervalChangePublishSubject.onNext(croller.progress)
+        })
     }
 
-    override fun render(viewState: Contracts.ViewState) {
-        //todo implement
+    override fun render(viewState: SettingsViewState) = with(viewState) {
+
+        if (isLoadingPhotoCount) photoCountProgressView.visible() else photoCountProgressView.invisible()
+
+        if (isLoadingSequenceInterval) sequenceIntervalProgressView.visible() else sequenceIntervalProgressView.invisible()
+
+        photosCountKnobWidget.label = photosCount.toString()
+        photosSequenceIntervalKnobWidget.label = photosSequenceInterval.toString()
     }
 
     companion object {
