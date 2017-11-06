@@ -1,6 +1,9 @@
 package pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents
 
 import io.reactivex.Observable
+import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.AlarmIncidentsViewStateChange.*
+import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.IncidentOperation.Removed
+import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.IncidentOperation.Updated
 import javax.inject.Inject
 
 class AlarmIncidentsInteractor @Inject constructor(
@@ -32,17 +35,40 @@ class AlarmIncidentsInteractor @Inject constructor(
         viewStateObservable = viewStateObservable
                 .mergeWith(alarmIncidentService
                         .observeIncidentsChanges()
-                        .map(this::mapToLocalModel)
-                        .map(AlarmIncidentsViewStateChange::ItemsChanged)
+                        .map(this::mapToViewStateChange)
+
                 )
     }
 
-    private fun mapToLocalModel(remoteModelList: List<SecurityIncident>) = remoteModelList.map { remoteModel ->
+    private fun mapToViewStateChange(incidentChange: IncidentChange): AlarmIncidentsViewStateChange = with(incidentChange) {
+        when (incidentChange.operation) {
+            is IncidentOperation.Added -> {
+                ItemAdded(
+                        mapToLocalModel(incidentChange.model)
+                )
+            }
+            is Removed -> {
+                ItemRemoved(
+                        mapToLocalModel(incidentChange.model),
+                        incidentChange.operation.removedIndex
+                )
+            }
+            is Updated -> {
+                ItemUpdated(
+                        mapToLocalModel(incidentChange.model),
+                        incidentChange.operation.changedIndex
+                )
+            }
+        }
+    }
+
+    private fun mapToLocalModel(remoteModel: SecurityIncident) = with(remoteModel) {
         SecurityIncidentItemViewState(
-                remoteModel.thumbnailUrl,
-                remoteModel.reason.toString(),
-                remoteModel.timestamp.toString(), //todo convert to displayable date
-                remoteModel.timestamp.toString()) //todo convert to displayable hour
+                thumbnailUrl,
+                reason.toString(),
+                timestamp.toString(), //todo convert to displayable date
+                timestamp.toString() //todo convert to displayable hour
+        )
     }
 
     override fun attachArchiveIntent(intentObservable: Observable<Int>) {

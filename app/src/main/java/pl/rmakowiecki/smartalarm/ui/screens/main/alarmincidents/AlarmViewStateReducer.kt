@@ -1,23 +1,48 @@
 package pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents
 
+import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.AlarmIncidentsViewStateChange.*
 import javax.inject.Inject
 
 class AlarmViewStateReducer @Inject constructor() {
 
     fun reduce(currentViewState: AlarmIncidentsViewState, change: AlarmIncidentsViewStateChange): AlarmIncidentsViewState = when (change) {
-        is AlarmIncidentsViewStateChange.ItemArchived -> {
+        is ItemArchived -> {
             currentViewState
         }
-        is AlarmIncidentsViewStateChange.ItemDeleted -> {
+        is ItemDeleted -> {
             currentViewState
         }
-        is AlarmIncidentsViewStateChange.ItemsChanged -> {
-            currentViewState.copy(isLoading = false, incidentsList = change.newList, isPlaceholderVisible = false)
-        }
-        is AlarmIncidentsViewStateChange.ItemsEmpty -> {
+        is ItemsEmpty -> {
             if (change.isEmpty) {
                 currentViewState.copy(isLoading = false, isPlaceholderVisible = true, incidentsList = emptyList())
             } else currentViewState
+        }
+        is ItemAdded -> {
+            currentViewState.copy(
+                    isLoading = false,
+                    incidentsList = currentViewState.incidentsList.toMutableList().apply {
+                        add(change.model)
+                    },
+                    isPlaceholderVisible = false
+            )
+        }
+        is ItemRemoved -> {
+            val newList = currentViewState.incidentsList.toMutableList().apply { removeAt(change.positon) }
+
+            currentViewState.copy(
+                    isLoading = false,
+                    incidentsList = newList,
+                    isPlaceholderVisible = newList.isEmpty()
+            )
+        }
+        is ItemUpdated -> {
+            currentViewState.copy(
+                    isLoading = false,
+                    incidentsList = currentViewState.incidentsList.toMutableList().apply {
+                        this[change.positon] = change.model
+                    },
+                    isPlaceholderVisible = false
+            )
         }
     }
 }
