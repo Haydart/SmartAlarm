@@ -5,6 +5,7 @@ import com.google.firebase.database.*
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
+import pl.rmakowiecki.smartalarm.extensions.logD
 import javax.inject.Inject
 
 class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsService {
@@ -95,16 +96,28 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
     override fun deleteIncident(listPosition: Int): Single<Boolean> = Single.create { emitter ->
         userDatabaseNode.child("coredevice")
                 .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot?) {
+                    override fun onDataChange(currentUserUidSnapshot: DataSnapshot) {
+
+                        logD("position = $listPosition")
+                        logD("deleting timestamp = ${incidentsList[listPosition].timestamp}")
+
                         rootDatabaseNode
-                                .child(dataSnapshot?.value as String) //user's core device uid
+                                .child(currentUserUidSnapshot.value as String)
                                 .child("incidents")
-                                .orderByChild("timestamp") //list needs to be then reversed on client side
+                                .orderByChild("timestamp")
+                                .equalTo(incidentsList[listPosition].timestamp.toDouble())
                                 .addListenerForSingleValueEvent(object : ValueEventListener {
                                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                        dataSnapshot.ref
-                                                .removeValue()
-                                                .addOnCompleteListener { emitter.onSuccess(it.isSuccessful) }
+
+                                        logD("parent key ${dataSnapshot.key}")
+
+                                        dataSnapshot.children.forEach { incidentSnapshot ->
+                                            logD("child key ${incidentSnapshot.key}")
+
+                                            incidentSnapshot.ref
+                                                    .removeValue()
+                                                    .addOnCompleteListener { emitter.onSuccess(it.isSuccessful) }
+                                        }
                                     }
 
                                     override fun onCancelled(databaseError: DatabaseError) = Unit

@@ -27,14 +27,15 @@ class AlarmViewStateReducer @Inject constructor() {
             )
         }
         is ItemRemoved -> {
+            val newList = currentViewState.incidentsList.toMutableList().apply { removeAt(change.positon) }
+
             currentViewState.copy(
                     isLoading = false,
-                    incidentsList = currentViewState.incidentsList.toMutableList().apply {
-                        removeAt(change.positon)
-                    }
+                    incidentsList = newList,
+                    isPlaceholderVisible = newList.isEmpty()
             )
         }
-        is AlarmIncidentsViewStateChange.ItemUpdated -> {
+        is ItemUpdated -> {
             currentViewState.copy(
                     isLoading = false,
                     incidentsList = currentViewState.incidentsList.toMutableList().apply {
