@@ -19,7 +19,7 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
 
     private val incidentsList = mutableListOf<SecurityIncident>()
 
-    private val childEventsPublishSubject = PublishSubject.create<Pair<SecurityIncident, IncidentOperation>>()
+    private val childEventsPublishSubject = PublishSubject.create<IncidentChange>()
 
     private fun getCurrentBackendUser() = FirebaseAuth.getInstance().currentUser
 
@@ -31,11 +31,11 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
 
                     override fun onDataChange(dataSnapshot: DataSnapshot?) = emitter.onSuccess(dataSnapshot?.value == null)
 
-                    override fun onCancelled(p0: DatabaseError?) = Unit
+                    override fun onCancelled(databaseError: DatabaseError) = Unit
                 })
     }
 
-    override fun observeIncidentsChanges(): Observable<Pair<SecurityIncident, IncidentOperation>> {
+    override fun observeIncidentsChanges(): Observable<IncidentChange> {
         rootDatabaseNode
                 .child("SgVIHNDQwsPj3lmS2jS1gS9Xz5r1") //todo use core device uid taken from server
                 .child("incidents")
@@ -48,18 +48,22 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
                         val changedIndex = incidentsList.indexOfFirst { it.timestamp == newModel.timestamp }
                         incidentsList[changedIndex] = newModel
 
-                        childEventsPublishSubject.onNext(Pair(
-                                dataSnapshot.getValue(SecurityIncident::class.java)!!,
-                                IncidentOperation.Updated(changedIndex))
+                        childEventsPublishSubject.onNext(
+                                IncidentChange(
+                                        newModel,
+                                        IncidentOperation.Updated(changedIndex)
+                                )
                         )
                     }
 
                     override fun onChildAdded(dataSnapshot: DataSnapshot, predecessor: String?) {
                         incidentsList += dataSnapshot.getValue(SecurityIncident::class.java)!!
 
-                        childEventsPublishSubject.onNext(Pair(
-                                dataSnapshot.getValue(SecurityIncident::class.java)!!,
-                                IncidentOperation.Added())
+                        childEventsPublishSubject.onNext(
+                                IncidentChange(
+                                        dataSnapshot.getValue(SecurityIncident::class.java)!!,
+                                        IncidentOperation.Added()
+                                )
                         )
                     }
 
@@ -69,9 +73,11 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
 
                         incidentsList -= removedModel
 
-                        childEventsPublishSubject.onNext(Pair(
-                                removedModel,
-                                IncidentOperation.Removed(removedIndex))
+                        childEventsPublishSubject.onNext(
+                                IncidentChange(
+                                        removedModel,
+                                        IncidentOperation.Removed(removedIndex)
+                                )
                         )
                     }
 
@@ -110,8 +116,13 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
     }
 }
 
+class IncidentChange(
+        val model: SecurityIncident,
+        val operation: IncidentOperation
+)
+
 sealed class IncidentOperation {
     class Added : IncidentOperation()
-    class Removed(removedIndex: Any) : IncidentOperation()
-    class Updated(changedIndex: Int) : IncidentOperation()
+    class Removed(val removedIndex: Int) : IncidentOperation()
+    class Updated(val changedIndex: Int) : IncidentOperation()
 }

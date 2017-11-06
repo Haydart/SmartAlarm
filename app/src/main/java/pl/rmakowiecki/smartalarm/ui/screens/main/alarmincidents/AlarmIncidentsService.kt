@@ -6,7 +6,7 @@ import io.reactivex.Single
 interface AlarmIncidentsService {
 
     fun isIncidentsListEmpty(): Single<Boolean>
-    fun observeIncidentsChanges(): Observable<Pair<SecurityIncident, IncidentOperation>>
+    fun observeIncidentsChanges(): Observable<IncidentChange>
     fun archiveIncident(listPosition: Int): Single<Boolean>
     fun deleteIncident(listPosition: Int): Single<Boolean>
 }
