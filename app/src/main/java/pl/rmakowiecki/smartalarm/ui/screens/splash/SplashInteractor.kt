@@ -20,14 +20,14 @@ class SplashInteractor @Inject constructor(
     override fun attachTransitionIntent(intentObservable: Observable<Unit>) {
         viewStateIntentObservable = viewStateIntentObservable
                 .mergeWith(intentObservable
-                        .map { SplashViewState.afterTransition() }
-                        .delay(TRANSITION_DELAY, TimeUnit.SECONDS))
+                        .delay(TRANSITION_DELAY, TimeUnit.SECONDS)
+                        .map { SplashViewState.afterTransition() })
                 .mergeWith(Observable
                         .timer(NAVIGATION_DELAY, TimeUnit.SECONDS)
                         .flatMapSingle { authService.isUserLoggedIn() }
                         .applyIoSchedulers()
                         .doOnNext(this::performNavigation)
-                        .map { SplashViewState.afterTransition() })
+                        .flatMap { Observable.empty<SplashViewState>() })
     }
 
     private fun performNavigation(isUserLoggedIn: Boolean) =
