@@ -2,7 +2,10 @@ package pl.rmakowiecki.smartalarm.ui.screens.main.settings
 
 import pl.rmakowiecki.smartalarm.base.Contracts
 
-class SettingsViewState(
-        private val photosCount: Int = 10,
-        private val photosSequenceInterval: Int = 500
+data class SettingsViewState(
+        val photosCount: Int = 10,
+        val photosSequenceInterval: Int = 500,
+        val isLoadingPhotoCount: Boolean = false,
+        val isLoadingSequenceInterval: Boolean = false
+
 ) : Contracts.ViewState

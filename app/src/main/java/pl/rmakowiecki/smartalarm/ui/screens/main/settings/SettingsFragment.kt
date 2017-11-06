@@ -18,7 +18,7 @@ class SettingsFragment : MviFragment<Settings.View, SettingsViewState, SettingsP
 
     override val layout = R.layout.fragment_settings
 
-    override val logoutIntent
+    override val logoutButtonClickIntent
         get() = logoutButton.clicks()
 
     override val photoCountInfoIntent: Observable<Unit>

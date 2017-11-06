@@ -33,5 +33,7 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="incidents_placeholder_text">No incidents reported.\nWhich is good, right?</string>
+    <string name="photo_count_description">Photo count is the number of photos you want to have taken for a single reported security incident.</string>
+    <string name="sequence_interval_description">Photo sequence interval specifies how much break there will be between each consecutive photo take in a security incident</string>
 
 </resources>
