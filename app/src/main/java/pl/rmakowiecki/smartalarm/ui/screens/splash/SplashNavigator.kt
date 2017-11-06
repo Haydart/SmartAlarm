@@ -2,7 +2,12 @@ package pl.rmakowiecki.smartalarm.ui.screens.splash
 
 import android.app.Activity
 import android.transition.Explode
+import android.transition.TransitionInflater
+import android.transition.TransitionManager
+import android.transition.TransitionSet
+import android.view.View
 import kotlinx.android.synthetic.main.activity_splash.*
+import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.extensions.Extra
 import pl.rmakowiecki.smartalarm.extensions.startActivity
 import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthActivity
@@ -26,5 +31,13 @@ class SplashNavigator @Inject constructor(
         startActivity<HomeActivity>()
         overridePendingTransition(0, 0)
         window.exitTransition = Explode()
+    }
+
+    override fun startLogoTransition() {
+        val transitionSet = TransitionInflater
+                .from(activity)
+                .inflateTransition(R.transition.splash_logo) as TransitionSet
+        TransitionManager.beginDelayedTransition(activity.rootLayout, transitionSet)
+        activity.splashLogoInscription.visibility = View.VISIBLE
     }
 }

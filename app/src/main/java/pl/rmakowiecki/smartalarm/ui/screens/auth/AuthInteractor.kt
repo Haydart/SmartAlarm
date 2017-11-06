@@ -97,21 +97,15 @@ class AuthInteractor @Inject constructor(
                         .map { AuthViewStateChange.CredentialsSubmit() })
                 .mergeWith(intentObservable
                         .flatMapSingle(authService::login)
-                        .flatMap(this::navigateToProperScreenIfSuccessful))
+                        .flatMap(this::applyBackendLoginResponse))
     }
 
-    private fun navigateToProperScreenIfSuccessful(response: AuthResponse): Observable<AuthViewStateChange> =
+    private fun applyBackendLoginResponse(response: AuthResponse): Observable<out AuthViewStateChange> =
             if (response.isSuccessful) {
-                applyChangeAndDelayedNeutralViewState(AuthViewStateChange.AuthSuccess())
+                Observable.just(AuthViewStateChange.AuthSuccess())
                         .doOnNext { navigator.showHomeScreen() }
             } else Observable.just(
                     AuthViewStateChange.AuthFailure(response.error?.localizedMessage ?: "Unknown error"))
-
-    private fun applyChangeAndDelayedNeutralViewState(viewStateChange: AuthViewStateChange): Observable<AuthViewStateChange> = Observable.merge(
-            Observable.just(viewStateChange),
-            Observable.just(AuthViewStateChange.Neutral())
-                    .delay(2, TimeUnit.SECONDS)
-    )
 
     override fun attachRegisterIntent(intentObservable: Observable<RegisterCredentials>) {
         viewStateIntentsObservable = viewStateIntentsObservable
@@ -119,7 +113,7 @@ class AuthInteractor @Inject constructor(
                         .map { AuthViewStateChange.CredentialsSubmit() })
                 .mergeWith(intentObservable
                         .flatMapSingle(authService::register)
-                        .flatMap(this::navigateToProperScreenIfSuccessful))
+                        .flatMap(this::applyBackendLoginResponse))
     }
 
     override fun attachResetPasswordIntent(intentObservable: Observable<RemindPasswordCredentials>) {
@@ -128,25 +122,27 @@ class AuthInteractor @Inject constructor(
                         .map { AuthViewStateChange.CredentialsSubmit() })
                 .mergeWith(intentObservable
                         .flatMapSingle(authService::resetPassword)
-                        .flatMap(this::navigateToProperScreenIfSuccessful))
+                        .flatMap(this::applyBackendLoginResponse))
     }
 
     override fun attachEmailRegistrationIntent(intentObservable: Observable<Unit>) {
-        viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
-                intentObservable.map { AuthViewStateChange.PerspectiveSwitch(REGISTER) }
-        )
+        viewStateIntentsObservable = viewStateIntentsObservable
+                .mergeWith(intentObservable
+                        .map { AuthViewStateChange.PerspectiveSwitch(REGISTER) }
+                        .doAfterNext { needsToRevalidateInput = true })
     }
 
     override fun attachBackButtonClickIntent(intentObservable: Observable<Unit>) {
-        viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
-                intentObservable.map { AuthViewStateChange.PerspectiveSwitch(LOGIN) }
-        )
+        viewStateIntentsObservable = viewStateIntentsObservable
+                .mergeWith(intentObservable
+                        .map { AuthViewStateChange.PerspectiveSwitch(LOGIN) })
     }
 
     override fun attachForgotPasswordIntent(intentObservable: Observable<Unit>) {
-        viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
-                intentObservable.map { AuthViewStateChange.PerspectiveSwitch(FORGOT_PASSWORD) }
-        )
+        viewStateIntentsObservable = viewStateIntentsObservable
+                .mergeWith(intentObservable
+                        .map { AuthViewStateChange.PerspectiveSwitch(FORGOT_PASSWORD) }
+                        .doAfterNext { needsToRevalidateInput = true })
     }
 }
 

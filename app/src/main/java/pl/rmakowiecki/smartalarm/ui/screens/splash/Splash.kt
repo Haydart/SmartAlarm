@@ -5,20 +5,13 @@ import pl.rmakowiecki.smartalarm.base.Contracts
 
 interface Splash {
 
-    interface View : Contracts.View {
-        val splashTransitionIntent: Observable<Unit>
-
-        fun render(viewState: SplashViewState)
-    }
-
     interface Navigator : Contracts.Navigator {
         fun showAuthScreen()
         fun showHomeScreen()
+        fun startLogoTransition()
     }
 
     interface Interactor : Contracts.Interactor {
-        val viewStateIntentObservable: Observable<SplashViewState>
-
-        fun attachTransitionIntent(intentObservable: Observable<Unit>)
+        val stubIntentObservable: Observable<Contracts.ViewState>
     }
 }

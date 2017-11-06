@@ -7,16 +7,20 @@ class AuthStateReducer @Inject constructor() {
 
     fun reduce(currentState: AuthViewState, change: AuthViewStateChange) = when (change) {
         is EmailInput -> {
-            currentState.copy(emailInputText = change.email, emailInputError = "")
+            currentState.copy(emailInputText = change.email, emailInputError = null)
         }
         is EmailValidation -> {
-            currentState.copy(emailInputError = change.emailError)
+            if (currentState.screenPerspective != AuthPerspective.LOGIN)
+                currentState.copy(emailInputError = change.emailError)
+            else currentState
         }
         is PasswordInput -> {
-            currentState.copy(passwordInputText = change.password, passwordInputError = "")
+            currentState.copy(passwordInputText = change.password, passwordInputError = null)
         }
         is PasswordValidation -> {
-            currentState.copy(passwordInputError = change.passwordError)
+            if (currentState.screenPerspective != AuthPerspective.LOGIN)
+                currentState.copy(passwordInputError = change.passwordError)
+            else currentState
         }
         is RepeatPasswordInput -> {
             currentState.copy(repeatPasswordInputText = change.repeatedPassword)
@@ -31,7 +35,8 @@ class AuthStateReducer @Inject constructor() {
         }
         is PerspectiveSwitch -> {
             if (!currentState.isLoading)
-                currentState.copy(screenPerspective = change.authPerspective)
+                currentState.copy(screenPerspective = change.authPerspective, generalError = null,
+                        emailInputError = null, passwordInputError = null, repeatPasswordInputError = null)
             else currentState
         }
         is AuthViewStateChange.CredentialsButtonChange -> {
@@ -44,7 +49,7 @@ class AuthStateReducer @Inject constructor() {
             currentState.copy(isLoading = false, generalError = change.errorMessage)
         }
         is AuthViewStateChange.Neutral -> {
-            currentState.copy(isLoading = false, isShowingSuccess = false, generalError = "")
+            currentState.copy(isLoading = false, isShowingSuccess = false, generalError = null)
         }
     }
 }
