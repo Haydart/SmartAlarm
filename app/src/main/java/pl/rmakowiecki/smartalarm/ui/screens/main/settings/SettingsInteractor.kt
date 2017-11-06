@@ -20,13 +20,7 @@ class SettingsInteractor @Inject constructor(
     override fun attachLogoutButtonClickIntent(intentObservable: Observable<Unit>) {
         viewStateObservable = viewStateObservable
                 .mergeWith(intentObservable
-                        .flatMap { navigator.showLogoutConfirmationDialog() }
-                )
-    }
-
-    override fun attachLogoutDialogOkClickIntent(intentObservable: Observable<Unit>) {
-        viewStateObservable = viewStateObservable
-                .mergeWith(intentObservable
+                        .flatMapMaybe { navigator.showLogoutConfirmationDialog() }
                         .flatMapSingle { authService.logoutUser() }
                         .doOnNext { navigator.showSplashScreen() }
                         .flatMap { Observable.empty<SettingsViewStateChange>() }

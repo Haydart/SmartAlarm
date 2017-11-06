@@ -16,17 +16,21 @@ class SettingsNavigator @Inject constructor(
 
     override fun showPhotoCountInfoDialog() = AlertDialog.Builder(activity)
             .setMessage(R.string.photo_count_description)
+            .setPositiveButton(android.R.string.ok, null)
             .create()
             .show()
 
     override fun showSequenceIntervalInfoDialog() = AlertDialog.Builder(activity)
             .setMessage(R.string.sequence_interval_description)
+            .setPositiveButton(android.R.string.ok, null)
             .create()
             .show()
 
     override fun showLogoutConfirmationDialog(): Maybe<Boolean> = Maybe.create { emitter ->
         AlertDialog.Builder(activity)
-                .setMessage(R.string.sequence_interval_description)
+                .setMessage(R.string.logout_confirmation_message)
+                .setPositiveButton(R.string.logout, { _, _ -> emitter.onSuccess(true) })
+                .setNegativeButton(android.R.string.cancel, { _, _ -> emitter.onComplete() })
                 .create()
                 .show()
     }
