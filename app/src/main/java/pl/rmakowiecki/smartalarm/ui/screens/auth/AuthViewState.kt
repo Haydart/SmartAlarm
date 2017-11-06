@@ -4,16 +4,16 @@ import pl.rmakowiecki.smartalarm.base.Contracts
 
 data class AuthViewState private constructor(
         val emailInputText: String = "",
-        val emailInputError: String = "",
+        val emailInputError: String? = null,
         val passwordInputText: String = "",
-        val passwordInputError: String = "",
+        val passwordInputError: String? = null,
         val repeatPasswordInputText: String = "",
-        val repeatPasswordInputError: String = "",
+        val repeatPasswordInputError: String? = null,
         val credentialsSubmitButtonEnabled: Boolean = false,
         val screenPerspective: AuthPerspective = AuthPerspective.LOGIN,
         val isLoading: Boolean = false,
         val isShowingSuccess: Boolean = false,
-        val generalError: String = ""
+        val generalError: String? = null
 ) : Contracts.ViewState {
     companion object {
         fun createInitial() = AuthViewState()

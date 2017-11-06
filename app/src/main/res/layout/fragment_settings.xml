@@ -28,6 +28,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:drawableEnd="@drawable/ic_info"
                 android:drawablePadding="@dimen/margin_medium"
+                android:padding="@dimen/margin_small"
                 android:text="@string/photos_count"/>
 
             <FrameLayout
@@ -74,6 +75,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:drawableEnd="@drawable/ic_info"
                 android:drawablePadding="@dimen/margin_medium"
+                android:padding="@dimen/margin_small"
                 android:text="@string/photo_sequence_interval"/>
 
             <FrameLayout

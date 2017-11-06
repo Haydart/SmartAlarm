@@ -102,14 +102,14 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
         passwordInput.setTextIfDifferent(passwordInputText)
         repeatPasswordInput.setTextIfDifferent(repeatPasswordInputText)
 
-        emailInputLayout.isErrorEnabled = emailInputError.isNotBlank()
-        emailInputLayout.error = emailInputError
+        emailInputLayout.isErrorEnabled = emailInputError != null
+        emailInputLayout.error = emailInputError ?: ""
 
-        passwordInputLayout.isErrorEnabled = passwordInputError.isNotBlank()
-        passwordInputLayout.error = passwordInputError
+        passwordInputLayout.isErrorEnabled = passwordInputError != null
+        passwordInputLayout.error = passwordInputError ?: ""
 
-        repeatPasswordInputLayout.isErrorEnabled = repeatPasswordInputError.isNotBlank()
-        repeatPasswordInputLayout.error = repeatPasswordInputError
+        repeatPasswordInputLayout.isErrorEnabled = repeatPasswordInputError != null
+        repeatPasswordInputLayout.error = repeatPasswordInputError ?: ""
 
         when (screenPerspective) {
             LOGIN -> showLoginPerspective(this)
@@ -137,7 +137,7 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
             when {
                 isLoading -> loginButton.showProcessing()
                 isShowingSuccess -> loginButton.showSuccess()
-                generalError.isNotBlank() -> loginButton.showFailure(generalError)
+                generalError != null -> loginButton.showFailure(generalError)
             }
         }
 
@@ -165,7 +165,7 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
             when {
                 isLoading -> registerButton.showProcessing()
                 isShowingSuccess -> registerButton.showSuccess()
-                generalError.isNotBlank() -> registerButton.showFailure(generalError)
+                generalError != null -> registerButton.showFailure(generalError)
             }
         }
 
@@ -193,7 +193,7 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
             when {
                 isLoading -> resetPasswordButton.showProcessing()
                 isShowingSuccess -> resetPasswordButton.showSuccess()
-                generalError.isNotBlank() -> resetPasswordButton.showFailure(generalError)
+                generalError != null -> resetPasswordButton.showFailure(generalError)
             }
         }
 

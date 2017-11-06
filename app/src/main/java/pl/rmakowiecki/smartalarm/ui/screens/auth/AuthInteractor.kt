@@ -126,21 +126,23 @@ class AuthInteractor @Inject constructor(
     }
 
     override fun attachEmailRegistrationIntent(intentObservable: Observable<Unit>) {
-        viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
-                intentObservable.map { AuthViewStateChange.PerspectiveSwitch(REGISTER) }
-        )
+        viewStateIntentsObservable = viewStateIntentsObservable
+                .mergeWith(intentObservable
+                        .map { AuthViewStateChange.PerspectiveSwitch(REGISTER) }
+                        .doAfterNext { needsToRevalidateInput = true })
     }
 
     override fun attachBackButtonClickIntent(intentObservable: Observable<Unit>) {
-        viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
-                intentObservable.map { AuthViewStateChange.PerspectiveSwitch(LOGIN) }
-        )
+        viewStateIntentsObservable = viewStateIntentsObservable
+                .mergeWith(intentObservable
+                        .map { AuthViewStateChange.PerspectiveSwitch(LOGIN) })
     }
 
     override fun attachForgotPasswordIntent(intentObservable: Observable<Unit>) {
-        viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
-                intentObservable.map { AuthViewStateChange.PerspectiveSwitch(FORGOT_PASSWORD) }
-        )
+        viewStateIntentsObservable = viewStateIntentsObservable
+                .mergeWith(intentObservable
+                        .map { AuthViewStateChange.PerspectiveSwitch(FORGOT_PASSWORD) }
+                        .doAfterNext { needsToRevalidateInput = true })
     }
 }
 
