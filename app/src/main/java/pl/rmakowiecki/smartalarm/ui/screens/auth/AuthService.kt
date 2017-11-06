@@ -2,6 +2,7 @@ package pl.rmakowiecki.smartalarm.ui.screens.auth
 
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,6 +18,7 @@ class FirebaseAuthService @Inject constructor() : AuthService {
         FirebaseAuth.getInstance()
                 .signInWithEmailAndPassword(credentials.email, credentials.password)
                 .addOnCompleteListener {
+                    FirebaseMessaging.getInstance().subscribeToTopic("SgVIHNDQwsPj3lmS2jS1gS9Xz5r1") //todo pass on-hardcoded core device UID
                     emitter.onSuccess(AuthResponse(it.isSuccessful, it.exception))
                 }
     }
@@ -48,7 +50,10 @@ class FirebaseAuthService @Inject constructor() : AuthService {
     }
 
     override fun logoutUser(): Single<Boolean> {
+
         FirebaseAuth.getInstance().signOut()
+        FirebaseMessaging.getInstance().unsubscribeFromTopic("SgVIHNDQwsPj3lmS2jS1gS9Xz5r1") //todo pass on-hardcoded core device UID
+
         return Single.just(true)
     }
 }

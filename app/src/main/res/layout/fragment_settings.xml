@@ -11,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:layout_marginBottom="@dimen/margin_x_large">
+        android:layout_marginBottom="@dimen/margin_x_large"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -30,21 +30,34 @@
                 android:drawablePadding="@dimen/margin_medium"
                 android:text="@string/photos_count"/>
 
-            <com.sdsmdg.harjot.crollerTest.Croller
-                android:id="@+id/photosCountSeekBar"
+            <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_medium"
-                app:back_circle_color="@color/lightGray"
-                app:indicator_color="@color/accent"
-                app:indicator_width="10"
-                app:is_continuous="true"
-                app:label_color="@color/textSecondary"
-                app:main_circle_color="#FFFFFF"
-                app:max="25"
-                app:progress_primary_color="@color/accent"
-                app:progress_secondary_color="#EEEEEE"
-                app:start_offset="45"/>
+                android:layout_height="wrap_content">
+
+                <com.sdsmdg.harjot.crollerTest.Croller
+                    android:id="@+id/photosCountKnobWidget"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_medium"
+                    app:back_circle_color="@color/lightGray"
+                    app:indicator_color="@color/accent"
+                    app:indicator_width="10"
+                    app:is_continuous="true"
+                    app:label_color="@color/textSecondary"
+                    app:main_circle_color="#FFFFFF"
+                    app:max="21"
+                    app:progress_primary_color="@color/accent"
+                    app:progress_secondary_color="#EEEEEE"
+                    app:start_offset="45"/>
+
+                <ProgressBar
+                    android:id="@+id/photoCountProgressView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="invisible"/>
+
+            </FrameLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -63,21 +76,34 @@
                 android:drawablePadding="@dimen/margin_medium"
                 android:text="@string/photo_sequence_interval"/>
 
-            <com.sdsmdg.harjot.crollerTest.Croller
-                android:id="@+id/photosSequenceIntervalSeekBar"
+            <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_medium"
-                app:back_circle_color="@color/lightGray"
-                app:indicator_color="@color/accent"
-                app:indicator_width="10"
-                app:is_continuous="true"
-                app:label_color="@color/textSecondary"
-                app:main_circle_color="#FFFFFF"
-                app:max="1000"
-                app:progress_primary_color="@color/accent"
-                app:progress_secondary_color="#EEEEEE"
-                app:start_offset="45"/>
+                android:layout_height="wrap_content">
+
+                <com.sdsmdg.harjot.crollerTest.Croller
+                    android:id="@+id/photosSequenceIntervalKnobWidget"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_medium"
+                    app:back_circle_color="@color/lightGray"
+                    app:indicator_color="@color/accent"
+                    app:indicator_width="10"
+                    app:is_continuous="true"
+                    app:label_color="@color/textSecondary"
+                    app:main_circle_color="#FFFFFF"
+                    app:max="20"
+                    app:progress_primary_color="@color/accent"
+                    app:progress_secondary_color="#EEEEEE"
+                    app:start_offset="45"/>
+
+                <ProgressBar
+                    android:id="@+id/sequenceIntervalProgressView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="invisible"/>
+
+            </FrameLayout>
         </LinearLayout>
     </LinearLayout>
 

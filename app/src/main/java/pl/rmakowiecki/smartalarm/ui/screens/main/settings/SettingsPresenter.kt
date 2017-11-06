@@ -9,8 +9,8 @@ class SettingsPresenter @Inject constructor(
 
     override fun bindIntents() = with(interactor) {
 
-        attachLogoutIntent(
-                bindIntent(Settings.View::logoutIntent)
+        attachLogoutButtonClickIntent(
+                bindIntent(Settings.View::logoutButtonClickIntent)
         )
         attachPhotoCountInfoIntent(
                 bindIntent(Settings.View::photoCountInfoIntent)
