@@ -25,7 +25,7 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
 
     override fun isIncidentsListEmpty(): Single<Boolean> = Single.create { emitter ->
         rootDatabaseNode
-                .child("SgVIHNDQwsPj3lmS2jS1gS9Xz5r1")
+                .child("SgVIHNDQwsPj3lmS2jS1gS9Xz5r1") //todo use core device uid taken from server
                 .child("incidents")
                 .addListenerForSingleValueEvent(object : ValueEventListener {
 
@@ -35,36 +35,50 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
                 })
     }
 
-    override fun observeIncidentsChanges(): Observable<List<SecurityIncident>> = Observable.create { emitter ->
+    override fun observeIncidentsChanges(): Observable<Pair<SecurityIncident, IncidentOperation>> {
         rootDatabaseNode
-                .child("SgVIHNDQwsPj3lmS2jS1gS9Xz5r1")
+                .child("SgVIHNDQwsPj3lmS2jS1gS9Xz5r1") //todo use core device uid taken from server
                 .child("incidents")
                 .addChildEventListener(object : ChildEventListener {
 
-                    override fun onChildMoved(dataSnapshot: DataSnapshot?, predecessor: String?) = Unit
+                    override fun onChildMoved(dataSnapshot: DataSnapshot, predecessor: String?) = Unit
 
-                    override fun onChildChanged(dataSnapshot: DataSnapshot?, predecessor: String?) = childEventsPublishSubject.onNext(Pair(
-                            dataSnapshot?.getValue(SecurityIncident::class.java)!!,
-                            IncidentOperation.Updated())
-                    )
-
-                    override fun onChildAdded(dataSnapshot: DataSnapshot?, predecessor: String?) {
-                        incidentsList += dataSnapshot?.getValue(SecurityIncident::class.java)!!
-                        emitter.onNext(incidentsList)
+                    override fun onChildChanged(dataSnapshot: DataSnapshot, predecessor: String?) {
+                        val newModel = dataSnapshot.getValue(SecurityIncident::class.java)!!
+                        val changedIndex = incidentsList.indexOfFirst { it.timestamp == newModel.timestamp }
+                        incidentsList[changedIndex] = newModel
 
                         childEventsPublishSubject.onNext(Pair(
-                                dataSnapshot?.getValue(SecurityIncident::class.java)!!,
+                                dataSnapshot.getValue(SecurityIncident::class.java)!!,
+                                IncidentOperation.Updated(changedIndex))
+                        )
+                    }
+
+                    override fun onChildAdded(dataSnapshot: DataSnapshot, predecessor: String?) {
+                        incidentsList += dataSnapshot.getValue(SecurityIncident::class.java)!!
+
+                        childEventsPublishSubject.onNext(Pair(
+                                dataSnapshot.getValue(SecurityIncident::class.java)!!,
                                 IncidentOperation.Added())
                         )
                     }
 
-                    override fun onChildRemoved(dataSnapshot: DataSnapshot?) = childEventsPublishSubject.onNext(Pair(
-                            dataSnapshot?.getValue(SecurityIncident::class.java)!!,
-                            IncidentOperation.Removed())
-                    )
+                    override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+                        val removedModel = dataSnapshot.getValue(SecurityIncident::class.java)!!
+                        val removedIndex = incidentsList.indexOf(removedModel)
 
-                    override fun onCancelled(p0: DatabaseError?) = Unit
+                        incidentsList -= removedModel
+
+                        childEventsPublishSubject.onNext(Pair(
+                                removedModel,
+                                IncidentOperation.Removed(removedIndex))
+                        )
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) = Unit
                 })
+
+        return childEventsPublishSubject
     }
 
     override fun archiveIncident(listPosition: Int): Single<Boolean> {
@@ -79,16 +93,15 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
                         rootDatabaseNode
                                 .child(dataSnapshot?.value as String) //user's core device uid
                                 .child("incidents")
-                                .orderByChild("timestamp")
-                                .equalTo("") //todo implement
+                                .orderByChild("timestamp") //list needs to be then reversed on client side
                                 .addListenerForSingleValueEvent(object : ValueEventListener {
-                                    override fun onDataChange(p0: DataSnapshot?) {
+                                    override fun onDataChange(dataSnapshot: DataSnapshot) {
                                         dataSnapshot.ref
                                                 .removeValue()
                                                 .addOnCompleteListener { emitter.onSuccess(it.isSuccessful) }
                                     }
 
-                                    override fun onCancelled(p0: DatabaseError?) = Unit
+                                    override fun onCancelled(databaseError: DatabaseError) = Unit
                                 })
                     }
 
@@ -99,6 +112,6 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
 
 sealed class IncidentOperation {
     class Added : IncidentOperation()
-    class Removed : IncidentOperation()
-    class Updated : IncidentOperation()
+    class Removed(removedIndex: Any) : IncidentOperation()
+    class Updated(changedIndex: Int) : IncidentOperation()
 }
