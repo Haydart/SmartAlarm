@@ -9,7 +9,8 @@ import javax.inject.Inject
 class AlarmIncidentsInteractor @Inject constructor(
         private val alarmIncidentService: FirebaseAlarmIncidentsService,
         private val reducer: AlarmViewStateReducer,
-        private val navigator: AlarmIncidentsNavigator
+        private val navigator: AlarmIncidentsNavigator,
+        private val modelMapper: AlarmIncidentModelMapper
 ) : AlarmIncidents.Interactor {
 
     private var viewStateObservable = Observable.empty<AlarmIncidentsViewStateChange>()
@@ -44,31 +45,22 @@ class AlarmIncidentsInteractor @Inject constructor(
         when (incidentChange.operation) {
             is IncidentOperation.Added -> {
                 ItemAdded(
-                        mapToLocalModel(incidentChange.model)
+                        modelMapper.mapToLocalModel(incidentChange.model)
                 )
             }
             is Removed -> {
                 ItemRemoved(
-                        mapToLocalModel(incidentChange.model),
+                        modelMapper.mapToLocalModel(incidentChange.model),
                         incidentChange.operation.removedIndex
                 )
             }
             is Updated -> {
                 ItemUpdated(
-                        mapToLocalModel(incidentChange.model),
+                        modelMapper.mapToLocalModel(incidentChange.model),
                         incidentChange.operation.changedIndex
                 )
             }
         }
-    }
-
-    private fun mapToLocalModel(remoteModel: SecurityIncident) = with(remoteModel) {
-        SecurityIncidentItemViewState(
-                thumbnailUrl,
-                reason.toString(),
-                timestamp.toString(), //todo convert to displayable date
-                timestamp.toString() //todo convert to displayable hour
-        )
     }
 
     override fun attachArchiveIntent(intentObservable: Observable<Int>) {
