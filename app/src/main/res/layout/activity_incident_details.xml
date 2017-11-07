@@ -3,49 +3,84 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
+    android:background="@android:color/black"
     tools:context="pl.rmakowiecki.smartalarm.ui.screens.incidentdetails.IncidentDetailsActivity">
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
-    <TextView
-        android:id="@+id/fullscreen_content"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/margin_large"
+        android:layout_height="?attr/actionBarSize"
+        android:fitsSystemWindows="true">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/margin_large"
+            android:background="@drawable/ic_arrow_back_white"/>
+
+    </LinearLayout>
+
+    <pl.rmakowiecki.smartalarm.ui.customView.ExtendedViewPager
+        android:id="@+id/contentViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:gravity="center"
         android:keepScreenOn="true"
-        android:text="@string/dummy_content"
-        android:textColor="#33b5e5"
-        android:textSize="50sp"
-        android:textStyle="bold"/>
+        android:src="@drawable/app_logo"/>
 
-    <!-- This FrameLayout insets its children based on system windows using
-         android:fitsSystemWindows. -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
         <LinearLayout
-            android:id="@+id/fullscreen_content_controls"
+            android:id="@+id/incidentInfoBar"
             style="?metaButtonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:background="@color/black_overlay"
+            android:paddingTop="@dimen/margin_small"
+            android:layout_gravity="bottom"
+            android:background="@drawable/bottom_gradient"
             android:orientation="horizontal"
             tools:ignore="UselessParent">
 
-            <Button
-                android:id="@+id/dummy_button"
-                style="?metaButtonBarButtonStyle"
+            <TextView
+                android:id="@+id/triggerDateText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_margin="@dimen/margin_medium"
                 android:layout_weight="1"
-                android:text="@string/dummy_button"/>
+                android:drawablePadding="@dimen/margin_medium"
+                android:drawableStart="@drawable/ic_date_range_white_18px"
+                android:gravity="center_vertical"
+                android:text="Date"/>
 
+            <TextView
+                android:id="@+id/triggerHourText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_margin="@dimen/margin_medium"
+                android:layout_weight="1"
+                android:drawablePadding="@dimen/margin_medium"
+                android:drawableStart="@drawable/ic_schedule_white_18px"
+                android:gravity="center_vertical"
+                android:text="Hour"/>
+
+            <TextView
+                android:id="@+id/triggerReasonText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_margin="@dimen/margin_medium"
+                android:layout_weight="1"
+                android:drawablePadding="@dimen/margin_medium"
+                android:drawableStart="@drawable/ic_announcement_white_18px"
+                android:gravity="center_vertical"
+                android:text="Launch reason"/>
         </LinearLayout>
     </FrameLayout>
-
 </FrameLayout>
