@@ -10,7 +10,7 @@
  * Extends Android ImageView to include pinch zooming, panning, fling and double tap zoom.
  */
 
-package com.ortiz.touch;
+package pl.rmakowiecki.smartalarm.ui.customView;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -409,12 +409,6 @@ public class TouchImageView extends android.support.v7.widget.AppCompatImageView
         setImageMatrix(matrix);
     }
 
-    /**
-     * Set zoom parameters equal to another TouchImageView. Including scale, position,
-     * and ScaleType.
-     *
-     * @param TouchImageView
-     */
     public void setZoom(TouchImageView img) {
         PointF center = img.getScrollPosition();
         setZoom(img.getCurrentZoom(), center.x, center.y, img.getScaleType());
@@ -557,7 +551,7 @@ public class TouchImageView extends android.support.v7.widget.AppCompatImageView
      * it is made to fit the screen according to the dimensions of the previous image matrix. This
      * allows the image to maintain its zoom after rotation.
      */
-    private void fitImageToView() {
+    public void fitImageToView() {
         Drawable drawable = getDrawable();
         if (drawable == null || drawable.getIntrinsicWidth() == 0 || drawable.getIntrinsicHeight() == 0) {
             return;

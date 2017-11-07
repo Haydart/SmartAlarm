@@ -2,6 +2,8 @@ package pl.rmakowiecki.smartalarm.ui.screens.incidentdetails
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.NavUtils
@@ -9,6 +11,9 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
+import kotlinx.android.synthetic.main.activity_incident_details.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.extensions.startActivity
 
@@ -65,11 +70,20 @@ class IncidentDetailsActivity : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
-//        (contentImage as AppCompatImageView).loadImage("https://team23-project.herokuapp.com/img/stock/stock02.jpg")
-
         mVisible = true
         mControlsView = findViewById(R.id.fullscreen_content_controls)
         mContentView = findViewById(R.id.contentImage)
+
+        Picasso.with(this)
+                .load("http://www.fungilab.com/imagenes/APM_03.jpg")
+                .into(object : Target {
+                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) = Unit
+
+                    override fun onBitmapFailed(errorDrawable: Drawable?) = Unit
+
+                    override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) =
+                            contentImage.setImageBitmap(bitmap)
+                })
 
         // Set up the user interaction to manually show or hide the system UI.
         mContentView!!.setOnClickListener { toggle() }

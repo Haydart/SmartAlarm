@@ -6,7 +6,7 @@
     android:background="@android:color/black"
     tools:context="pl.rmakowiecki.smartalarm.ui.screens.incidentdetails.IncidentDetailsActivity">
 
-    <com.ortiz.touch.TouchImageView
+    <pl.rmakowiecki.smartalarm.ui.customView.TouchImageView
         android:id="@+id/contentImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
