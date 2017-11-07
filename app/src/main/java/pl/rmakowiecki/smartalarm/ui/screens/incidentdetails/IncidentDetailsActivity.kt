@@ -8,17 +8,14 @@ import android.support.v4.app.NavUtils
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
+import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_incident_details.*
 import pl.rmakowiecki.smartalarm.R
-import pl.rmakowiecki.smartalarm.extensions.logD
 import pl.rmakowiecki.smartalarm.extensions.startActivity
 import pl.rmakowiecki.smartalarm.ui.customView.DepthPageTransformer
 import pl.rmakowiecki.smartalarm.ui.customView.SingleTapListener
 import pl.rmakowiecki.smartalarm.ui.customView.TouchImageViewAdapter
 
-private const val AUTO_HIDE = false
-private const val AUTO_HIDE_DELAY_MILLIS = 3000
 private const val UI_ANIMATION_DELAY = 300
 
 class IncidentDetailsActivity : AppCompatActivity() {
@@ -27,31 +24,12 @@ class IncidentDetailsActivity : AppCompatActivity() {
     private var mControlsView: View? = null
     private var menuControlsVisible: Boolean = false
 
-    /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
-     */
-    private val delayHideTouchListener = View.OnTouchListener { view, motionEvent ->
-        if (AUTO_HIDE) {
-            delayedHide(AUTO_HIDE_DELAY_MILLIS)
-        }
-        false
-    }
-
     private val mHidePart2Runnable = Runnable {
         mContentView!!.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
     }
 
     private val mShowPart2Runnable = Runnable {
-        // Delayed display of UI elements
-        val actionBar = supportActionBar
-        actionBar?.show()
         mControlsView!!.visibility = View.VISIBLE
     }
 
@@ -62,8 +40,11 @@ class IncidentDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_incident_details)
 
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
         menuControlsVisible = true
-        mControlsView = findViewById(R.id.fullscreen_content_controls)
+        mControlsView = findViewById(R.id.incidentInfoBar)
         mContentView = findViewById(R.id.contentViewPager)
 
         contentViewPager.adapter = TouchImageViewAdapter(
@@ -78,17 +59,6 @@ class IncidentDetailsActivity : AppCompatActivity() {
                     override fun onSingleTapPerformed() = toggle()
                 })
         contentViewPager.setPageTransformer(true, DepthPageTransformer())
-
-        // Set up the user interaction to manually show or hide the system UI.
-        contentViewPager.setOnClickListener {
-            logD("clicked viewpager")
-            toggle()
-        }
-
-        // Upon interacting with UI controls, delay any scheduled hide()
-        // operations to prevent the jarring behavior of controls going away
-        // while interacting with the UI.
-        findViewById<Button>(R.id.dummy_button).setOnTouchListener(delayHideTouchListener)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -126,8 +96,6 @@ class IncidentDetailsActivity : AppCompatActivity() {
 
     @SuppressLint("InlinedApi")
     private fun show() {
-        // Show the system bar
-        mContentView!!.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN //or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         menuControlsVisible = true
 
         // Schedule a runnable to display UI elements after a delay
