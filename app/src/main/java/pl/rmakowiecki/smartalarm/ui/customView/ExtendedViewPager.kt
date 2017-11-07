@@ -22,12 +22,15 @@ class ExtendedViewPager @JvmOverloads constructor(
 
 class TouchImageViewAdapter(
         private val context: Context,
-        private val photoUrls: List<String>
+        private val photoUrls: List<String>,
+        private val singleTapListener: SingleTapListener
 ) : PagerAdapter() {
 
     override fun getCount() = photoUrls.size
 
     override fun instantiateItem(container: ViewGroup, position: Int) = TouchImageView(container.context).apply {
+        setOnSingleTapListener(singleTapListener)
+
         Picasso.with(context)
                 .load(photoUrls[position])
                 .into(object : Target {

@@ -6,6 +6,17 @@
     android:background="@android:color/black"
     tools:context="pl.rmakowiecki.smartalarm.ui.screens.incidentdetails.IncidentDetailsActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_arrow_back_white_24dp"/>
+
+    </LinearLayout>
+
     <pl.rmakowiecki.smartalarm.ui.customView.ExtendedViewPager
         android:id="@+id/contentViewPager"
         android:layout_width="match_parent"

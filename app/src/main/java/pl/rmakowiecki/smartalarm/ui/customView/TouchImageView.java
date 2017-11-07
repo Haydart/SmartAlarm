@@ -61,6 +61,7 @@ public class TouchImageView extends android.support.v7.widget.AppCompatImageView
     // saved prior to the screen rotating.
     //
     private Matrix matrix, prevMatrix;
+    private SingleTapListener singleTapListener;
 
     private static enum State {NONE, DRAG, ZOOM, FLING, ANIMATE_ZOOM}
 
@@ -135,6 +136,10 @@ public class TouchImageView extends android.support.v7.widget.AppCompatImageView
         setState(State.NONE);
         onDrawReady = false;
         super.setOnTouchListener(new PrivateOnTouchListener());
+    }
+
+    public void setOnSingleTapListener(SingleTapListener listener) {
+        singleTapListener = listener;
     }
 
     @Override
@@ -756,6 +761,7 @@ public class TouchImageView extends android.support.v7.widget.AppCompatImageView
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
+            singleTapListener.onSingleTapPerformed();
             if (doubleTapListener != null) {
                 return doubleTapListener.onSingleTapConfirmed(e);
             }

@@ -11,26 +11,28 @@ import android.view.View
 import android.widget.Button
 import kotlinx.android.synthetic.main.activity_incident_details.*
 import pl.rmakowiecki.smartalarm.R
+import pl.rmakowiecki.smartalarm.extensions.logD
 import pl.rmakowiecki.smartalarm.extensions.startActivity
 import pl.rmakowiecki.smartalarm.ui.customView.DepthPageTransformer
+import pl.rmakowiecki.smartalarm.ui.customView.SingleTapListener
 import pl.rmakowiecki.smartalarm.ui.customView.TouchImageViewAdapter
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
+private const val AUTO_HIDE = false
+private const val AUTO_HIDE_DELAY_MILLIS = 3000
+private const val UI_ANIMATION_DELAY = 300
+
 class IncidentDetailsActivity : AppCompatActivity() {
 
     private var mContentView: View? = null
     private var mControlsView: View? = null
-    private var mVisible: Boolean = false
+    private var menuControlsVisible: Boolean = false
 
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the
      * system UI. This is to prevent the jarring behavior of controls going away
      * while interacting with activity UI.
      */
-    private val mDelayHideTouchListener = View.OnTouchListener { view, motionEvent ->
+    private val delayHideTouchListener = View.OnTouchListener { view, motionEvent ->
         if (AUTO_HIDE) {
             delayedHide(AUTO_HIDE_DELAY_MILLIS)
         }
@@ -38,11 +40,6 @@ class IncidentDetailsActivity : AppCompatActivity() {
     }
 
     private val mHidePart2Runnable = Runnable {
-        // Delayed removal of status and navigation bar
-
-        // Note that some of these constants are new as of API 16 (Jelly Bean)
-        // and API 19 (KitKat). It is safe to use them, as they are inlined
-        // at compile-time and do nothing on earlier devices.
         mContentView!!.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
                 or View.SYSTEM_UI_FLAG_FULLSCREEN
                 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -63,31 +60,35 @@ class IncidentDetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_incident_details)
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
 
-        mVisible = true
+        menuControlsVisible = true
         mControlsView = findViewById(R.id.fullscreen_content_controls)
         mContentView = findViewById(R.id.contentViewPager)
 
-        contentViewPager.adapter = TouchImageViewAdapter(this, listOf(
-                "http://www.fungilab.com/imagenes/APM_03.jpg",
-                "http://www.osuinternationalhouse.com/wp-content/uploads/2011/10/logo_house_small.png",
-                "http://imgsv.imaging.nikon.com/lineup/lens/zoom/normalzoom/af-s_dx_18-140mmf_35-56g_ed_vr/img/sample/sample1_l.jpg",
-                "http://imgsv.imaging.nikon.com/lineup/dslr/df/img/sample/img_01_l.jpg",
-                "http://www.saraeichner.com/eichnerpaintingspage3/greenverticlewallpaper.jpg"
-        ))
+        contentViewPager.adapter = TouchImageViewAdapter(
+                this,
+                listOf(
+                        "http://www.fungilab.com/imagenes/APM_03.jpg",
+                        "http://www.osuinternationalhouse.com/wp-content/uploads/2011/10/logo_house_small.png",
+                        "http://imgsv.imaging.nikon.com/lineup/lens/zoom/normalzoom/af-s_dx_18-140mmf_35-56g_ed_vr/img/sample/sample1_l.jpg",
+                        "http://www.saraeichner.com/eichnerpaintingspage3/greenverticlewallpaper.jpg"
+                ),
+                object : SingleTapListener {
+                    override fun onSingleTapPerformed() = toggle()
+                })
         contentViewPager.setPageTransformer(true, DepthPageTransformer())
 
         // Set up the user interaction to manually show or hide the system UI.
-        mContentView!!.setOnClickListener { toggle() }
+        contentViewPager.setOnClickListener {
+            logD("clicked viewpager")
+            toggle()
+        }
 
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        findViewById<Button>(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener)
+        findViewById<Button>(R.id.dummy_button).setOnTouchListener(delayHideTouchListener)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -109,14 +110,14 @@ class IncidentDetailsActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun toggle() = if (mVisible) hide() else show()
+    private fun toggle() = if (menuControlsVisible) hide() else show()
 
     private fun hide() {
         // Hide UI first
         val actionBar = supportActionBar
         actionBar?.hide()
         mControlsView!!.visibility = View.GONE
-        mVisible = false
+        menuControlsVisible = false
 
         // Schedule a runnable to remove the status and navigation bar after a delay
         mHideHandler.removeCallbacks(mShowPart2Runnable)
@@ -126,42 +127,20 @@ class IncidentDetailsActivity : AppCompatActivity() {
     @SuppressLint("InlinedApi")
     private fun show() {
         // Show the system bar
-        mContentView!!.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-        mVisible = true
+        mContentView!!.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN //or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        menuControlsVisible = true
 
         // Schedule a runnable to display UI elements after a delay
         mHideHandler.removeCallbacks(mHidePart2Runnable)
         mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY.toLong())
     }
 
-    /**
-     * Schedules a call to hide() in [delay] milliseconds, canceling any
-     * previously scheduled calls.
-     */
     private fun delayedHide(delayMillis: Int) {
         mHideHandler.removeCallbacks(mHideRunnable)
         mHideHandler.postDelayed(mHideRunnable, delayMillis.toLong())
     }
 
     companion object {
-        /**
-         * Whether or not the system UI should be auto-hidden after
-         * [.AUTO_HIDE_DELAY_MILLIS] milliseconds.
-         */
-        private val AUTO_HIDE = false
-
-        /**
-         * If [.AUTO_HIDE] is set, the number of milliseconds to wait after
-         * user interaction before hiding the system UI.
-         */
-        private val AUTO_HIDE_DELAY_MILLIS = 3000
-
-        /**
-         * Some older devices needs a small delay between UI widget updates
-         * and a change of the status and navigation bar.
-         */
-        private val UI_ANIMATION_DELAY = 300
-
         fun start(context: Context) = context.startActivity<IncidentDetailsActivity>()
     }
 }
