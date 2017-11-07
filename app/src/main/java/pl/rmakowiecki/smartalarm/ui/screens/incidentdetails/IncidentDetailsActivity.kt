@@ -12,6 +12,7 @@ import android.widget.Button
 import kotlinx.android.synthetic.main.activity_incident_details.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.extensions.startActivity
+import pl.rmakowiecki.smartalarm.ui.customView.DepthPageTransformer
 import pl.rmakowiecki.smartalarm.ui.customView.TouchImageViewAdapter
 
 /**
@@ -78,6 +79,7 @@ class IncidentDetailsActivity : AppCompatActivity() {
                 "http://imgsv.imaging.nikon.com/lineup/dslr/df/img/sample/img_01_l.jpg",
                 "http://www.saraeichner.com/eichnerpaintingspage3/greenverticlewallpaper.jpg"
         ))
+        contentViewPager.setPageTransformer(true, DepthPageTransformer())
 
         // Set up the user interaction to manually show or hide the system UI.
         mContentView!!.setOnClickListener { toggle() }
