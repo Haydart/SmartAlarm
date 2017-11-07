@@ -65,9 +65,11 @@ class IncidentDetailsActivity : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
+//        (contentImage as AppCompatImageView).loadImage("https://team23-project.herokuapp.com/img/stock/stock02.jpg")
+
         mVisible = true
         mControlsView = findViewById(R.id.fullscreen_content_controls)
-        mContentView = findViewById(R.id.fullscreen_content)
+        mContentView = findViewById(R.id.contentImage)
 
         // Set up the user interaction to manually show or hide the system UI.
         mContentView!!.setOnClickListener { toggle() }
@@ -142,7 +144,7 @@ class IncidentDetailsActivity : AppCompatActivity() {
          * Whether or not the system UI should be auto-hidden after
          * [.AUTO_HIDE_DELAY_MILLIS] milliseconds.
          */
-        private val AUTO_HIDE = true
+        private val AUTO_HIDE = false
 
         /**
          * If [.AUTO_HIDE] is set, the number of milliseconds to wait after

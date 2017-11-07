@@ -58,7 +58,8 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_incident_details"
             android:parentActivityName=".ui.screens.main.HomeActivity"
-            android:theme="@style/FullscreenTheme">
+            android:theme="@style/FullscreenTheme"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="pl.rmakowiecki.smartalarm.ui.screens.main.HomeActivity"/>
