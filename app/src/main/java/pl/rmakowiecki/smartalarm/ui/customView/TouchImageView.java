@@ -728,10 +728,6 @@ public class TouchImageView extends android.support.v7.widget.AppCompatImageView
         this.state = state;
     }
 
-    public boolean canScrollHorizontallyFroyo(int direction) {
-        return canScrollHorizontally(direction);
-    }
-
     @Override
     public boolean canScrollHorizontally(int direction) {
         matrix.getValues(m);

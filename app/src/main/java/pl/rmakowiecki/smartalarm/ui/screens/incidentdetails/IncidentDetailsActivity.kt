@@ -2,8 +2,6 @@ package pl.rmakowiecki.smartalarm.ui.screens.incidentdetails
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.NavUtils
@@ -11,11 +9,10 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.activity_incident_details.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.extensions.startActivity
+import pl.rmakowiecki.smartalarm.ui.customView.TouchImageViewAdapter
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -72,18 +69,15 @@ class IncidentDetailsActivity : AppCompatActivity() {
 
         mVisible = true
         mControlsView = findViewById(R.id.fullscreen_content_controls)
-        mContentView = findViewById(R.id.contentImage)
+        mContentView = findViewById(R.id.contentViewPager)
 
-        Picasso.with(this)
-                .load("http://www.fungilab.com/imagenes/APM_03.jpg")
-                .into(object : Target {
-                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) = Unit
-
-                    override fun onBitmapFailed(errorDrawable: Drawable?) = Unit
-
-                    override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) =
-                            contentImage.setImageBitmap(bitmap)
-                })
+        contentViewPager.adapter = TouchImageViewAdapter(this, listOf(
+                "http://www.fungilab.com/imagenes/APM_03.jpg",
+                "http://www.osuinternationalhouse.com/wp-content/uploads/2011/10/logo_house_small.png",
+                "http://imgsv.imaging.nikon.com/lineup/lens/zoom/normalzoom/af-s_dx_18-140mmf_35-56g_ed_vr/img/sample/sample1_l.jpg",
+                "http://imgsv.imaging.nikon.com/lineup/dslr/df/img/sample/img_01_l.jpg",
+                "http://www.saraeichner.com/eichnerpaintingspage3/greenverticlewallpaper.jpg"
+        ))
 
         // Set up the user interaction to manually show or hide the system UI.
         mContentView!!.setOnClickListener { toggle() }
@@ -113,13 +107,7 @@ class IncidentDetailsActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun toggle() {
-        if (mVisible) {
-            hide()
-        } else {
-            show()
-        }
-    }
+    private fun toggle() = if (mVisible) hide() else show()
 
     private fun hide() {
         // Hide UI first
