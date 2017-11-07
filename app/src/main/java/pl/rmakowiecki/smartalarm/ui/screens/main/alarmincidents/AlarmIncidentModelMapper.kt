@@ -14,7 +14,7 @@ class AlarmIncidentModelMapper @Inject constructor(
         SecurityIncidentItemViewState(
                 thumbnailUrl,
                 reason.toString(),
-                SimpleDateFormat("MM/dd/yyyy", getCurrentLocale(context)).format(timestamp),
+                SimpleDateFormat("dd-MM-yyyy", getCurrentLocale(context)).format(timestamp),
                 SimpleDateFormat("HH:mm:ss", getCurrentLocale(context)).format(timestamp)
         )
     }
