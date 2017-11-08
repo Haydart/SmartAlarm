@@ -75,7 +75,7 @@ class AlarmIncidentsInteractor @Inject constructor(
                         .flatMapSingle(alarmIncidentService::archiveIncident)
                         .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() }) //state change will come from firebase
                 .mergeWith(intentObservable
-                        .map { SnackBarShown("Incident archived.") })
+                        .map { SnackBarShown("Incident archived") }) //todo get other language resources
                 .mergeWith(intentObservable
                         .delay(SNACKBAR_HIDE_DELAY, TimeUnit.SECONDS)
                         .map { SnackBarHidden() })
@@ -91,6 +91,11 @@ class AlarmIncidentsInteractor @Inject constructor(
                                     }
                         }
                         .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() })
+                .mergeWith(intentObservable
+                        .map { SnackBarShown("Incident deleted") }) //todo get other language resources
+                .mergeWith(intentObservable
+                        .delay(SNACKBAR_HIDE_DELAY, TimeUnit.SECONDS)
+                        .map { SnackBarHidden() })
     }
 
     override fun attachSnackBarDismissIntent(intentObservable: Observable<Unit>) {
