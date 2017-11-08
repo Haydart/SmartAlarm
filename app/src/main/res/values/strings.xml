@@ -36,5 +36,7 @@
     <string name="photo_count_description">Photo count is the number of photos you want to have taken for a single reported security incident.</string>
     <string name="sequence_interval_description">Photo sequence interval specifies how much break there will be between each consecutive photo take in a security incident</string>
     <string name="logout_confirmation_message">Do you really want to log out? You will not be receiving any notifications from your core device.</string>
+    <string name="delete_confirmation_message">Are you sure you want to delete the incident? It will be permanently wiped from the system.</string>
+    <string name="delete">Delete</string>
 
 </resources>

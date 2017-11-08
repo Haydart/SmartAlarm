@@ -72,7 +72,10 @@ class AlarmIncidentsInteractor @Inject constructor(
 
     override fun attachDeletionIntent(intentObservable: Observable<Int>) {
         viewStateObservable = viewStateObservable.mergeWith(intentObservable
-                .flatMapSingle(alarmIncidentService::deleteIncident)
+                .flatMapMaybe { listPosition ->
+                    navigator.showDeleteConfirmationDialog()
+                            .doOnSuccess { alarmIncidentService.deleteIncident(listPosition) }
+                }
                 .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() }
         )
     }
