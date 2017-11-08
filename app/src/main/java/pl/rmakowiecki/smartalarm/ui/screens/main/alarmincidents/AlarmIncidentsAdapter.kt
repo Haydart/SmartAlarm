@@ -17,7 +17,7 @@ class AlarmIncidentsAdapter(
     override fun onBindViewHolder(holder: AlarmIncidentViewHolder, position: Int) = with(holder.overflowMenuButton) {
         setOnClickListener { inflateAndShowPopupMenu(it, position) }
         holder.bind(items[position])
-        holder.itemView.setOnClickListener { onDetailsFuncs(position) }
+        holder.previewImage.setOnClickListener { onDetailsFuncs(position) }
     }
 
     private fun inflateAndShowPopupMenu(view: View, position: Int) = PopupMenu(view.context, view).apply {

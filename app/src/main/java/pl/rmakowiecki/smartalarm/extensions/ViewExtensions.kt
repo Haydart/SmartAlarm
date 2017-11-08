@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentTransaction
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 
 fun View.visible() {
@@ -33,7 +34,12 @@ fun EditText.setTextIfDifferent(text: String) {
     }
 }
 
-inline fun <reified T : ImageView> T.loadImage(path: String, placeHolderResourceId: Int? = null, errorResourceId: Int? = null) {
+inline fun <reified T : ImageView> T.loadImage(
+        path: String,
+        placeHolderResourceId: Int? = null,
+        errorResourceId: Int? = null,
+        crossinline onPhotoLoadedFunc: () -> Unit
+) {
 
     val request = Picasso
             .with(context)
@@ -47,7 +53,13 @@ inline fun <reified T : ImageView> T.loadImage(path: String, placeHolderResource
         request.error(errorResourceId)
     }
 
-    request.into(this)
+    request.into(this, object : Callback {
+        override fun onSuccess() {
+            onPhotoLoadedFunc()
+        }
+
+        override fun onError() = Unit
+    })
 }
 
 inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> Unit) {

@@ -38,5 +38,6 @@
     <string name="logout_confirmation_message">Do you really want to log out? You will not be receiving any notifications from your core device.</string>
     <string name="delete_confirmation_message">Are you sure you want to delete the incident? It will be permanently wiped from the system.</string>
     <string name="delete">Delete</string>
+    <string name="preview">Preview</string>
 
 </resources>
