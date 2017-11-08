@@ -19,7 +19,8 @@ private const val UI_ANIMATION_DURATION = 150L
 
 class IncidentDetailsActivity : AppCompatActivity() {
 
-    private var menuControlsVisible: Boolean = false
+    private var menuControlsVisible: Boolean = true
+
     private val hideLayoutsHandler = Handler()
 
     private val hideDelayedRunnable = Runnable {
@@ -50,20 +51,26 @@ class IncidentDetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_incident_details)
+        setupActionBar()
+        setupContent()
+        setupWindowFlags()
+    }
 
+    private fun setupWindowFlags() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
+    }
 
-
-        statusBarMock.layoutParams.height = getStatusBarHeight()
-
+    private fun setupActionBar() {
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             title = "Incident"
         }
+    }
 
-        menuControlsVisible = true
+    private fun setupContent() {
+        statusBarMock.layoutParams.height = getStatusBarHeight()
 
         contentViewPager.adapter = TouchImageViewAdapter(
                 this,
