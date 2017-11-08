@@ -8,6 +8,9 @@ class IncidentDetailsPresenter @Inject constructor(
 ) : MviPresenter<IncidentDetails.View, IncidentDetailsViewState>() {
 
     override fun bindIntents() = with(interactor) {
+        attachPhotoSwipeIntent(
+                bindIntent(IncidentDetails.View::photoSwipeIntent)
+        )
 
         subscribeViewState(getViewStateObservable(), IncidentDetails.View::render)
     }

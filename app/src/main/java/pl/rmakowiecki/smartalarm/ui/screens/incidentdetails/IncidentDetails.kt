@@ -12,5 +12,7 @@ interface IncidentDetails {
 
     interface Interactor : Contracts.Interactor {
         fun getViewStateObservable(): Observable<IncidentDetailsViewState>
+
+        fun attachPhotoSwipeIntent(intentObservable: Observable<Int>)
     }
 }

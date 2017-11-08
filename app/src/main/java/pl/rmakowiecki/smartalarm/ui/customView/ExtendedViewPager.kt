@@ -22,7 +22,7 @@ class ExtendedViewPager @JvmOverloads constructor(
 
 class TouchImageViewAdapter(
         private val context: Context,
-        private val photoUrls: List<String>,
+        var photoUrls: List<String>,
         private val singleTapListener: SingleTapListener
 ) : PagerAdapter() {
 
