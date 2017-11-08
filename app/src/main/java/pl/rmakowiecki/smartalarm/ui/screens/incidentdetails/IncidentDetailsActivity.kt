@@ -3,24 +3,36 @@ package pl.rmakowiecki.smartalarm.ui.screens.incidentdetails
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import com.jakewharton.rxbinding2.support.v4.view.pageSelections
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_incident_details.*
 import pl.rmakowiecki.smartalarm.R
+import pl.rmakowiecki.smartalarm.base.Contracts
+import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
+import pl.rmakowiecki.smartalarm.base.mvi.MviPresenter
 import pl.rmakowiecki.smartalarm.extensions.startActivity
 import pl.rmakowiecki.smartalarm.ui.customView.DepthPageTransformer
 import pl.rmakowiecki.smartalarm.ui.customView.SingleTapListener
 import pl.rmakowiecki.smartalarm.ui.customView.TouchImageViewAdapter
+import javax.inject.Inject
 
 private const val UI_ANIMATION_DELAY = 150
 private const val UI_ANIMATION_DURATION = 150L
 
-class IncidentDetailsActivity : AppCompatActivity() {
+class IncidentDetailsActivity : MviActivity<IncidentDetails.View, Contracts.ViewState, IncidentDetailsPresenter>(),
+        IncidentDetails.View {
+
+    @Inject lateinit var presenter: IncidentDetailsPresenter
+
+    override val layoutRes = R.layout.activity_incident_details
+
+    override val photoSwipeIntent: Observable<Int>
+        get() = contentViewPager.pageSelections()
 
     private var menuControlsVisible: Boolean = true
-
     private val hideLayoutsHandler = Handler()
 
     private val hideDelayedRunnable = Runnable {
@@ -48,9 +60,12 @@ class IncidentDetailsActivity : AppCompatActivity() {
                 .start()
     }
 
+    override fun retrievePresenter() = presenter
+
+    override fun injectComponents() = activityComponent.inject(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_incident_details)
         setupActionBar()
         setupContent()
         setupWindowFlags()
@@ -119,5 +134,38 @@ class IncidentDetailsActivity : AppCompatActivity() {
 
     companion object {
         fun start(context: Context) = context.startActivity<IncidentDetailsActivity>()
+    }
+}
+
+interface IncidentDetails {
+    interface View : Contracts.View {
+        val photoSwipeIntent: Observable<Int>
+
+        fun render(viewState: IncidentDetailsViewState)
+    }
+
+    interface Interactor : Contracts.Interactor {
+        fun getViewStateObservable(): Observable<IncidentDetailsViewState>
+    }
+}
+
+class IncidentDetailsViewState(
+        val currentPhotoPage: Int = 0
+)
+
+class IncidentDetailsPresenter @Inject constructor(
+        private val interactor: IncidentDetailsInteractor
+) : MviPresenter<IncidentDetails.View, Contracts.ViewState>() {
+
+    override fun bindIntents() = with(interactor) {
+
+        subscribeViewState(inter)
+    }
+}
+
+class IncidentDetailsInteractor @Inject constructor() : IncidentDetails.Interactor {
+
+    override fun getViewStateObservable(): Observable<IncidentDetailsViewState> {
+        //todo implement
     }
 }
