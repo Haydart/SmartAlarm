@@ -111,7 +111,7 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
 
     override fun archiveIncident(listPosition: Int): Single<Boolean> {
         //todo implement
-        return Single.just(false)
+        return Single.just(true)
     }
 
     override fun deleteIncident(listPosition: Int): Single<Boolean> = Single.create { emitter ->

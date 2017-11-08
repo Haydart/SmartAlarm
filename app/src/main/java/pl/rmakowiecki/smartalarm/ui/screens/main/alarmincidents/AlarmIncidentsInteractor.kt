@@ -5,12 +5,15 @@ import io.reactivex.Single
 import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.AlarmIncidentsViewStateChange.*
 import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.IncidentOperation.Removed
 import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.IncidentOperation.Updated
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
+private const val SNACKBAR_HIDE_DELAY = 3L
+
 class AlarmIncidentsInteractor @Inject constructor(
         private val alarmIncidentService: FirebaseAlarmIncidentsService,
-        private val reducer: AlarmViewStateReducer,
+        private val reducer: AlarmIncidentsViewStateReducer,
         private val navigator: AlarmIncidentsNavigator,
         private val modelMapper: AlarmIncidentModelMapper,
         private val detailsLogicGateway: DetailsGateway
@@ -67,20 +70,33 @@ class AlarmIncidentsInteractor @Inject constructor(
     }
 
     override fun attachArchiveIntent(intentObservable: Observable<Int>) {
-        viewStateObservable = viewStateObservable.mergeWith(intentObservable
-                .flatMapSingle(alarmIncidentService::archiveIncident)
-                .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() } //state change will come from firebase
-        )
+        viewStateObservable = viewStateObservable
+                .mergeWith(intentObservable
+                        .flatMapSingle(alarmIncidentService::archiveIncident)
+                        .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() }) //state change will come from firebase
+                .mergeWith(intentObservable
+                        .map { SnackBarShown("Incident archived.") })
+                .mergeWith(intentObservable
+                        .delay(SNACKBAR_HIDE_DELAY, TimeUnit.SECONDS)
+                        .map { SnackBarHidden() })
     }
 
     override fun attachDeletionIntent(intentObservable: Observable<Int>) {
-        viewStateObservable = viewStateObservable.mergeWith(intentObservable
-                .flatMapMaybe { listPosition ->
-                    navigator.showDeleteConfirmationDialog()
-                            .doOnSuccess { alarmIncidentService.deleteIncident(listPosition) }
-                }
-                .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() }
-        )
+        viewStateObservable = viewStateObservable
+                .mergeWith(intentObservable
+                        .flatMapMaybe { listPosition ->
+                            navigator.showDeleteConfirmationDialog()
+                                    .doOnSuccess {
+                                        alarmIncidentService.deleteIncident(listPosition)
+                                    }
+                        }
+                        .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() })
+    }
+
+    override fun attachSnackBarDismissIntent(intentObservable: Observable<Unit>) {
+        viewStateObservable = viewStateObservable
+                .mergeWith(intentObservable
+                        .map { SnackBarHidden() })
     }
 
     override fun attachDetailsIntent(intentObservable: Observable<Int>) {

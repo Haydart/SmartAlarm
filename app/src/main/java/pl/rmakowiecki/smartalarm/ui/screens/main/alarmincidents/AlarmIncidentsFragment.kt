@@ -1,8 +1,10 @@
 package pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import com.jakewharton.rxbinding2.support.design.widget.dismisses
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_alarm_incidents.*
@@ -28,6 +30,11 @@ class AlarmIncidentsFragment : MviFragment<AlarmIncidents.View, AlarmIncidentsVi
 
     override val incidentDeletionIntent: Observable<Int>
         get() = deleteIntentPublishSubject
+
+    private var snackbar: Snackbar? = null
+
+    override val snackBarDismissIntent: Observable<Unit>
+        get() = snackbar?.dismisses()?.map { Unit } ?: Observable.empty<Unit>()
 
     private val incidentsDetailsIntentPublishSubject = PublishSubject.create<Int>()
 
@@ -65,6 +72,12 @@ class AlarmIncidentsFragment : MviFragment<AlarmIncidents.View, AlarmIncidentsVi
         if (incidentsList.isEmpty()) recyclerView.gone() else recyclerView.visible()
 
         if (isLoading) progressBar.visible() else progressBar.gone()
+
+        if (isSnackBarShown)
+            snackbar = Snackbar.make(incidentsFragmentRootLayout, snackBarMessage.toString(), Snackbar.LENGTH_INDEFINITE).apply {
+                show()
+            }
+        else snackbar?.dismiss() ?: Unit
     }
 
     companion object {
