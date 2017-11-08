@@ -4,22 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
+    android:animateLayoutChanges="true"
     tools:context="pl.rmakowiecki.smartalarm.ui.screens.incidentdetails.IncidentDetailsActivity">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/margin_large"
-        android:layout_height="?attr/actionBarSize"
-        android:fitsSystemWindows="true">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="@dimen/margin_large"
-            android:background="@drawable/ic_arrow_back_white"/>
-
-    </LinearLayout>
 
     <pl.rmakowiecki.smartalarm.ui.customView.ExtendedViewPager
         android:id="@+id/contentViewPager"
@@ -30,20 +16,47 @@
         android:keepScreenOn="true"
         android:src="@drawable/app_logo"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/statusBarMock"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@android:color/black"/>
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/top_gradient"
+            android:theme="@style/ToolbarTheme">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@android:color/transparent"/>
+
+        </android.support.design.widget.AppBarLayout>
+    </LinearLayout>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
         <LinearLayout
-            android:id="@+id/incidentInfoBar"
+            android:id="@+id/incidentInfoBottomLayout"
             style="?metaButtonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/margin_small"
             android:layout_gravity="bottom"
             android:background="@drawable/bottom_gradient"
             android:orientation="horizontal"
+            android:paddingTop="@dimen/margin_small"
             tools:ignore="UselessParent">
 
             <TextView
