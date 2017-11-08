@@ -95,6 +95,7 @@ class AlarmIncidentsInteractor @Inject constructor(
 }
 
 @Singleton
-class DetailsGateway @Inject constructor(
-        var incidentBackendIdSingle: Single<String>
-)
+class DetailsGateway @Inject constructor() {
+
+    var incidentBackendIdSingle: Single<String> = Single.just("")
+}
