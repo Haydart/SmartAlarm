@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private const val SNACKBAR_HIDE_DELAY = 3L
+private const val SNACKBAR_HIDE_DELAY = 2L
 
 class AlarmIncidentsInteractor @Inject constructor(
         private val alarmIncidentService: FirebaseAlarmIncidentsService,
@@ -77,8 +77,10 @@ class AlarmIncidentsInteractor @Inject constructor(
                 .mergeWith(intentObservable
                         .map { SnackBarShown("Incident archived") }) //todo get other language resources
                 .mergeWith(intentObservable
-                        .delay(SNACKBAR_HIDE_DELAY, TimeUnit.SECONDS)
-                        .map { SnackBarHidden() })
+                        .switchMap {
+                            Observable.just(SnackBarHidden())
+                                    .delay(SNACKBAR_HIDE_DELAY, TimeUnit.SECONDS)
+                        })
     }
 
     override fun attachDeletionIntent(intentObservable: Observable<Int>) {
@@ -86,16 +88,16 @@ class AlarmIncidentsInteractor @Inject constructor(
                 .mergeWith(intentObservable
                         .flatMapMaybe { listPosition ->
                             navigator.showDeleteConfirmationDialog()
-                                    .doOnSuccess {
-                                        alarmIncidentService.deleteIncident(listPosition)
-                                    }
-                        }
-                        .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() })
+                                    .doOnSuccess { alarmIncidentService.deleteIncident(listPosition) }
+                        }.flatMap { Observable.empty<AlarmIncidentsViewStateChange>() })
                 .mergeWith(intentObservable
                         .map { SnackBarShown("Incident deleted") }) //todo get other language resources
                 .mergeWith(intentObservable
-                        .delay(SNACKBAR_HIDE_DELAY, TimeUnit.SECONDS)
-                        .map { SnackBarHidden() })
+                        .switchMap {
+                            Observable.just(SnackBarHidden())
+                                    .delay(SNACKBAR_HIDE_DELAY, TimeUnit.SECONDS)
+                        })
+
     }
 
     override fun attachSnackBarDismissIntent(intentObservable: Observable<Unit>) {
