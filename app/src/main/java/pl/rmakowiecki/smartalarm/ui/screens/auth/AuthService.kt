@@ -50,7 +50,6 @@ class FirebaseAuthService @Inject constructor() : AuthService {
     }
 
     override fun logoutUser(): Single<Boolean> {
-
         FirebaseAuth.getInstance().signOut()
         FirebaseMessaging.getInstance().unsubscribeFromTopic("SgVIHNDQwsPj3lmS2jS1gS9Xz5r1") //todo pass on-hardcoded core device UID
 

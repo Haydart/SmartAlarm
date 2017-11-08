@@ -58,6 +58,13 @@ class IncidentDetailsActivity : MviActivity<IncidentDetails.View, IncidentDetail
                 .start()
     }
 
+    val galleryAdapter = TouchImageViewAdapter(
+            this,
+            emptyList(),
+            object : SingleTapListener {
+                override fun onSingleTapPerformed() = toggle()
+            })
+
     override fun retrievePresenter() = presenter
 
     override fun injectComponents() = activityComponent.inject(this)
@@ -84,18 +91,7 @@ class IncidentDetailsActivity : MviActivity<IncidentDetails.View, IncidentDetail
 
     private fun setupContent() {
         statusBarMock.layoutParams.height = getStatusBarHeight()
-
-        contentViewPager.adapter = TouchImageViewAdapter(
-                this,
-                listOf(
-                        "http://www.fungilab.com/imagenes/APM_03.jpg",
-                        "http://www.osuinternationalhouse.com/wp-content/uploads/2011/10/logo_house_small.png",
-                        "http://imgsv.imaging.nikon.com/lineup/lens/zoom/normalzoom/af-s_dx_18-140mmf_35-56g_ed_vr/img/sample/sample1_l.jpg",
-                        "http://www.saraeichner.com/eichnerpaintingspage3/greenverticlewallpaper.jpg"
-                ),
-                object : SingleTapListener {
-                    override fun onSingleTapPerformed() = toggle()
-                })
+        contentViewPager.adapter = galleryAdapter
         contentViewPager.setPageTransformer(true, DepthPageTransformer())
     }
 
@@ -112,8 +108,11 @@ class IncidentDetailsActivity : MviActivity<IncidentDetails.View, IncidentDetail
         return super.onOptionsItemSelected(item)
     }
 
-    override fun render(viewState: IncidentDetailsViewState) {
-        //todo implement
+    override fun render(viewState: IncidentDetailsViewState) = with(viewState) {
+        galleryAdapter.photoUrls = photoUrlsList
+        galleryAdapter.notifyDataSetChanged()
+
+        if (currentPhotoPage != contentViewPager.currentItem) contentViewPager.currentItem = currentPhotoPage
     }
 
     private fun toggle() = if (menuControlsVisible) hide() else show()

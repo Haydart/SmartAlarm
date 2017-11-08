@@ -1,13 +1,11 @@
 package pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents
 
 import io.reactivex.Observable
-import io.reactivex.Single
 import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.AlarmIncidentsViewStateChange.*
 import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.IncidentOperation.Removed
 import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.IncidentOperation.Updated
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import javax.inject.Singleton
 
 private const val SNACKBAR_HIDE_DELAY = 2L
 
@@ -115,10 +113,4 @@ class AlarmIncidentsInteractor @Inject constructor(
                 .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() }
         )
     }
-}
-
-@Singleton
-class DetailsGateway @Inject constructor() {
-
-    var incidentBackendIdSingle: Single<String> = Single.just("")
 }
