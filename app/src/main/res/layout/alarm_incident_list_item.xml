@@ -5,8 +5,8 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="@dimen/card_view_corner_radius"
-    android:layout_margin="@dimen/margin_small">
+    android:layout_margin="@dimen/margin_small"
+    card_view:cardCornerRadius="@dimen/card_view_corner_radius">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,11 +14,22 @@
         android:layout_margin="@dimen/margin_medium"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/incidentPreviewImage"
+        <FrameLayout
             android:layout_width="@dimen/alarm_incident_item_preview_size"
-            android:layout_height="@dimen/alarm_incident_item_preview_size"
-            android:scaleType="centerCrop"/>
+            android:layout_height="@dimen/alarm_incident_item_preview_size">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
+            <ImageView
+                android:id="@+id/incidentPreviewImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
+
+        </FrameLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -30,40 +41,40 @@
                 android:id="@+id/popupMenuIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_popup_menu"
-                android:layout_gravity="top|end"/>
+                android:layout_gravity="top|end"
+                android:background="@drawable/ic_popup_menu"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/triggerDateText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_date_range_18px"
-                    android:drawablePadding="@dimen/margin_medium"
                     android:layout_margin="@dimen/margin_medium"
+                    android:drawablePadding="@dimen/margin_medium"
+                    android:drawableStart="@drawable/ic_date_range_18px"
                     android:text="Date"/>
 
                 <TextView
                     android:id="@+id/triggerHourText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_schedule_18px"
-                    android:drawablePadding="@dimen/margin_medium"
                     android:layout_margin="@dimen/margin_medium"
+                    android:drawablePadding="@dimen/margin_medium"
+                    android:drawableStart="@drawable/ic_schedule_18px"
                     android:text="Hour"/>
 
                 <TextView
                     android:id="@+id/triggerReasonText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_announcement_18px"
-                    android:drawablePadding="@dimen/margin_medium"
                     android:layout_margin="@dimen/margin_medium"
+                    android:drawablePadding="@dimen/margin_medium"
+                    android:drawableStart="@drawable/ic_announcement_18px"
                     android:text="Launch reason"/>
 
             </LinearLayout>
