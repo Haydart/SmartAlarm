@@ -1,10 +1,8 @@
 package pl.rmakowiecki.smartalarm.ui.screens.incidentdetails
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.NavUtils
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
@@ -16,25 +14,38 @@ import pl.rmakowiecki.smartalarm.ui.customView.DepthPageTransformer
 import pl.rmakowiecki.smartalarm.ui.customView.SingleTapListener
 import pl.rmakowiecki.smartalarm.ui.customView.TouchImageViewAdapter
 
-private const val UI_ANIMATION_DELAY = 300
+private const val UI_ANIMATION_DELAY = 150
+private const val UI_ANIMATION_DURATION = 150L
 
 class IncidentDetailsActivity : AppCompatActivity() {
 
-    private var mContentView: View? = null
-    private var mControlsView: View? = null
     private var menuControlsVisible: Boolean = false
+    private val hideLayoutsHandler = Handler()
 
-    private val mHidePart2Runnable = Runnable {
-        mContentView!!.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
+    private val hideDelayedRunnable = Runnable {
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
                 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+
+        appbar.animate()
+                .translationYBy(-getStatusBarHeight().toFloat() * 5)
+                .setDuration(UI_ANIMATION_DURATION)
+                .start()
+        incidentInfoBottomLayout.animate()
+                .translationYBy(getStatusBarHeight().toFloat() * 5)
+                .setDuration(UI_ANIMATION_DURATION)
+                .start()
     }
 
-    private val mShowPart2Runnable = Runnable {
-        mControlsView!!.visibility = View.VISIBLE
+    private val showDelayedRunnable = Runnable {
+        appbar.animate()
+                .translationYBy(getStatusBarHeight().toFloat() * 5)
+                .setDuration(UI_ANIMATION_DURATION)
+                .start()
+        incidentInfoBottomLayout.animate()
+                .translationYBy(-getStatusBarHeight().toFloat() * 5)
+                .setDuration(UI_ANIMATION_DURATION)
+                .start()
     }
-
-    private val mHideHandler = Handler()
-    private val mHideRunnable = Runnable { hide() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,9 +54,16 @@ class IncidentDetailsActivity : AppCompatActivity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
+
+        statusBarMock.layoutParams.height = getStatusBarHeight()
+
+        setSupportActionBar(toolbar)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = "Incident"
+        }
+
         menuControlsVisible = true
-        mControlsView = findViewById(R.id.incidentInfoBar)
-        mContentView = findViewById(R.id.contentViewPager)
 
         contentViewPager.adapter = TouchImageViewAdapter(
                 this,
@@ -61,20 +79,14 @@ class IncidentDetailsActivity : AppCompatActivity() {
         contentViewPager.setPageTransformer(true, DepthPageTransformer())
     }
 
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-
-        // Trigger the initial hide() shortly after the activity has been
-        // created, to briefly hint to the user that UI controls
-        // are available.
-        delayedHide(100)
-    }
+    private fun getStatusBarHeight() = resources.getDimensionPixelSize(
+            resources.getIdentifier("status_bar_height", "dimen", "android")
+    )
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            // This ID represents the Home or Up button.
-            NavUtils.navigateUpFromSameTask(this)
+            onBackPressed()
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -83,29 +95,19 @@ class IncidentDetailsActivity : AppCompatActivity() {
     private fun toggle() = if (menuControlsVisible) hide() else show()
 
     private fun hide() {
-        // Hide UI first
-        val actionBar = supportActionBar
-        actionBar?.hide()
-        mControlsView!!.visibility = View.GONE
         menuControlsVisible = false
 
         // Schedule a runnable to remove the status and navigation bar after a delay
-        mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY.toLong())
+        hideLayoutsHandler.removeCallbacks(showDelayedRunnable)
+        hideLayoutsHandler.postDelayed(hideDelayedRunnable, UI_ANIMATION_DELAY.toLong())
     }
 
-    @SuppressLint("InlinedApi")
     private fun show() {
         menuControlsVisible = true
 
         // Schedule a runnable to display UI elements after a delay
-        mHideHandler.removeCallbacks(mHidePart2Runnable)
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY.toLong())
-    }
-
-    private fun delayedHide(delayMillis: Int) {
-        mHideHandler.removeCallbacks(mHideRunnable)
-        mHideHandler.postDelayed(mHideRunnable, delayMillis.toLong())
+        hideLayoutsHandler.removeCallbacks(hideDelayedRunnable)
+        hideLayoutsHandler.postDelayed(showDelayedRunnable, UI_ANIMATION_DELAY.toLong())
     }
 
     companion object {

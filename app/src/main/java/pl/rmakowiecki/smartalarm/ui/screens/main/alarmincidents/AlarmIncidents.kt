@@ -1,5 +1,6 @@
 package pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents
 
+import io.reactivex.Maybe
 import io.reactivex.Observable
 import pl.rmakowiecki.smartalarm.base.Contracts
 
@@ -23,5 +24,6 @@ interface AlarmIncidents {
 
     interface Navigator : Contracts.Navigator {
         fun showIncidentDetailsScreen()
+        fun showDeleteConfirmationDialog(): Maybe<Boolean>
     }
 }
