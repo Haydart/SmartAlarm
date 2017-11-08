@@ -1,16 +1,19 @@
 package pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents
 
 import io.reactivex.Observable
+import io.reactivex.Single
 import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.AlarmIncidentsViewStateChange.*
 import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.IncidentOperation.Removed
 import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.IncidentOperation.Updated
 import javax.inject.Inject
+import javax.inject.Singleton
 
 class AlarmIncidentsInteractor @Inject constructor(
         private val alarmIncidentService: FirebaseAlarmIncidentsService,
         private val reducer: AlarmViewStateReducer,
         private val navigator: AlarmIncidentsNavigator,
-        private val modelMapper: AlarmIncidentModelMapper
+        private val modelMapper: AlarmIncidentModelMapper,
+        private val detailsLogicGateway: DetailsGateway
 ) : AlarmIncidents.Interactor {
 
     private var viewStateObservable = Observable.empty<AlarmIncidentsViewStateChange>()
@@ -82,8 +85,16 @@ class AlarmIncidentsInteractor @Inject constructor(
 
     override fun attachDetailsIntent(intentObservable: Observable<Int>) {
         viewStateObservable = viewStateObservable.mergeWith(intentObservable
-                .doOnNext { navigator.showIncidentDetailsScreen() }
+                .doOnNext {
+                    detailsLogicGateway.incidentBackendIdSingle = alarmIncidentService.fetchIdForListPosition(it)
+                    navigator.showIncidentDetailsScreen()
+                }
                 .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() }
         )
     }
 }
+
+@Singleton
+class DetailsGateway @Inject constructor(
+        var incidentBackendIdSingle: Single<String>
+)

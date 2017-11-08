@@ -9,4 +9,5 @@ interface AlarmIncidentsService {
     fun observeIncidentsChanges(): Observable<IncidentChange>
     fun archiveIncident(listPosition: Int): Single<Boolean>
     fun deleteIncident(listPosition: Int): Single<Boolean>
+    fun fetchIdForListPosition(listPosition: Int): Single<String>
 }

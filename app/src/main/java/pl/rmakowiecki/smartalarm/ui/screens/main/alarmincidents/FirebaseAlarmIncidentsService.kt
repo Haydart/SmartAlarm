@@ -5,7 +5,6 @@ import com.google.firebase.database.*
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
-import pl.rmakowiecki.smartalarm.extensions.logD
 import javax.inject.Inject
 
 class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsService {
@@ -31,6 +30,28 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
                 .addListenerForSingleValueEvent(object : ValueEventListener {
 
                     override fun onDataChange(dataSnapshot: DataSnapshot?) = emitter.onSuccess(dataSnapshot?.value == null)
+
+                    override fun onCancelled(databaseError: DatabaseError) = Unit
+                })
+    }
+
+    override fun fetchIdForListPosition(listPosition: Int): Single<String> = Single.create { emitter ->
+        userDatabaseNode.child("coredevice")
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(currentUserUidSnapshot: DataSnapshot) {
+                        rootDatabaseNode
+                                .child(currentUserUidSnapshot.value as String)
+                                .child("incidents")
+                                .orderByChild("timestamp")
+                                .equalTo(incidentsList[listPosition].timestamp.toDouble())
+                                .addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                        emitter.onSuccess(dataSnapshot.children.first().ref.key)
+                                    }
+
+                                    override fun onCancelled(databaseError: DatabaseError) = Unit
+                                })
+                    }
 
                     override fun onCancelled(databaseError: DatabaseError) = Unit
                 })
@@ -97,10 +118,6 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
         userDatabaseNode.child("coredevice")
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(currentUserUidSnapshot: DataSnapshot) {
-
-                        logD("position = $listPosition")
-                        logD("deleting timestamp = ${incidentsList[listPosition].timestamp}")
-
                         rootDatabaseNode
                                 .child(currentUserUidSnapshot.value as String)
                                 .child("incidents")
@@ -108,12 +125,7 @@ class FirebaseAlarmIncidentsService @Inject constructor() : AlarmIncidentsServic
                                 .equalTo(incidentsList[listPosition].timestamp.toDouble())
                                 .addListenerForSingleValueEvent(object : ValueEventListener {
                                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-
-                                        logD("parent key ${dataSnapshot.key}")
-
                                         dataSnapshot.children.forEach { incidentSnapshot ->
-                                            logD("child key ${incidentSnapshot.key}")
-
                                             incidentSnapshot.ref
                                                     .removeValue()
                                                     .addOnCompleteListener { emitter.onSuccess(it.isSuccessful) }
