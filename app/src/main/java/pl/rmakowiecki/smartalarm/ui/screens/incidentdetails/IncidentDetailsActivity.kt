@@ -1,6 +1,5 @@
 package pl.rmakowiecki.smartalarm.ui.screens.incidentdetails
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -10,14 +9,13 @@ import android.view.View
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_incident_details.*
 import pl.rmakowiecki.smartalarm.R
-import pl.rmakowiecki.smartalarm.extensions.gone
 import pl.rmakowiecki.smartalarm.extensions.startActivity
-import pl.rmakowiecki.smartalarm.extensions.visible
 import pl.rmakowiecki.smartalarm.ui.customView.DepthPageTransformer
 import pl.rmakowiecki.smartalarm.ui.customView.SingleTapListener
 import pl.rmakowiecki.smartalarm.ui.customView.TouchImageViewAdapter
 
-private const val UI_ANIMATION_DELAY = 300
+private const val UI_ANIMATION_DELAY = 150
+private const val UI_ANIMATION_DURATION = 150L
 
 class IncidentDetailsActivity : AppCompatActivity() {
 
@@ -28,13 +26,25 @@ class IncidentDetailsActivity : AppCompatActivity() {
         window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
                 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
 
-        appbar.gone()
-        incidentInfoBottomLayout.gone()
+        appbar.animate()
+                .translationYBy(-getStatusBarHeight().toFloat() * 5)
+                .setDuration(UI_ANIMATION_DURATION)
+                .start()
+        incidentInfoBottomLayout.animate()
+                .translationYBy(getStatusBarHeight().toFloat() * 5)
+                .setDuration(UI_ANIMATION_DURATION)
+                .start()
     }
 
     private val showDelayedRunnable = Runnable {
-        appbar.visible()
-        incidentInfoBottomLayout.visible()
+        appbar.animate()
+                .translationYBy(getStatusBarHeight().toFloat() * 5)
+                .setDuration(UI_ANIMATION_DURATION)
+                .start()
+        incidentInfoBottomLayout.animate()
+                .translationYBy(-getStatusBarHeight().toFloat() * 5)
+                .setDuration(UI_ANIMATION_DURATION)
+                .start()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,7 +102,6 @@ class IncidentDetailsActivity : AppCompatActivity() {
         hideLayoutsHandler.postDelayed(hideDelayedRunnable, UI_ANIMATION_DELAY.toLong())
     }
 
-    @SuppressLint("InlinedApi")
     private fun show() {
         menuControlsVisible = true
 
