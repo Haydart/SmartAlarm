@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.NavUtils
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
@@ -22,24 +21,21 @@ private const val UI_ANIMATION_DELAY = 300
 
 class IncidentDetailsActivity : AppCompatActivity() {
 
-    private var mContentView: View? = null
     private var menuControlsVisible: Boolean = false
+    private val hideLayoutsHandler = Handler()
 
-    private val mHidePart2Runnable = Runnable {
-        mContentView!!.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
+    private val hideDelayedRunnable = Runnable {
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
                 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
 
         appbar.gone()
         incidentInfoBottomLayout.gone()
     }
 
-    private val mShowPart2Runnable = Runnable {
+    private val showDelayedRunnable = Runnable {
         appbar.visible()
         incidentInfoBottomLayout.visible()
     }
-
-    private val hideLayoutsHandler = Handler()
-    private val mHideRunnable = Runnable { hide() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +54,6 @@ class IncidentDetailsActivity : AppCompatActivity() {
         }
 
         menuControlsVisible = true
-        mContentView = findViewById(R.id.contentViewPager)
 
         contentViewPager.adapter = TouchImageViewAdapter(
                 this,
@@ -81,8 +76,7 @@ class IncidentDetailsActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            // This ID represents the Home or Up button.
-            NavUtils.navigateUpFromSameTask(this)
+            onBackPressed()
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -94,8 +88,8 @@ class IncidentDetailsActivity : AppCompatActivity() {
         menuControlsVisible = false
 
         // Schedule a runnable to remove the status and navigation bar after a delay
-        hideLayoutsHandler.removeCallbacks(mShowPart2Runnable)
-        hideLayoutsHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY.toLong())
+        hideLayoutsHandler.removeCallbacks(showDelayedRunnable)
+        hideLayoutsHandler.postDelayed(hideDelayedRunnable, UI_ANIMATION_DELAY.toLong())
     }
 
     @SuppressLint("InlinedApi")
@@ -103,8 +97,8 @@ class IncidentDetailsActivity : AppCompatActivity() {
         menuControlsVisible = true
 
         // Schedule a runnable to display UI elements after a delay
-        hideLayoutsHandler.removeCallbacks(mHidePart2Runnable)
-        hideLayoutsHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY.toLong())
+        hideLayoutsHandler.removeCallbacks(hideDelayedRunnable)
+        hideLayoutsHandler.postDelayed(showDelayedRunnable, UI_ANIMATION_DELAY.toLong())
     }
 
     companion object {
