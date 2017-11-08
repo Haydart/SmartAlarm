@@ -10,6 +10,7 @@ interface AlarmIncidents {
         val incidentArchivingIntent: Observable<Int>
         val incidentDeletionIntent: Observable<Int>
         val incidentDetailsIntent: Observable<Int>
+        val snackBarDismissIntent: Observable<Unit>
 
         fun render(viewState: AlarmIncidentsViewState)
     }
@@ -20,6 +21,7 @@ interface AlarmIncidents {
         fun attachArchiveIntent(intentObservable: Observable<Int>)
         fun attachDeletionIntent(intentObservable: Observable<Int>)
         fun attachDetailsIntent(intentObservable: Observable<Int>)
+        fun attachSnackBarDismissIntent(intentObservable: Observable<Unit>)
     }
 
     interface Navigator : Contracts.Navigator {

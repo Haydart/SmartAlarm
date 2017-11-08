@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.MotionEvent
 
-class CustomViewPager @JvmOverloads constructor(
+class BottomBarViewPager @JvmOverloads constructor(
         context: Context,
         attributes: AttributeSet
 ) : ViewPager(context, attributes) {

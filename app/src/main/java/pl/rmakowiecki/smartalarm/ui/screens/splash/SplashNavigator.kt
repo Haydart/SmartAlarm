@@ -37,7 +37,7 @@ class SplashNavigator @Inject constructor(
         val transitionSet = TransitionInflater
                 .from(activity)
                 .inflateTransition(R.transition.splash_logo) as TransitionSet
-        TransitionManager.beginDelayedTransition(activity.rootLayout, transitionSet)
+        TransitionManager.beginDelayedTransition(activity.incidentsFragmentRootLayout, transitionSet)
         activity.splashLogoInscription.visibility = View.VISIBLE
     }
 }
