@@ -31,7 +31,7 @@ import pl.rmakowiecki.smartalarm.extensions.visible
 private const val CIRCULAR_REVEAL_DURATION = 500
 private const val CIRCULAR_REVEAL_RADIUS = 1024
 private const val CIRCULAR_REVEAL_DELAY = 1250
-private const val FAILURE_ICON_DISPLAYING_TIME = 800
+private const val ICON_DISPLAYING_TIME = 800
 private const val SLIDE_DURATION = 300
 private const val SLIDE_DELAY = 300
 private const val SLIDE_IN_Y_DELTA = 500
@@ -143,6 +143,12 @@ class ActionButton @JvmOverloads constructor(
         performScaleUpAndFadeOutAnimation(successImageView, SLIDE_DELAY + SLIDE_DURATION) {
             successImageView.invisible()
         }
+        resetButtonState(ICON_DISPLAYING_TIME)
+    }
+
+    fun showNeutral() {
+        resetViewsVisibilityBeforeAnimation()
+        this@ActionButton.performResetButtonState()
     }
 
     fun showFailure(message: String) {
@@ -155,7 +161,7 @@ class ActionButton @JvmOverloads constructor(
                 progressView.invisible()
             }
         }
-        showErrorMessage(message, FAILURE_ICON_DISPLAYING_TIME)
+        showErrorMessage(message, ICON_DISPLAYING_TIME)
     }
 
     private fun setLayoutsBackground() {
