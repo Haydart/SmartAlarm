@@ -143,6 +143,12 @@ class ActionButton @JvmOverloads constructor(
         performScaleUpAndFadeOutAnimation(successImageView, SLIDE_DELAY + SLIDE_DURATION) {
             successImageView.invisible()
         }
+        resetButtonState(3000)
+    }
+
+    fun showNeutral() {
+        resetViewsVisibilityBeforeAnimation()
+        this@ActionButton.performResetButtonState()
     }
 
     fun showFailure(message: String) {

@@ -121,10 +121,19 @@ class AuthInteractor @Inject constructor(
                 .mergeWith(intentObservable
                         .map { AuthViewStateChange.CredentialsSubmit() })
                 .mergeWith(intentObservable
+                        .delay(1, TimeUnit.SECONDS)
                         .flatMapSingle(authService::resetPassword)
-                        .doOnNext { if (it.isSuccessful) navigator.showResetPasswordCompleteDialog() }
-                        .map { AuthViewStateChange.AuthSuccess() })
+                        .flatMap(this::applyBackendPasswordResetResponse))
     }
+
+    private fun applyBackendPasswordResetResponse(response: AuthResponse): Observable<out AuthViewStateChange> =
+            if (response.isSuccessful) {
+                Observable.just(AuthViewStateChange.AuthSuccess())
+                        .doOnNext { navigator.showResetPasswordCompleteDialog() }
+            } else {
+                Observable.just(AuthViewStateChange.AuthFailure(""))
+                        .doOnNext { navigator.showFailureDialog(response.error?.localizedMessage ?: "Unknown password reset error.") }
+            }
 
     override fun attachEmailRegistrationIntent(intentObservable: Observable<Unit>) {
         viewStateIntentsObservable = viewStateIntentsObservable

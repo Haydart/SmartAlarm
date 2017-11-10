@@ -20,4 +20,12 @@ class AuthNavigator @Inject constructor(
                 .create()
                 .show()
     }
+
+    override fun showFailureDialog(localizedMessage: String) {
+        AlertDialog.Builder(activity)
+                .setMessage(localizedMessage)
+                .setPositiveButton(android.R.string.ok, null)
+                .create()
+                .show()
+    }
 }
