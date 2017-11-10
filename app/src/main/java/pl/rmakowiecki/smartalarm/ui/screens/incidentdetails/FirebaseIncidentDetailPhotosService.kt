@@ -34,7 +34,6 @@ class FirebaseIncidentDetailPhotosService @Inject constructor() : IncidentDetail
                             }
                 }
             }
-
         }
 
         val photosNode = rootDatabaseNode

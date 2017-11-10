@@ -122,7 +122,8 @@ class AuthInteractor @Inject constructor(
                         .map { AuthViewStateChange.CredentialsSubmit() })
                 .mergeWith(intentObservable
                         .flatMapSingle(authService::resetPassword)
-                        .flatMap(this::applyBackendLoginResponse))
+                        .doOnNext { if (it.isSuccessful) navigator.showResetPasswordCompleteDialog() }
+                        .map { AuthViewStateChange.AuthSuccess() })
     }
 
     override fun attachEmailRegistrationIntent(intentObservable: Observable<Unit>) {

@@ -1,14 +1,23 @@
 package pl.rmakowiecki.smartalarm.ui.screens.auth
 
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.Single
+import io.reactivex.SingleEmitter
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class FirebaseAuthService @Inject constructor() : AuthService {
+
+    private val rootDatabaseNode = FirebaseDatabase
+            .getInstance()
+            .reference
+
 
     override fun isUserLoggedIn(): Single<Boolean> = Single.just(
             FirebaseAuth.getInstance().currentUser != null
@@ -27,8 +36,15 @@ class FirebaseAuthService @Inject constructor() : AuthService {
         FirebaseAuth.getInstance()
                 .createUserWithEmailAndPassword(credentials.email, credentials.password)
                 .addOnCompleteListener {
-                    emitter.onSuccess(AuthResponse(it.isSuccessful, it.exception))
+                    saveUserUid(emitter, it)
                 }
+    }
+
+    private fun saveUserUid(emitter: SingleEmitter<AuthResponse>, task: Task<AuthResult>) {
+        rootDatabaseNode
+                .child("users")
+
+        emitter.onSuccess(AuthResponse(task.isSuccessful, task.exception))
     }
 
     override fun resetPassword(credentials: RemindPasswordCredentials): Single<AuthResponse> = Single.create { emitter ->

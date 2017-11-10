@@ -24,6 +24,7 @@ interface Auth {
 
     interface Navigator : Contracts.Navigator {
         fun showHomeScreen()
+        fun showResetPasswordCompleteDialog()
     }
 
     interface Interactor : Contracts.Interactor {

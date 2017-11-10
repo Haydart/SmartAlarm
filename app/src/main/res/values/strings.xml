@@ -39,5 +39,6 @@
     <string name="delete_confirmation_message">Are you sure you want to delete the incident? It will be permanently wiped from the system.</string>
     <string name="delete">Delete</string>
     <string name="preview">Preview</string>
+    <string name="reset_password_complete">Password reset process complete. We\'ve sent you an email with further instructions.</string>
 
 </resources>

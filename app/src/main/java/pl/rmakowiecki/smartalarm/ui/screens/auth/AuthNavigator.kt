@@ -1,18 +1,23 @@
 package pl.rmakowiecki.smartalarm.ui.screens.auth
 
-import android.content.Context
-import pl.rmakowiecki.smartalarm.di.qualifier.ActivityContext
-import pl.rmakowiecki.smartalarm.extensions.logD
+import android.app.Activity
+import android.app.AlertDialog
+import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.extensions.startActivity
 import pl.rmakowiecki.smartalarm.ui.screens.main.HomeActivity
 import javax.inject.Inject
 
 class AuthNavigator @Inject constructor(
-        @ActivityContext private val context: Context
+        private val activity: Activity
 ) : Auth.Navigator {
 
-    override fun showHomeScreen() {
-        logD("transition")
-        context.startActivity<HomeActivity>()
+    override fun showHomeScreen() = activity.startActivity<HomeActivity>()
+
+    override fun showResetPasswordCompleteDialog() {
+        AlertDialog.Builder(activity)
+                .setMessage(R.string.reset_password_complete)
+                .setPositiveButton(android.R.string.ok, null)
+                .create()
+                .show()
     }
 }
