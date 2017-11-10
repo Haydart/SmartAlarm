@@ -1,6 +1,5 @@
 package pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents
 
-import pl.rmakowiecki.smartalarm.extensions.logD
 import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.AlarmIncidentsViewStateChange.*
 import javax.inject.Inject
 
@@ -46,11 +45,9 @@ class AlarmIncidentsViewStateReducer @Inject constructor() {
             )
         }
         is SnackBarShown -> {
-            logD("snackbar show")
             currentViewState.copy(isSnackBarShown = true, snackBarMessage = change.message)
         }
         is SnackBarHidden -> {
-            logD("snackbar dismiss")
             currentViewState.copy(isSnackBarShown = false, snackBarMessage = null)
         }
     }
