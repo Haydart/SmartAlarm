@@ -1,7 +1,9 @@
 package pl.rmakowiecki.smartalarm.ui.screens.auth
 
 import io.reactivex.Observable
+import io.reactivex.Single
 import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthPerspective.*
+import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthViewStateChange.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -9,7 +11,8 @@ class AuthInteractor @Inject constructor(
         private val navigator: AuthNavigator,
         private val reducer: AuthStateReducer,
         private val validator: CredentialsValidator,
-        private val authService: FirebaseAuthService
+        private val authService: FirebaseAuthService,
+        private val setupService: FirebaseSetupService
 ) : Auth.Interactor {
 
     private var viewStateIntentsObservable: Observable<AuthViewStateChange> = Observable.empty()
@@ -23,7 +26,7 @@ class AuthInteractor @Inject constructor(
     private fun changeCredentialsSubmitButtonStateIfNeeded(authViewState: AuthViewState): Observable<AuthViewState> = Observable.just(authViewState)
             .mergeWith(
                     if (needsToRevalidateInput) Observable
-                            .just(reducer.reduce(authViewState, AuthViewStateChange.CredentialsButtonChange(
+                            .just(reducer.reduce(authViewState, CredentialsButtonChange(
                                     isCredentialInputValid(authViewState)
                             )))
                     else Observable.empty<AuthViewState>()
@@ -59,7 +62,7 @@ class AuthInteractor @Inject constructor(
     private fun Observable<out AuthViewStateChange>.delayInputValidation() = this.debounce(1, TimeUnit.SECONDS)
 
     private fun mapToEmailError(isValid: Boolean) =
-            AuthViewStateChange.EmailValidation(if (isValid) "" else "Invalid email format")
+            EmailValidation(if (isValid) "" else "Invalid email format")
 
     override fun attachPasswordInputIntent(intentObservable: Observable<String>) {
         viewStateIntentsObservable = viewStateIntentsObservable
@@ -72,7 +75,7 @@ class AuthInteractor @Inject constructor(
                         .delayInputValidation())
     }
 
-    private fun mapToPasswordError(isValid: Boolean) = AuthViewStateChange.PasswordValidation(
+    private fun mapToPasswordError(isValid: Boolean) = PasswordValidation(
             if (isValid) "" else "Password must be at least 8 characters long"
     )
 
@@ -87,39 +90,53 @@ class AuthInteractor @Inject constructor(
                         .delayInputValidation())
     }
 
-    private fun mapToRepeatPasswordError(arePasswordsIdentical: Boolean) = AuthViewStateChange.RepeatPasswordValidation(
+    private fun mapToRepeatPasswordError(arePasswordsIdentical: Boolean) = RepeatPasswordValidation(
             if (arePasswordsIdentical) "" else "Passwords are not identical"
     )
 
     override fun attachLoginIntent(intentObservable: Observable<LoginCredentials>) {
         viewStateIntentsObservable = viewStateIntentsObservable
                 .mergeWith(intentObservable
-                        .map { AuthViewStateChange.CredentialsSubmit() })
+                        .map { CredentialsSubmit() })
                 .mergeWith(intentObservable
                         .flatMapSingle(authService::login)
-                        .flatMap(this::applyBackendLoginResponse))
+                        .flatMap(this::applyBackendAuthResponse))
     }
 
-    private fun applyBackendLoginResponse(response: AuthResponse): Observable<out AuthViewStateChange> =
+    private fun applyBackendAuthResponse(response: AuthResponse): Observable<out AuthViewStateChange> =
             if (response.isSuccessful) {
-                Observable.just(AuthViewStateChange.AuthSuccess())
-                        .doOnNext { navigator.showHomeScreen() }
+                setupService.fetchUsersCoreDeviceUid()
+                        .flatMap(this::validateAssignedCoreDeviceUid)
+                        .toObservable()
+                        .doOnNext(this::navigateToProperScreen)
+                        .map { AuthSuccess() }
             } else Observable.just(
-                    AuthViewStateChange.AuthFailure(response.error?.localizedMessage ?: "Unknown error"))
+                    AuthFailure(response.error?.localizedMessage ?: "Unknown error"))
+
+    private fun validateAssignedCoreDeviceUid(assignedCoreDeviceUiud: String) =
+            if (assignedCoreDeviceUiud.isNotBlank()) {
+                setupService.checkIfCoreDeviceExists(assignedCoreDeviceUiud)
+            } else {
+                Single.just(false)
+            }
+
+    private fun navigateToProperScreen(isSetupWithCoreDevice: Boolean) =
+            if (isSetupWithCoreDevice) navigator.showHomeScreen()
+            else navigator.showSetupScreen()
 
     override fun attachRegisterIntent(intentObservable: Observable<RegisterCredentials>) {
         viewStateIntentsObservable = viewStateIntentsObservable
                 .mergeWith(intentObservable
-                        .map { AuthViewStateChange.CredentialsSubmit() })
+                        .map { CredentialsSubmit() })
                 .mergeWith(intentObservable
                         .flatMapSingle(authService::register)
-                        .flatMap(this::applyBackendLoginResponse))
+                        .flatMap(this::applyBackendAuthResponse))
     }
 
     override fun attachResetPasswordIntent(intentObservable: Observable<RemindPasswordCredentials>) {
         viewStateIntentsObservable = viewStateIntentsObservable
                 .mergeWith(intentObservable
-                        .map { AuthViewStateChange.CredentialsSubmit() })
+                        .map { CredentialsSubmit() })
                 .mergeWith(intentObservable
                         .delay(1, TimeUnit.SECONDS)
                         .flatMapSingle(authService::resetPassword)
@@ -128,30 +145,30 @@ class AuthInteractor @Inject constructor(
 
     private fun applyBackendPasswordResetResponse(response: AuthResponse): Observable<out AuthViewStateChange> =
             if (response.isSuccessful) {
-                Observable.just(AuthViewStateChange.AuthSuccess())
+                Observable.just(AuthSuccess())
                         .doOnNext { navigator.showResetPasswordCompleteDialog() }
             } else {
-                Observable.just(AuthViewStateChange.AuthFailure(""))
+                Observable.just(AuthFailure(""))
                         .doOnNext { navigator.showFailureDialog(response.error?.localizedMessage ?: "Unknown password reset error.") }
             }
 
     override fun attachEmailRegistrationIntent(intentObservable: Observable<Unit>) {
         viewStateIntentsObservable = viewStateIntentsObservable
                 .mergeWith(intentObservable
-                        .map { AuthViewStateChange.PerspectiveSwitch(REGISTER) }
+                        .map { PerspectiveSwitch(REGISTER) }
                         .doAfterNext { needsToRevalidateInput = true })
     }
 
     override fun attachBackButtonClickIntent(intentObservable: Observable<Unit>) {
         viewStateIntentsObservable = viewStateIntentsObservable
                 .mergeWith(intentObservable
-                        .map { AuthViewStateChange.PerspectiveSwitch(LOGIN) })
+                        .map { PerspectiveSwitch(LOGIN) })
     }
 
     override fun attachForgotPasswordIntent(intentObservable: Observable<Unit>) {
         viewStateIntentsObservable = viewStateIntentsObservable
                 .mergeWith(intentObservable
-                        .map { AuthViewStateChange.PerspectiveSwitch(FORGOT_PASSWORD) }
+                        .map { PerspectiveSwitch(FORGOT_PASSWORD) }
                         .doAfterNext { needsToRevalidateInput = true })
     }
 }

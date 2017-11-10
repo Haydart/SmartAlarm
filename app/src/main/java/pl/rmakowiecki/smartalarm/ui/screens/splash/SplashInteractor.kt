@@ -1,9 +1,11 @@
 package pl.rmakowiecki.smartalarm.ui.screens.splash
 
 import io.reactivex.Observable
+import io.reactivex.Single
 import pl.rmakowiecki.smartalarm.base.Contracts
 import pl.rmakowiecki.smartalarm.extensions.applyIoSchedulers
 import pl.rmakowiecki.smartalarm.ui.screens.auth.FirebaseAuthService
+import pl.rmakowiecki.smartalarm.ui.screens.auth.FirebaseSetupService
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -12,6 +14,7 @@ private const val NAVIGATION_DELAY = 3L
 
 class SplashInteractor @Inject constructor(
         private val authService: FirebaseAuthService,
+        private val setupService: FirebaseSetupService,
         private val navigator: SplashNavigator
 ) : Splash.Interactor {
 
@@ -25,11 +28,30 @@ class SplashInteractor @Inject constructor(
                     .timer(NAVIGATION_DELAY, TimeUnit.SECONDS)
                     .applyIoSchedulers()
                     .flatMapSingle { authService.isUserLoggedIn() }
-                    .doOnNext(this::performNavigation)
+                    .map { UserState(it, false) }
+                    .flatMapSingle { checkIfUserIsSetupWithCoreDevice(it.isLoggedIn) }
+                    .doOnNext(this::navigateToProperScreen)
                     .flatMap { Observable.empty<Contracts.ViewState>() })
         private set
 
-    private fun performNavigation(isUserLoggedIn: Boolean) =
-            if (isUserLoggedIn) navigator.showHomeScreen()
-            else navigator.showAuthScreen()
+    private fun checkIfUserIsSetupWithCoreDevice(isUserLoggedIn: Boolean) =
+            if (isUserLoggedIn) setupService.fetchUsersCoreDeviceUid()
+                    .flatMap(setupService::checkIfCoreDeviceExists)
+                    .map { UserState(isUserLoggedIn, it) }
+            else Single.just(UserState(false, false))
+
+    private fun navigateToProperScreen(determinedUserState: UserState) = with(determinedUserState) {
+        if (isLoggedIn && isSetUpWithCoreDevice) {
+            navigator.showHomeScreen()
+        } else if (isLoggedIn && !isSetUpWithCoreDevice) {
+            navigator.showSetupScreen()
+        } else {
+            navigator.showAuthScreen()
+        }
+    }
+
+    inner class UserState(
+            val isLoggedIn: Boolean,
+            val isSetUpWithCoreDevice: Boolean
+    )
 }

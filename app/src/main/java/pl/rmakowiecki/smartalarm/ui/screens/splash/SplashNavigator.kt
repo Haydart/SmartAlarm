@@ -12,6 +12,7 @@ import pl.rmakowiecki.smartalarm.extensions.Extra
 import pl.rmakowiecki.smartalarm.extensions.startActivity
 import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthActivity
 import pl.rmakowiecki.smartalarm.ui.screens.main.HomeActivity
+import pl.rmakowiecki.smartalarm.ui.screens.setup.SetupActivity
 import javax.inject.Inject
 
 class SplashNavigator @Inject constructor(
@@ -26,6 +27,8 @@ class SplashNavigator @Inject constructor(
         overridePendingTransition(0, 0)
         window.exitTransition = Explode()
     }
+
+    override fun showSetupScreen() = activity.startActivity<SetupActivity>()
 
     override fun showHomeScreen() = with(activity as SplashActivity) {
         startActivity<HomeActivity>()

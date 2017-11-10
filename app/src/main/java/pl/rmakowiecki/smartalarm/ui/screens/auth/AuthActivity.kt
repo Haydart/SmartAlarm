@@ -9,7 +9,10 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_auth.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
-import pl.rmakowiecki.smartalarm.extensions.*
+import pl.rmakowiecki.smartalarm.extensions.gone
+import pl.rmakowiecki.smartalarm.extensions.invisible
+import pl.rmakowiecki.smartalarm.extensions.setTextIfDifferent
+import pl.rmakowiecki.smartalarm.extensions.visible
 import pl.rmakowiecki.smartalarm.ui.customView.TilingDrawable
 import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthPerspective.*
 import javax.inject.Inject
@@ -129,8 +132,6 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
         forgotPasswordText.visible()
 
         with(authViewState) {
-
-            logD("$isLoading $isShowingSuccess ${generalError == null}")
 
             loginButton.isEnabled = credentialsSubmitButtonEnabled
 
