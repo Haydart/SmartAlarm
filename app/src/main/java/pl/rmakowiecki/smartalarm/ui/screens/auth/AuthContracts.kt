@@ -26,6 +26,7 @@ interface Auth {
         fun showHomeScreen()
         fun showResetPasswordCompleteDialog()
         fun showFailureDialog(localizedMessage: String)
+        fun showSetupScreen()
     }
 
     interface Interactor : Contracts.Interactor {

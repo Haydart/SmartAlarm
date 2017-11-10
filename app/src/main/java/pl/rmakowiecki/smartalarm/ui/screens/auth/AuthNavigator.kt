@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.extensions.startActivity
 import pl.rmakowiecki.smartalarm.ui.screens.main.HomeActivity
+import pl.rmakowiecki.smartalarm.ui.screens.setup.SetupActivity
 import javax.inject.Inject
 
 class AuthNavigator @Inject constructor(
@@ -12,6 +13,8 @@ class AuthNavigator @Inject constructor(
 ) : Auth.Navigator {
 
     override fun showHomeScreen() = activity.startActivity<HomeActivity>()
+
+    override fun showSetupScreen() = activity.startActivity<SetupActivity>()
 
     override fun showResetPasswordCompleteDialog() {
         AlertDialog.Builder(activity)
