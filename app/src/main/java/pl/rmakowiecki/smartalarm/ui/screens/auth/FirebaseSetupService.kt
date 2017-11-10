@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import io.reactivex.Single
+import pl.rmakowiecki.smartalarm.extensions.logD
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -43,13 +44,18 @@ class FirebaseSetupService @Inject constructor() : SetupService {
     }
 
     override fun checkIfCoreDeviceExists(uniqueIdentifier: String): Single<Boolean> = Single.create { emitter ->
-        rootDatabaseNode
-                .child(uniqueIdentifier)
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) = emitter.onSuccess(dataSnapshot.exists())
+        if (uniqueIdentifier.isNotBlank()) {
+            rootDatabaseNode.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    logD("QQvalue = $uniqueIdentifier")
+                    logD("QQDS key = ${dataSnapshot.key}")
+                    logD("QQvalue = ${dataSnapshot.hasChild(uniqueIdentifier)}")
+                    emitter.onSuccess(dataSnapshot.hasChild(uniqueIdentifier))
+                }
 
-                    override fun onCancelled(error: DatabaseError?) = Unit
-                })
+                override fun onCancelled(error: DatabaseError?) = Unit
+            })
+        } else emitter.onSuccess(false)
     }
 }
 
