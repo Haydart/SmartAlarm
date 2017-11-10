@@ -62,6 +62,7 @@
             android:background="@drawable/setup_phone"/>
 
         <FrameLayout
+            android:id="@+id/dottedLine"
             android:layout_width="0dp"
             android:layout_height="32dp"
             android:layout_gravity="center"
