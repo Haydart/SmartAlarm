@@ -28,6 +28,7 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.screens.setup.SetupActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.screens.main.HomeActivity"
