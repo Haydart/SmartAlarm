@@ -11,4 +11,5 @@
     <color name="divider">#BDBDBD</color>
     <color name="failureRed">#FF0000</color>
     <color name="lightGray">#EEEEEE</color>
+    <color name="gray">#FFAAAAAA</color>
 </resources>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/incidentsFragmentRootLayout"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".ui.screens.splash.SplashActivity">
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/incidentsFragmentRootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.screens.splash.SplashActivity">
 
     <LinearLayout
         android:id="@+id/contentLayout"
@@ -18,16 +19,16 @@
             android:layout_width="@dimen/splash_icon_size"
             android:layout_height="@dimen/splash_icon_size"
             android:src="@drawable/app_logo"
-            android:transitionName="@string/transition_logo" />
+            android:transitionName="@string/transition_logo"/>
 
         <ImageView
             android:id="@+id/splashLogoInscription"
             android:layout_width="@dimen/splash_inscription_width"
             android:layout_height="@dimen/splash_inscription_height"
+            android:layout_margin="@dimen/margin_medium"
             android:src="@drawable/splash_inscription"
             android:transitionName="inscription_transition"
-            android:layout_margin="@dimen/margin_medium"
-            android:visibility="gone" />
+            android:visibility="gone"/>
     </LinearLayout>
 
     <View
@@ -35,5 +36,5 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="bottom"
-        android:transitionName="@string/transition_auth_content" />
+        android:transitionName="@string/transition_auth_content"/>
 </FrameLayout>

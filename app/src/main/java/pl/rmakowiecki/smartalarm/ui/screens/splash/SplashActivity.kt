@@ -25,7 +25,7 @@ class SplashActivity : MviActivity<Contracts.View, Contracts.ViewState, SplashPr
     }
 
     private fun setActivityBackground() {
-        val rawDrawable = ContextCompat.getDrawable(this, R.drawable.background_vector)
+        val rawDrawable = ContextCompat.getDrawable(this, R.drawable.overlay_pattern_background_vector)
 
         val tilingDrawable = TilingDrawable(rawDrawable)
         contentLayout.background = tilingDrawable
