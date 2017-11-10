@@ -22,7 +22,7 @@ class FirebaseSetupService @Inject constructor() : SetupService {
 
     private fun getCurrentBackendUser() = FirebaseAuth.getInstance().currentUser
 
-    override fun fetchCoreDeviceUid(): Single<String> = Single.create { emitter ->
+    override fun fetchUsersCoreDeviceUid(): Single<String> = Single.create { emitter ->
         userDatabaseNode
                 .child("coredevice")
                 .addValueEventListener(object : ValueEventListener {
@@ -55,7 +55,7 @@ class FirebaseSetupService @Inject constructor() : SetupService {
 
 interface SetupService {
 
-    fun fetchCoreDeviceUid(): Single<String>
+    fun fetchUsersCoreDeviceUid(): Single<String>
     fun updateCoreDeviceUid(uniqueIdentifier: String): Single<Boolean>
     fun checkIfCoreDeviceExists(uniqueIdentifier: String): Single<Boolean>
 }

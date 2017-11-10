@@ -105,7 +105,7 @@ class AuthInteractor @Inject constructor(
 
     private fun applyBackendAuthResponse(response: AuthResponse): Observable<out AuthViewStateChange> =
             if (response.isSuccessful) {
-                setupService.fetchCoreDeviceUid()
+                setupService.fetchUsersCoreDeviceUid()
                         .flatMap(this::validateAssignedCoreDeviceUid)
                         .toObservable()
                         .doOnNext(this::navigateToProperScreen)

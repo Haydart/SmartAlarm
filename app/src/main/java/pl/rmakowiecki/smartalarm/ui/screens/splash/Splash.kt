@@ -7,6 +7,7 @@ interface Splash {
 
     interface Navigator : Contracts.Navigator {
         fun showAuthScreen()
+        fun showSetupScreen()
         fun showHomeScreen()
         fun startLogoTransition()
     }
