@@ -2,6 +2,7 @@ package pl.rmakowiecki.smartalarm.ui.screens.auth
 
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.Single
 import javax.inject.Inject
@@ -9,6 +10,11 @@ import javax.inject.Singleton
 
 @Singleton
 class FirebaseAuthService @Inject constructor() : AuthService {
+
+    private val rootDatabaseNode = FirebaseDatabase
+            .getInstance()
+            .reference
+
 
     override fun isUserLoggedIn(): Single<Boolean> = Single.just(
             FirebaseAuth.getInstance().currentUser != null
