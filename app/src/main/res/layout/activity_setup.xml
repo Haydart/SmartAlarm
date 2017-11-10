@@ -26,7 +26,8 @@
             android:layout_width="@dimen/auth_screen_logo_size"
             android:layout_height="@dimen/auth_screen_logo_size"
             android:layout_gravity="center"
-            android:src="@drawable/app_logo"/>
+            android:src="@drawable/app_logo"
+            android:transitionName="@string/transition_logo"/>
     </FrameLayout>
 
     <LinearLayout

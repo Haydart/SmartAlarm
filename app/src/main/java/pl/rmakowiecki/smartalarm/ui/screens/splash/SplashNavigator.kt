@@ -28,7 +28,14 @@ class SplashNavigator @Inject constructor(
         window.exitTransition = Explode()
     }
 
-    override fun showSetupScreen() = activity.startActivity<SetupActivity>()
+    override fun showSetupScreen() = with(activity) {
+        activity.startActivity<SetupActivity>(
+                Extra.SharedView(splashLogo),
+                Extra.SharedView(contentView)
+        )
+        overridePendingTransition(0, 0)
+        window.exitTransition = Explode()
+    }
 
     override fun showHomeScreen() = with(activity as SplashActivity) {
         startActivity<HomeActivity>()
