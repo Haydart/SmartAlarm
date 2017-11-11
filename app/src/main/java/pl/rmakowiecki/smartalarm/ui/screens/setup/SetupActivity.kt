@@ -49,9 +49,18 @@ class SetupActivity : MviActivity<Contracts.View, Contracts.ViewState, SetupPres
     }
 }
 
-class SetupPresenter @Inject constructor() : MviPresenter<Contracts.View, Contracts.ViewState>() {
+class SetupPresenter @Inject constructor(
+        private val interactor: SetupInteractor
+) : MviPresenter<Contracts.View, Contracts.ViewState>() {
 
     override fun bindIntents() = Unit
+}
+
+class SetupInteractor @Inject constructor() : Setup.Interactor {
+
+    private val viewStateObservable = Observable.empty<SetupViewState>()
+
+    override fun getViewStateObservable(): Observable<SetupViewState> = viewStateObservable
 }
 
 enum class SetupPerspective {
