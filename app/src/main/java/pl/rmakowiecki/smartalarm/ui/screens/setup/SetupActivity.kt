@@ -39,3 +39,8 @@ class SetupPresenter : MviPresenter<Contracts.View, Contracts.ViewState>() {
 
     override fun bindIntents() = Unit
 }
+
+enum class SetupPerspective {
+    MOBILE_DEVICE_CONFIGURATION,
+    CORE_DEVICE_CONFIGURATION
+}
