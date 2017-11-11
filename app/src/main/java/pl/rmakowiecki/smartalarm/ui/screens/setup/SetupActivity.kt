@@ -3,6 +3,7 @@ package pl.rmakowiecki.smartalarm.ui.screens.setup
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.view.View
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_setup.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.Contracts
@@ -49,3 +50,19 @@ data class SetupViewState(
         private val isInitialTextShown: Boolean = false,
         private val isLoading: Boolean = false
 ) : Contracts.ViewState
+
+interface Setup {
+    interface View : Contracts.View {
+        val ssidInputIntent: Observable<String>
+        val networkPasswordInputIntent: Observable<String>
+        val networkCredentialsSubmitIntent: Observable<String>
+
+        fun render(viewState: SetupViewState)
+    }
+
+    interface Interactor : Contracts.Interactor {
+        fun getViewStateObservable(): Observable<SetupViewState>
+    }
+}
+
+
