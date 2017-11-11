@@ -2,17 +2,27 @@ package pl.rmakowiecki.smartalarm.ui.screens.setup
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.activity_setup.*
 import pl.rmakowiecki.smartalarm.R
+import pl.rmakowiecki.smartalarm.base.Contracts
+import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
+import pl.rmakowiecki.smartalarm.base.mvi.MviPresenter
 import pl.rmakowiecki.smartalarm.ui.customView.TilingDrawable
+import javax.inject.Inject
 
-class SetupActivity : AppCompatActivity() {
+class SetupActivity : MviActivity<Contracts.View, Contracts.ViewState, SetupPresenter>() {
+
+    @Inject lateinit var presenter: SetupPresenter
+
+    override val layoutRes = R.layout.activity_setup
+
+    override fun retrievePresenter() = presenter
+
+    override fun injectComponents() = activityComponent.inject(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_setup)
         setActivityBackground()
         dottedLine.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
     }
@@ -23,4 +33,9 @@ class SetupActivity : AppCompatActivity() {
         val tilingDrawable = TilingDrawable(rawDrawable)
         headerBackgroundImage.background = tilingDrawable
     }
+}
+
+class SetupPresenter : MviPresenter<Contracts.View, Contracts.ViewState>() {
+
+    override fun bindIntents() = Unit
 }

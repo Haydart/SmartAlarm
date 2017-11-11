@@ -6,6 +6,7 @@ import pl.rmakowiecki.smartalarm.di.module.ActivityModule
 import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthActivity
 import pl.rmakowiecki.smartalarm.ui.screens.incidentdetails.IncidentDetailsActivity
 import pl.rmakowiecki.smartalarm.ui.screens.main.HomeActivity
+import pl.rmakowiecki.smartalarm.ui.screens.setup.SetupActivity
 import pl.rmakowiecki.smartalarm.ui.screens.splash.SplashActivity
 
 @ActivityScope
@@ -16,4 +17,5 @@ interface ActivityComponent {
     fun inject(authActivity: AuthActivity)
     fun inject(homeActivity: HomeActivity)
     fun inject(incidentDetailsActivity: IncidentDetailsActivity)
+    fun inject(setupActivity: SetupActivity)
 }
