@@ -44,3 +44,8 @@ enum class SetupPerspective {
     MOBILE_DEVICE_CONFIGURATION,
     CORE_DEVICE_CONFIGURATION
 }
+
+data class SetupViewState(
+        private val isInitialTextShown: Boolean = false,
+        private val isLoading: Boolean = false
+) : Contracts.ViewState
