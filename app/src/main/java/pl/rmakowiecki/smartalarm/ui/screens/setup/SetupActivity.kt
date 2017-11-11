@@ -49,7 +49,7 @@ class SetupActivity : MviActivity<Contracts.View, Contracts.ViewState, SetupPres
     }
 }
 
-class SetupPresenter : MviPresenter<Contracts.View, Contracts.ViewState>() {
+class SetupPresenter @Inject constructor() : MviPresenter<Contracts.View, Contracts.ViewState>() {
 
     override fun bindIntents() = Unit
 }
