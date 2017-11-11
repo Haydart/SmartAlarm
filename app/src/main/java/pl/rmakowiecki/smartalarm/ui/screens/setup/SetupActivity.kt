@@ -12,11 +12,20 @@ import pl.rmakowiecki.smartalarm.base.mvi.MviPresenter
 import pl.rmakowiecki.smartalarm.ui.customView.TilingDrawable
 import javax.inject.Inject
 
-class SetupActivity : MviActivity<Contracts.View, Contracts.ViewState, SetupPresenter>() {
+class SetupActivity : MviActivity<Contracts.View, Contracts.ViewState, SetupPresenter>(), Setup.View {
 
     @Inject lateinit var presenter: SetupPresenter
 
     override val layoutRes = R.layout.activity_setup
+
+    override val ssidInputIntent: Observable<String>
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+
+    override val networkPasswordInputIntent: Observable<String>
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+
+    override val networkCredentialsSubmitIntent: Observable<String>
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 
     override fun retrievePresenter() = presenter
 
@@ -33,6 +42,10 @@ class SetupActivity : MviActivity<Contracts.View, Contracts.ViewState, SetupPres
 
         val tilingDrawable = TilingDrawable(rawDrawable)
         headerBackgroundImage.background = tilingDrawable
+    }
+
+    override fun render(viewState: SetupViewState) {
+        //todo implement
     }
 }
 
