@@ -24,7 +24,7 @@ class SetupActivity : MviActivity<Contracts.View, Contracts.ViewState, SetupPres
     override val networkPasswordInputIntent: Observable<String>
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 
-    override val networkCredentialsSubmitIntent: Observable<String>
+    override val networkCredentialsSubmitIntent: Observable<Unit>
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 
     override fun retrievePresenter() = presenter
@@ -51,7 +51,7 @@ class SetupActivity : MviActivity<Contracts.View, Contracts.ViewState, SetupPres
 
 class SetupPresenter @Inject constructor(
         private val interactor: SetupInteractor
-) : MviPresenter<Contracts.View, Contracts.ViewState>() {
+) : MviPresenter<Setup.View, SetupViewState>() {
 
     override fun bindIntents() = with(interactor) {
 
@@ -102,7 +102,7 @@ interface Setup {
     interface View : Contracts.View {
         val ssidInputIntent: Observable<String>
         val networkPasswordInputIntent: Observable<String>
-        val networkCredentialsSubmitIntent: Observable<String>
+        val networkCredentialsSubmitIntent: Observable<Unit>
 
         fun render(viewState: SetupViewState)
     }
