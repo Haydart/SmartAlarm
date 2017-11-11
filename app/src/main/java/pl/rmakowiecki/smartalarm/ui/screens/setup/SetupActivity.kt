@@ -6,13 +6,11 @@ import android.view.View
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_setup.*
 import pl.rmakowiecki.smartalarm.R
-import pl.rmakowiecki.smartalarm.base.Contracts
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
-import pl.rmakowiecki.smartalarm.base.mvi.MviPresenter
 import pl.rmakowiecki.smartalarm.ui.customView.TilingDrawable
 import javax.inject.Inject
 
-class SetupActivity : MviActivity<Contracts.View, Contracts.ViewState, SetupPresenter>(), Setup.View {
+class SetupActivity : MviActivity<Setup.View, SetupViewState, SetupPresenter>(), Setup.View {
 
     @Inject lateinit var presenter: SetupPresenter
 
@@ -48,72 +46,3 @@ class SetupActivity : MviActivity<Contracts.View, Contracts.ViewState, SetupPres
         //todo implement
     }
 }
-
-class SetupPresenter @Inject constructor(
-        private val interactor: SetupInteractor
-) : MviPresenter<Setup.View, SetupViewState>() {
-
-    override fun bindIntents() = with(interactor) {
-
-        attachSsidInputIntent(bindIntent(Setup.View::ssidInputIntent))
-        attachNetworkPasswordInputIntent(bindIntent(Setup.View::networkPasswordInputIntent))
-        attachNetworkCredentialsSubmitIntent(bindIntent(Setup.View::networkCredentialsSubmitIntent))
-
-        subscribeViewState(getViewStateObservable(), Setup.View::render)
-    }
-}
-
-class SetupInteractor @Inject constructor() : Setup.Interactor {
-
-    private var viewStateObservable = Observable.empty<SetupViewState>()
-
-    override fun getViewStateObservable(): Observable<SetupViewState> = viewStateObservable
-
-    override fun attachSsidInputIntent(intentObservable: Observable<String>) {
-        viewStateObservable = viewStateObservable.mergeWith(
-                intentObservable.map { SetupViewState() }
-        )
-    }
-
-    override fun attachNetworkPasswordInputIntent(intentObservable: Observable<String>) {
-        viewStateObservable = viewStateObservable.mergeWith(
-                intentObservable.map { SetupViewState() }
-        )
-    }
-
-    override fun attachNetworkCredentialsSubmitIntent(intentObservable: Observable<Unit>) {
-        viewStateObservable = viewStateObservable.mergeWith(
-                intentObservable.map { SetupViewState() }
-        )
-    }
-}
-
-enum class SetupPerspective {
-    MOBILE_DEVICE_CONFIGURATION,
-    CORE_DEVICE_CONFIGURATION
-}
-
-data class SetupViewState(
-        private val isInitialTextShown: Boolean = false,
-        private val isLoading: Boolean = false
-) : Contracts.ViewState
-
-interface Setup {
-    interface View : Contracts.View {
-        val ssidInputIntent: Observable<String>
-        val networkPasswordInputIntent: Observable<String>
-        val networkCredentialsSubmitIntent: Observable<Unit>
-
-        fun render(viewState: SetupViewState)
-    }
-
-    interface Interactor : Contracts.Interactor {
-        fun getViewStateObservable(): Observable<SetupViewState>
-
-        fun attachSsidInputIntent(intentObservable: Observable<String>)
-        fun attachNetworkPasswordInputIntent(intentObservable: Observable<String>)
-        fun attachNetworkCredentialsSubmitIntent(intentObservable: Observable<Unit>)
-    }
-}
-
-
