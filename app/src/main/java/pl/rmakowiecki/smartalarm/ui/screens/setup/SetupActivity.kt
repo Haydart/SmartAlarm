@@ -53,14 +53,39 @@ class SetupPresenter @Inject constructor(
         private val interactor: SetupInteractor
 ) : MviPresenter<Contracts.View, Contracts.ViewState>() {
 
-    override fun bindIntents() = Unit
+    override fun bindIntents() = with(interactor) {
+
+        attachSsidInputIntent(bindIntent(Setup.View::ssidInputIntent))
+        attachNetworkPasswordInputIntent(bindIntent(Setup.View::networkPasswordInputIntent))
+        attachNetworkCredentialsSubmitIntent(bindIntent(Setup.View::networkCredentialsSubmitIntent))
+
+        subscribeViewState(getViewStateObservable(), Setup.View::render)
+    }
 }
 
 class SetupInteractor @Inject constructor() : Setup.Interactor {
 
-    private val viewStateObservable = Observable.empty<SetupViewState>()
+    private var viewStateObservable = Observable.empty<SetupViewState>()
 
     override fun getViewStateObservable(): Observable<SetupViewState> = viewStateObservable
+
+    override fun attachSsidInputIntent(intentObservable: Observable<String>) {
+        viewStateObservable = viewStateObservable.mergeWith(
+                intentObservable.map { SetupViewState() }
+        )
+    }
+
+    override fun attachNetworkPasswordInputIntent(intentObservable: Observable<String>) {
+        viewStateObservable = viewStateObservable.mergeWith(
+                intentObservable.map { SetupViewState() }
+        )
+    }
+
+    override fun attachNetworkCredentialsSubmitIntent(intentObservable: Observable<Unit>) {
+        viewStateObservable = viewStateObservable.mergeWith(
+                intentObservable.map { SetupViewState() }
+        )
+    }
 }
 
 enum class SetupPerspective {
@@ -84,6 +109,10 @@ interface Setup {
 
     interface Interactor : Contracts.Interactor {
         fun getViewStateObservable(): Observable<SetupViewState>
+
+        fun attachSsidInputIntent(intentObservable: Observable<String>)
+        fun attachNetworkPasswordInputIntent(intentObservable: Observable<String>)
+        fun attachNetworkCredentialsSubmitIntent(intentObservable: Observable<Unit>)
     }
 }
 
