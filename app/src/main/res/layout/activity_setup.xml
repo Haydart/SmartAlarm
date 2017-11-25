@@ -44,7 +44,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/setup_connect_text"
-            android:textSize="16sp"/>
+            android:textSize="@dimen/text_size_normal"/>
 
         <ProgressBar
             android:id="@+id/usbDataExchangeProgressBar"
@@ -58,10 +58,9 @@
         android:id="@+id/connectionImageLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="64dp"
         android:layout_weight="0.45"
         android:orientation="horizontal"
-        android:padding="24dp"
+        android:padding="@dimen/margin_x_large"
         android:baselineAligned="false">
 
         <FrameLayout
@@ -73,9 +72,9 @@
         <FrameLayout
             android:id="@+id/dottedLine"
             android:layout_width="0dp"
-            android:layout_height="32dp"
+            android:layout_height="@dimen/margin_xx_large"
             android:layout_gravity="center"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/margin_medium"
             android:layout_weight="1"
             android:background="@drawable/setup_dashed_line"/>
 
@@ -83,8 +82,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
             android:layout_weight="1.25"
             android:background="@drawable/setup_core_device"/>
     </LinearLayout>
