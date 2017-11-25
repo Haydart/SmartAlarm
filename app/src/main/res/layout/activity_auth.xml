@@ -112,7 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/input_hint_repeat_password"
-                android:inputType="textEmailAddress" />
+                android:inputType="textPassword"/>
         </android.support.design.widget.TextInputLayout>
 
         <FrameLayout
