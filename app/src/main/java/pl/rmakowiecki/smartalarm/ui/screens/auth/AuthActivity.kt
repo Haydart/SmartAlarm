@@ -88,7 +88,7 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
     }
 
     private fun setActivityBackground() {
-        val rawDrawable = ContextCompat.getDrawable(this, R.drawable.overlay_pattern_background_vector)
+        val rawDrawable = ContextCompat.getDrawable(this, R.drawable.background_pattern)
 
         val tilingDrawable = TilingDrawable(rawDrawable)
         headerBackgroundImage.background = tilingDrawable

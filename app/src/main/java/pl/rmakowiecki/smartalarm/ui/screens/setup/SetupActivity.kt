@@ -17,13 +17,13 @@ class SetupActivity : MviActivity<Setup.View, SetupViewState, SetupPresenter>(),
     override val layoutRes = R.layout.activity_setup
 
     override val ssidInputIntent: Observable<String>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = Observable.empty()
 
     override val networkPasswordInputIntent: Observable<String>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = Observable.empty()
 
     override val networkCredentialsSubmitIntent: Observable<Unit>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = Observable.empty()
 
     override fun retrievePresenter() = presenter
 
@@ -36,7 +36,7 @@ class SetupActivity : MviActivity<Setup.View, SetupViewState, SetupPresenter>(),
     }
 
     private fun setActivityBackground() {
-        val rawDrawable = ContextCompat.getDrawable(this, R.drawable.overlay_pattern_background_vector)
+        val rawDrawable = ContextCompat.getDrawable(this, R.drawable.background_pattern)
 
         val tilingDrawable = TilingDrawable(rawDrawable)
         headerBackgroundImage.background = tilingDrawable
