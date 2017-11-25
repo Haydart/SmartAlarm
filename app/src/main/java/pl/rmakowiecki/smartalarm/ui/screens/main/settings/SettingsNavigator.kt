@@ -30,7 +30,7 @@ class SettingsNavigator @Inject constructor(
         AlertDialog.Builder(activity)
                 .setMessage(R.string.logout_confirmation_message)
                 .setPositiveButton(R.string.logout, { _, _ -> emitter.onSuccess(true) })
-                .setNegativeButton(android.R.string.cancel, { _, _ -> emitter.onComplete() })
+                .setNegativeButton(R.string.cancel, { _, _ -> emitter.onComplete() })
                 .create()
                 .show()
     }
