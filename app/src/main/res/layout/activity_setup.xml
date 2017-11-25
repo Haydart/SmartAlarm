@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:animateLayoutChanges="true"
     android:orientation="vertical"
     android:weightSum="1"
     tools:context="pl.rmakowiecki.smartalarm.ui.screens.setup.SetupActivity">
@@ -31,6 +32,7 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/connectionTextLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.35"
@@ -48,10 +50,12 @@
             android:id="@+id/usbDataExchangeProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:visibility="gone"/>
     </FrameLayout>
 
     <LinearLayout
+        android:id="@+id/connectionImageLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="64dp"
@@ -84,4 +88,9 @@
             android:layout_weight="1.25"
             android:background="@drawable/setup_core_device"/>
     </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/availableWifiRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>
