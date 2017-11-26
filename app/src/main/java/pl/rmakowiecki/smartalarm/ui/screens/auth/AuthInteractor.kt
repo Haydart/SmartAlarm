@@ -114,11 +114,9 @@ class AuthInteractor @Inject constructor(
                     AuthFailure(response.error?.localizedMessage ?: "Unknown error"))
 
     private fun validateAssignedCoreDeviceUid(assignedCoreDeviceUiud: String) =
-            if (assignedCoreDeviceUiud.isNotBlank()) {
+            if (assignedCoreDeviceUiud.isNotBlank())
                 setupService.checkIfCoreDeviceExists(assignedCoreDeviceUiud)
-            } else {
-                Single.just(false)
-            }
+            else Single.just(false)
 
     private fun navigateToProperScreen(isSetupWithCoreDevice: Boolean) =
             if (isSetupWithCoreDevice) navigator.showHomeScreen()
@@ -187,4 +185,3 @@ data class RegisterCredentials(
 data class RemindPasswordCredentials(
         val email: String
 )
-
