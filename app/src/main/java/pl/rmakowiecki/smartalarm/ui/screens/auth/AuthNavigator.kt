@@ -12,9 +12,15 @@ class AuthNavigator @Inject constructor(
         private val activity: Activity
 ) : Auth.Navigator {
 
-    override fun showHomeScreen() = activity.startActivity<HomeActivity>()
+    override fun showHomeScreen() {
+        activity.startActivity<HomeActivity>()
+        activity.finish()
+    }
 
-    override fun showSetupScreen() = activity.startActivity<SetupActivity>()
+    override fun showSetupScreen() {
+        activity.startActivity<SetupActivity>()
+        activity.finish()
+    }
 
     override fun showResetPasswordCompleteDialog() {
         AlertDialog.Builder(activity)

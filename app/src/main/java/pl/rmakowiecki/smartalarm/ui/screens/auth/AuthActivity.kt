@@ -74,13 +74,13 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
     override val forgotPasswordIntent: Observable<Unit>
         get() = forgotPasswordText.clicks()
 
-    override fun retrievePresenter() = presenter
-
-    override fun injectComponents() = activityComponent.inject(this)
-
     private var loginIntentBlocked = false
     private var registerIntentBlocked = true
     private var resetPasswordIntentBlocked = true
+
+    override fun retrievePresenter() = presenter
+
+    override fun injectComponents() = activityComponent.inject(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
