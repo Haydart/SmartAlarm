@@ -1,6 +1,8 @@
 package pl.rmakowiecki.smartalarm.feature.screens.main.alarmarming
 
 import io.reactivex.Observable
+import pl.rmakowiecki.smartalarm.feature.screens.main.alarmarming.AlarmArmingViewStateChange.AlarmArmed
+import pl.rmakowiecki.smartalarm.feature.screens.main.alarmarming.AlarmArmingViewStateChange.AlarmDisarmed
 import javax.inject.Inject
 
 class AlarmArmingInteractor @Inject constructor(
@@ -14,11 +16,11 @@ class AlarmArmingInteractor @Inject constructor(
                 .scan(AlarmArmingViewState(), reducer::reduce)
 
     fun attachAlarmArmingIntent(intent: Observable<Unit>) = mergeChanges(
-            intent.map { AlarmArmingViewStateChange.AlarmArmed }
+            intent.map { AlarmArmed }
     )
 
     fun attachAlarmDisarmingIntent(intent: Observable<Unit>) = mergeChanges(
-            intent.map { AlarmArmingViewStateChange.AlarmDisarmed }
+            intent.map { AlarmDisarmed }
     )
 
     private fun <T : AlarmArmingViewStateChange> mergeChanges(changes: Observable<T>) {

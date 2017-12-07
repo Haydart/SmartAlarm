@@ -5,9 +5,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.Single
-import pl.rmakowiecki.smartalarm.feature.screens.auth.LoginCredentials
-import pl.rmakowiecki.smartalarm.feature.screens.auth.RegisterCredentials
-import pl.rmakowiecki.smartalarm.feature.screens.auth.RemindPasswordCredentials
+import pl.rmakowiecki.smartalarm.domain.auth.LoginCredentials
+import pl.rmakowiecki.smartalarm.domain.auth.RegisterCredentials
+import pl.rmakowiecki.smartalarm.domain.auth.RemindPasswordCredentials
 import javax.inject.Inject
 import javax.inject.Singleton
 

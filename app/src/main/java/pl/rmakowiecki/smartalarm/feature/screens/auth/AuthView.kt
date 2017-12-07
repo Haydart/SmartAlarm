@@ -2,6 +2,9 @@ package pl.rmakowiecki.smartalarm.feature.screens.auth
 
 import io.reactivex.Observable
 import pl.rmakowiecki.smartalarm.base.Contracts
+import pl.rmakowiecki.smartalarm.domain.auth.LoginCredentials
+import pl.rmakowiecki.smartalarm.domain.auth.RegisterCredentials
+import pl.rmakowiecki.smartalarm.domain.auth.RemindPasswordCredentials
 
 interface AuthView : Contracts.View {
 

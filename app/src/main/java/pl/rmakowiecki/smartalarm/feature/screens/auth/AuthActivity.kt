@@ -11,6 +11,9 @@ import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
 import pl.rmakowiecki.smartalarm.customView.TilingDrawable
 import pl.rmakowiecki.smartalarm.domain.auth.AuthMode.*
+import pl.rmakowiecki.smartalarm.domain.auth.LoginCredentials
+import pl.rmakowiecki.smartalarm.domain.auth.RegisterCredentials
+import pl.rmakowiecki.smartalarm.domain.auth.RemindPasswordCredentials
 import pl.rmakowiecki.smartalarm.extensions.gone
 import pl.rmakowiecki.smartalarm.extensions.invisible
 import pl.rmakowiecki.smartalarm.extensions.setTextIfDifferent

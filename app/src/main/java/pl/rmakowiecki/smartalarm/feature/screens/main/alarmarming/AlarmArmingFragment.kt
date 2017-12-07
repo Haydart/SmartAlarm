@@ -6,10 +6,9 @@ import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_alarm_state.*
 import pl.rmakowiecki.smartalarm.R
-import pl.rmakowiecki.smartalarm.base.Contracts
 import pl.rmakowiecki.smartalarm.base.mvi.MviFragment
 
-class AlarmArmingFragment : MviFragment<AlarmArmingView, Contracts.ViewState, AlarmArmingPresenter>(), AlarmArmingView {
+class AlarmArmingFragment : MviFragment<AlarmArmingView, AlarmArmingViewState, AlarmArmingPresenter>(), AlarmArmingView {
 
     override val layout = R.layout.fragment_alarm_state
 
