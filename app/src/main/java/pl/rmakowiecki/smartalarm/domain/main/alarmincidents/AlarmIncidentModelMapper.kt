@@ -1,8 +1,10 @@
-package pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents
+package pl.rmakowiecki.smartalarm.domain.main.alarmincidents
 
 import android.content.Context
 import android.os.Build
+import pl.rmakowiecki.smartalarm.data.main.alarmincidents.SecurityIncident
 import pl.rmakowiecki.smartalarm.di.qualifier.ActivityContext
+import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.SecurityIncidentItemViewState
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject

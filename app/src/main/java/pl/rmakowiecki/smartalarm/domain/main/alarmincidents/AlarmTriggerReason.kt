@@ -1,4 +1,4 @@
-package pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents
+package pl.rmakowiecki.smartalarm.domain.main.alarmincidents
 
 enum class AlarmTriggerReason {
     BEAM_BREAK_DETECTOR {

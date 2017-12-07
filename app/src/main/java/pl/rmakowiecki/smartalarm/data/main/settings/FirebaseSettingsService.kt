@@ -1,4 +1,4 @@
-package pl.rmakowiecki.smartalarm.data.settings
+package pl.rmakowiecki.smartalarm.data.main.settings
 
 import com.google.firebase.database.FirebaseDatabase
 import io.reactivex.Single

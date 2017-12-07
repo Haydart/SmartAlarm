@@ -2,7 +2,7 @@ package pl.rmakowiecki.smartalarm.ui.screens.incidentdetails
 
 import io.reactivex.Observable
 import pl.rmakowiecki.smartalarm.data.incidentdetails.FirebaseIncidentDetailPhotosService
-import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.DetailsGateway
+import pl.rmakowiecki.smartalarm.data.main.alarmincidents.DetailsGateway
 import javax.inject.Inject
 
 class IncidentDetailsInteractor @Inject constructor(

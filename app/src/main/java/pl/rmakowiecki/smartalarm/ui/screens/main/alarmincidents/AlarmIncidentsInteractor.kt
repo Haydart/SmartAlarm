@@ -1,9 +1,14 @@
 package pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents
 
 import io.reactivex.Observable
+import pl.rmakowiecki.smartalarm.data.main.alarmincidents.DetailsGateway
+import pl.rmakowiecki.smartalarm.data.main.alarmincidents.FirebaseAlarmIncidentsService
+import pl.rmakowiecki.smartalarm.data.main.alarmincidents.IncidentChange
+import pl.rmakowiecki.smartalarm.data.main.alarmincidents.IncidentOperation
+import pl.rmakowiecki.smartalarm.data.main.alarmincidents.IncidentOperation.Removed
+import pl.rmakowiecki.smartalarm.data.main.alarmincidents.IncidentOperation.Updated
+import pl.rmakowiecki.smartalarm.domain.main.alarmincidents.AlarmIncidentModelMapper
 import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.AlarmIncidentsViewStateChange.*
-import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.IncidentOperation.Removed
-import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.IncidentOperation.Updated
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

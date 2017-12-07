@@ -1,4 +1,4 @@
-package pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents
+package pl.rmakowiecki.smartalarm.data.main.alarmincidents
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
