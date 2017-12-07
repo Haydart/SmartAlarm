@@ -15,11 +15,11 @@ class AlarmIncidentsInteractor @Inject constructor(
         private val navigator: AlarmIncidentsNavigator,
         private val modelMapper: AlarmIncidentModelMapper,
         private val detailsLogicGateway: DetailsGateway
-) : AlarmIncidents.Interactor {
+) {
 
     private var viewStateObservable = Observable.empty<AlarmIncidentsViewStateChange>()
 
-    override fun getViewStateObservable(): Observable<AlarmIncidentsViewState> = viewStateObservable
+    fun getViewStateObservable(): Observable<AlarmIncidentsViewState> = viewStateObservable
             .scan(AlarmIncidentsViewState(), reducer::reduce)
 
     init {
@@ -67,7 +67,7 @@ class AlarmIncidentsInteractor @Inject constructor(
         }
     }
 
-    override fun attachArchiveIntent(intentObservable: Observable<Int>) {
+    fun attachArchiveIntent(intentObservable: Observable<Int>) {
         viewStateObservable = viewStateObservable
                 .mergeWith(intentObservable
                         .flatMapSingle(alarmIncidentService::archiveIncident)
@@ -81,7 +81,7 @@ class AlarmIncidentsInteractor @Inject constructor(
                         })
     }
 
-    override fun attachDeletionIntent(intentObservable: Observable<Int>) {
+    fun attachDeletionIntent(intentObservable: Observable<Int>) {
         viewStateObservable = viewStateObservable
                 .mergeWith(intentObservable
                         .flatMapMaybe { listPosition ->
@@ -98,13 +98,13 @@ class AlarmIncidentsInteractor @Inject constructor(
 
     }
 
-    override fun attachSnackBarDismissIntent(intentObservable: Observable<Unit>) {
+    fun attachSnackBarDismissIntent(intentObservable: Observable<Unit>) {
         viewStateObservable = viewStateObservable
                 .mergeWith(intentObservable
                         .map { SnackBarHidden() })
     }
 
-    override fun attachDetailsIntent(intentObservable: Observable<Int>) {
+    fun attachDetailsIntent(intentObservable: Observable<Int>) {
         viewStateObservable = viewStateObservable.mergeWith(intentObservable
                 .doOnNext {
                     detailsLogicGateway.incidentBackendIdSingle = alarmIncidentService.fetchIdForListPosition(it)

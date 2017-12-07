@@ -11,7 +11,7 @@ import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
 import javax.inject.Inject
 
-class HomeActivity : MviActivity<Home.View, HomeViewState, HomePresenter>(), Home.View {
+class HomeActivity : MviActivity<HomeView, HomeViewState, HomePresenter>(), HomeView {
 
     @Inject lateinit var presenter: HomePresenter
 

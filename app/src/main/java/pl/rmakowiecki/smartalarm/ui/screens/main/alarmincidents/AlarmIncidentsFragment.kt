@@ -14,8 +14,8 @@ import pl.rmakowiecki.smartalarm.extensions.gone
 import pl.rmakowiecki.smartalarm.extensions.visible
 import javax.inject.Inject
 
-class AlarmIncidentsFragment : MviFragment<AlarmIncidents.View, AlarmIncidentsViewState, AlarmIncidentsPresenter>(),
-        AlarmIncidents.View {
+class AlarmIncidentsFragment : MviFragment<AlarmIncidentsView, AlarmIncidentsViewState, AlarmIncidentsPresenter>(),
+        AlarmIncidentsView {
 
     @Inject lateinit var presenter: AlarmIncidentsPresenter
 

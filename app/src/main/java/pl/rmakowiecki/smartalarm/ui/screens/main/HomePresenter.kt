@@ -5,11 +5,11 @@ import javax.inject.Inject
 
 class HomePresenter @Inject constructor(
         private val interactor: HomeInteractor
-) : MviPresenter<Home.View, HomeViewState>() {
+) : MviPresenter<HomeView, HomeViewState>() {
 
     override fun bindIntents() = with(interactor) {
-        attachTabSwitchIntent(bindIntent(Home.View::tabSwitchIntent))
+        attachTabSwitchIntent(bindIntent(HomeView::tabSwitchIntent))
 
-        subscribeViewState(getViewStateObservable(), Home.View::render)
+        subscribeViewState(getViewStateObservable(), HomeView::render)
     }
 }

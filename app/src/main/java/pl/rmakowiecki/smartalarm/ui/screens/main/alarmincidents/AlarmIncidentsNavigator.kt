@@ -9,11 +9,11 @@ import javax.inject.Inject
 
 class AlarmIncidentsNavigator @Inject constructor(
         private val activity: Activity
-) : AlarmIncidents.Navigator {
+) {
 
-    override fun showIncidentDetailsScreen() = IncidentDetailsActivity.start(activity)
+    fun showIncidentDetailsScreen() = IncidentDetailsActivity.start(activity)
 
-    override fun showDeleteConfirmationDialog(): Maybe<Boolean> = Maybe.create { emitter ->
+    fun showDeleteConfirmationDialog(): Maybe<Boolean> = Maybe.create { emitter ->
         AlertDialog.Builder(activity)
                 .setMessage(R.string.delete_confirmation_message)
                 .setPositiveButton(R.string.delete, { _, _ -> emitter.onSuccess(true) })

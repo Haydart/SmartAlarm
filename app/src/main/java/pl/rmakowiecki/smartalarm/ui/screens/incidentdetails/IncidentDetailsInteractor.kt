@@ -8,7 +8,7 @@ class IncidentDetailsInteractor @Inject constructor(
         private val photosService: FirebaseIncidentDetailPhotosService,
         private val reducer: IncidentDetailsViewStateReducer,
         private val detailsGateway: DetailsGateway
-) : IncidentDetails.Interactor {
+) {
 
     private var viewStateObservable = Observable.empty<IncidentDetailsViewStateChange>()
 
@@ -25,10 +25,10 @@ class IncidentDetailsInteractor @Inject constructor(
                         .map(IncidentDetailsViewStateChange::PhotoAdded))
     }
 
-    override fun getViewStateObservable(): Observable<IncidentDetailsViewState> = viewStateObservable
+    fun getViewStateObservable(): Observable<IncidentDetailsViewState> = viewStateObservable
             .scan(IncidentDetailsViewState(), reducer::reduce)
 
-    override fun attachPhotoSwipeIntent(intentObservable: Observable<Int>) {
+    fun attachPhotoSwipeIntent(intentObservable: Observable<Int>) {
         viewStateObservable = viewStateObservable
                 .mergeWith(intentObservable
                         .map(IncidentDetailsViewStateChange::CurrentPhotoChanged))

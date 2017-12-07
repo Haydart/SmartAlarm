@@ -16,14 +16,14 @@ class SettingsInteractor @Inject constructor(
         private val settingsService: FirebaseSettingsService,
         private val reducer: SettingsViewStateReducer,
         private val navigator: SettingsNavigator
-) : Settings.Interactor {
+) {
 
     private var viewStateObservable = Observable.empty<SettingsViewStateChange>()
 
-    override fun getViewStateObservable(): Observable<SettingsViewState> = viewStateObservable
+    fun getViewStateObservable(): Observable<SettingsViewState> = viewStateObservable
             .scan(SettingsViewState(), reducer::reduce)
 
-    override fun attachLogoutButtonClickIntent(intentObservable: Observable<Unit>) {
+    fun attachLogoutButtonClickIntent(intentObservable: Observable<Unit>) {
         viewStateObservable = viewStateObservable
                 .mergeWith(intentObservable
                         .flatMapMaybe { navigator.showLogoutConfirmationDialog() }
@@ -33,7 +33,7 @@ class SettingsInteractor @Inject constructor(
                 )
     }
 
-    override fun attachPhotoCountInfoIntent(intentObservable: Observable<Unit>) {
+    fun attachPhotoCountInfoIntent(intentObservable: Observable<Unit>) {
         viewStateObservable = viewStateObservable
                 .mergeWith(intentObservable
                         .doOnNext { navigator.showPhotoCountInfoDialog() }
@@ -41,7 +41,7 @@ class SettingsInteractor @Inject constructor(
                 )
     }
 
-    override fun attachSequenceIntervalInfoIntent(intentObservable: Observable<Unit>) {
+    fun attachSequenceIntervalInfoIntent(intentObservable: Observable<Unit>) {
         viewStateObservable = viewStateObservable
                 .mergeWith(intentObservable
                         .doOnNext { navigator.showSequenceIntervalInfoDialog() }
@@ -49,7 +49,7 @@ class SettingsInteractor @Inject constructor(
                 )
     }
 
-    override fun attachPhotoCountChangeIntent(intentObservable: Observable<Int>) {
+    fun attachPhotoCountChangeIntent(intentObservable: Observable<Int>) {
         viewStateObservable = viewStateObservable
                 .mergeWith(intentObservable
                         .map { PhotoCountValueChange(it + PHOTO_COUNT_OFFSET) }
@@ -62,7 +62,7 @@ class SettingsInteractor @Inject constructor(
                 )
     }
 
-    override fun attachPhotoSequenceIntervalChangeIntent(intentObservable: Observable<Int>) {
+    fun attachPhotoSequenceIntervalChangeIntent(intentObservable: Observable<Int>) {
         viewStateObservable = viewStateObservable
                 .mergeWith(intentObservable
                         .map { SequenceIntervalValueChange(it * SEQUENCE_INTERVAL_MULTIPLIER + SEQUENCE_INTERVAL_OFFSET) }

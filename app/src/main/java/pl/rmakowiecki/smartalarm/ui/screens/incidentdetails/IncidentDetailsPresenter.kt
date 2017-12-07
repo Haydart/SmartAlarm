@@ -5,13 +5,13 @@ import javax.inject.Inject
 
 class IncidentDetailsPresenter @Inject constructor(
         private val interactor: IncidentDetailsInteractor
-) : MviPresenter<IncidentDetails.View, IncidentDetailsViewState>() {
+) : MviPresenter<IncidentDetailsView, IncidentDetailsViewState>() {
 
     override fun bindIntents() = with(interactor) {
         attachPhotoSwipeIntent(
-                bindIntent(IncidentDetails.View::photoSwipeIntent)
+                bindIntent(IncidentDetailsView::photoSwipeIntent)
         )
 
-        subscribeViewState(getViewStateObservable(), IncidentDetails.View::render)
+        subscribeViewState(getViewStateObservable(), IncidentDetailsView::render)
     }
 }

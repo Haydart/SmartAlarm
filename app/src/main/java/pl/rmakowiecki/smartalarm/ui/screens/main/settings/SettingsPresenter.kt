@@ -5,26 +5,26 @@ import javax.inject.Inject
 
 class SettingsPresenter @Inject constructor(
         private val interactor: SettingsInteractor
-) : MviPresenter<Settings.View, SettingsViewState>() {
+) : MviPresenter<SettingsView, SettingsViewState>() {
 
     override fun bindIntents() = with(interactor) {
 
         attachLogoutButtonClickIntent(
-                bindIntent(Settings.View::logoutButtonClickIntent)
+                bindIntent(SettingsView::logoutButtonClickIntent)
         )
         attachPhotoCountInfoIntent(
-                bindIntent(Settings.View::photoCountInfoIntent)
+                bindIntent(SettingsView::photoCountInfoIntent)
         )
         attachSequenceIntervalInfoIntent(
-                bindIntent(Settings.View::sequenceIntervalInfoIntent)
+                bindIntent(SettingsView::sequenceIntervalInfoIntent)
         )
         attachPhotoCountChangeIntent(
-                bindIntent(Settings.View::photoCountChangeIntent)
+                bindIntent(SettingsView::photoCountChangeIntent)
         )
         attachPhotoSequenceIntervalChangeIntent(
-                bindIntent(Settings.View::photoSequenceIntervalChangeIntent)
+                bindIntent(SettingsView::photoSequenceIntervalChangeIntent)
         )
 
-        subscribeViewState(getViewStateObservable(), Settings.View::render)
+        subscribeViewState(getViewStateObservable(), SettingsView::render)
     }
 }

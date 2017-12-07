@@ -5,42 +5,42 @@ import javax.inject.Inject
 
 class AuthPresenter @Inject constructor(
         private val interactor: AuthInteractor
-) : MviPresenter<Auth.View, AuthViewState>() {
+) : MviPresenter<AuthView, AuthViewState>() {
 
     override fun bindIntents() = with(interactor) {
         attachFacebookAuthIntent(
-                bindIntent(Auth.View::facebookAuthIntent))
+                bindIntent(AuthView::facebookAuthIntent))
 
         attachGoogleAuthIntent(
-                bindIntent(Auth.View::googleAuthIntent))
+                bindIntent(AuthView::googleAuthIntent))
 
         attachEmailInputIntent(
-                bindIntent(Auth.View::emailInputIntent))
+                bindIntent(AuthView::emailInputIntent))
 
         attachPasswordInputIntent(
-                bindIntent(Auth.View::passwordInputIntent))
+                bindIntent(AuthView::passwordInputIntent))
 
         attachRepeatPasswordInputIntent(
-                bindIntent(Auth.View::repeatPasswordInputIntent))
+                bindIntent(AuthView::repeatPasswordInputIntent))
 
         attachLoginIntent(
-                bindIntent(Auth.View::loginIntent))
+                bindIntent(AuthView::loginIntent))
 
         attachRegisterIntent(
-                bindIntent(Auth.View::registerIntent))
+                bindIntent(AuthView::registerIntent))
 
         attachResetPasswordIntent(
-                bindIntent(Auth.View::resetPasswordIntent))
+                bindIntent(AuthView::resetPasswordIntent))
 
         attachEmailRegistrationIntent(
-                bindIntent(Auth.View::emailRegistrationIntent))
+                bindIntent(AuthView::emailRegistrationIntent))
 
         attachBackButtonClickIntent(
-                bindIntent(Auth.View::backButtonIntent))
+                bindIntent(AuthView::backButtonIntent))
 
         attachForgotPasswordIntent(
-                bindIntent(Auth.View::forgotPasswordIntent))
+                bindIntent(AuthView::forgotPasswordIntent))
 
-        subscribeViewState(getViewStateObservable(), Auth.View::render)
+        subscribeViewState(getViewStateObservable(), AuthView::render)
     }
 }
