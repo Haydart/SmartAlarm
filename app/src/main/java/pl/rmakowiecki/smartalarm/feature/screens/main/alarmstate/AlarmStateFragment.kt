@@ -2,6 +2,7 @@ package pl.rmakowiecki.smartalarm.feature.screens.main.alarmstate
 
 import android.os.Bundle
 import android.view.View
+import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_alarm_state.*
 import pl.rmakowiecki.smartalarm.R
@@ -12,8 +13,11 @@ class AlarmStateFragment : MviFragment<AlarmStateView, Contracts.ViewState, Alar
 
     override val layout = R.layout.fragment_alarm_state
 
-    override val alarmArmingIntent: Observable<TargetAlarmState>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val alarmArmingIntent: Observable<Unit>
+        get() = armingButton.clicks()
+
+    override val alarmDisarmingIntent: Observable<Unit>
+        get() = disarmingButton.clicks()
 
     override fun injectComponents() = fragmentComponent.inject(this)
 
