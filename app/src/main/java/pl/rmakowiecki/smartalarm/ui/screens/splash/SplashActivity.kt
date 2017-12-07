@@ -7,15 +7,10 @@ import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.Contracts
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
 import pl.rmakowiecki.smartalarm.ui.customView.TilingDrawable
-import javax.inject.Inject
 
 class SplashActivity : MviActivity<Contracts.View, Contracts.ViewState, SplashPresenter>() {
 
-    @Inject lateinit var presenter: SplashPresenter
-
     override val layoutRes = R.layout.activity_splash
-
-    override fun retrievePresenter() = presenter
 
     override fun injectComponents() = activityComponent.inject(this)
 

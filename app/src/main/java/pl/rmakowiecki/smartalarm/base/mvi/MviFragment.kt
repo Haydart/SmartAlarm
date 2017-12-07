@@ -10,8 +10,9 @@ import pl.rmakowiecki.smartalarm.SmartAlarmApp
 import pl.rmakowiecki.smartalarm.base.Contracts
 import pl.rmakowiecki.smartalarm.di.module.ActivityModule
 import pl.rmakowiecki.smartalarm.di.module.FragmentComponent
+import javax.inject.Inject
 
-abstract class MviFragment<V : Contracts.View, VS : Contracts.ViewState, out P : MviPresenter<V, VS>> :
+abstract class MviFragment<V : Contracts.View, VS : Contracts.ViewState, P : MviPresenter<V, VS>> :
         Fragment(), Contracts.View {
 
     lateinit var fragmentComponent: FragmentComponent
@@ -19,6 +20,8 @@ abstract class MviFragment<V : Contracts.View, VS : Contracts.ViewState, out P :
 
     @get:LayoutRes
     protected abstract val layout: Int
+
+    @Inject lateinit var presenter: P
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,15 +39,13 @@ abstract class MviFragment<V : Contracts.View, VS : Contracts.ViewState, out P :
     @Suppress("UNCHECKED_CAST")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        retrievePresenter().attachView(this as V)
+        presenter.attachView(this as V)
     }
 
     override fun onDestroyView() {
-        retrievePresenter().detachView()
+        presenter.detachView()
         super.onDestroyView()
     }
 
     protected abstract fun injectComponents()
-
-    protected abstract fun retrievePresenter(): P
 }

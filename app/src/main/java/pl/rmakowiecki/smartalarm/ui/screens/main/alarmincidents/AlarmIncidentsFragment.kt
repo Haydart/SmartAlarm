@@ -12,12 +12,9 @@ import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviFragment
 import pl.rmakowiecki.smartalarm.extensions.gone
 import pl.rmakowiecki.smartalarm.extensions.visible
-import javax.inject.Inject
 
 class AlarmIncidentsFragment : MviFragment<AlarmIncidentsView, AlarmIncidentsViewState, AlarmIncidentsPresenter>(),
         AlarmIncidentsView {
-
-    @Inject lateinit var presenter: AlarmIncidentsPresenter
 
     override val layout = R.layout.fragment_alarm_incidents
 
@@ -42,8 +39,6 @@ class AlarmIncidentsFragment : MviFragment<AlarmIncidentsView, AlarmIncidentsVie
         get() = incidentsDetailsIntentPublishSubject
 
     override fun injectComponents() = fragmentComponent.inject(this)
-
-    override fun retrievePresenter() = presenter
 
     private val incidentsAdapter = AlarmIncidentsAdapter(
             mutableListOf(),

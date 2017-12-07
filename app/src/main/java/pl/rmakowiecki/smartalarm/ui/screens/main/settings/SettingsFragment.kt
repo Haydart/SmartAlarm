@@ -12,12 +12,9 @@ import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviFragment
 import pl.rmakowiecki.smartalarm.extensions.invisible
 import pl.rmakowiecki.smartalarm.extensions.visible
-import javax.inject.Inject
 
 class SettingsFragment : MviFragment<SettingsView, SettingsViewState, SettingsPresenter>(),
         SettingsView {
-
-    @Inject lateinit var presenter: SettingsPresenter
 
     override val layout = R.layout.fragment_settings
 
@@ -41,8 +38,6 @@ class SettingsFragment : MviFragment<SettingsView, SettingsViewState, SettingsPr
         get() = sequenceIntervalChangePublishSubject
 
     override fun injectComponents() = fragmentComponent.inject(this)
-
-    override fun retrievePresenter() = presenter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

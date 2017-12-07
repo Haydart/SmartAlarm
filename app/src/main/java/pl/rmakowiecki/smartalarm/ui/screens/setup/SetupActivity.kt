@@ -8,11 +8,8 @@ import kotlinx.android.synthetic.main.activity_setup.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
 import pl.rmakowiecki.smartalarm.ui.customView.TilingDrawable
-import javax.inject.Inject
 
 class SetupActivity : MviActivity<SetupView, SetupViewState, SetupPresenter>(), SetupView {
-
-    @Inject lateinit var presenter: SetupPresenter
 
     override val layoutRes = R.layout.activity_setup
 
@@ -24,8 +21,6 @@ class SetupActivity : MviActivity<SetupView, SetupViewState, SetupPresenter>(), 
 
     override val networkCredentialsSubmitIntent: Observable<Unit>
         get() = Observable.empty()
-
-    override fun retrievePresenter() = presenter
 
     override fun injectComponents() = activityComponent.inject(this)
 

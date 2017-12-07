@@ -9,19 +9,14 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_home.*
 import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
-import javax.inject.Inject
 
 class HomeActivity : MviActivity<HomeView, HomeViewState, HomePresenter>(), HomeView {
-
-    @Inject lateinit var presenter: HomePresenter
 
     override val layoutRes = R.layout.activity_home
 
     private val tabSwitchPublishSubject = PublishSubject.create<Int>()
 
     override val tabSwitchIntent: Observable<Int> = tabSwitchPublishSubject
-
-    override fun retrievePresenter() = presenter
 
     override fun injectComponents() = activityComponent.inject(this)
 

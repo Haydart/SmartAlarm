@@ -15,15 +15,12 @@ import pl.rmakowiecki.smartalarm.extensions.startActivity
 import pl.rmakowiecki.smartalarm.ui.customView.DepthPageTransformer
 import pl.rmakowiecki.smartalarm.ui.customView.SingleTapListener
 import pl.rmakowiecki.smartalarm.ui.customView.TouchImageViewAdapter
-import javax.inject.Inject
 
 private const val UI_ANIMATION_DELAY = 150
 private const val UI_ANIMATION_DURATION = 150L
 
 class IncidentDetailsActivity : MviActivity<IncidentDetailsView, IncidentDetailsViewState, IncidentDetailsPresenter>(),
         IncidentDetailsView {
-
-    @Inject lateinit var presenter: IncidentDetailsPresenter
 
     override val layoutRes = R.layout.activity_incident_details
 
@@ -64,8 +61,6 @@ class IncidentDetailsActivity : MviActivity<IncidentDetailsView, IncidentDetails
             object : SingleTapListener {
                 override fun onSingleTapPerformed() = toggle()
             })
-
-    override fun retrievePresenter() = presenter
 
     override fun injectComponents() = activityComponent.inject(this)
 

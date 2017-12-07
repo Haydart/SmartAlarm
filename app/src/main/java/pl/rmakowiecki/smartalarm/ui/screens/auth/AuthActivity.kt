@@ -15,12 +15,9 @@ import pl.rmakowiecki.smartalarm.extensions.invisible
 import pl.rmakowiecki.smartalarm.extensions.setTextIfDifferent
 import pl.rmakowiecki.smartalarm.extensions.visible
 import pl.rmakowiecki.smartalarm.ui.customView.TilingDrawable
-import javax.inject.Inject
 
 class AuthActivity : MviActivity<AuthView, AuthViewState, AuthPresenter>(),
         AuthView {
-
-    @Inject lateinit var presenter: AuthPresenter
 
     override val layoutRes = R.layout.activity_auth
 
@@ -77,8 +74,6 @@ class AuthActivity : MviActivity<AuthView, AuthViewState, AuthPresenter>(),
     private var loginIntentBlocked = false
     private var registerIntentBlocked = true
     private var resetPasswordIntentBlocked = true
-
-    override fun retrievePresenter() = presenter
 
     override fun injectComponents() = activityComponent.inject(this)
 
