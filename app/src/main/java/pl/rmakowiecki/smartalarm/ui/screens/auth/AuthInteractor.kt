@@ -24,7 +24,7 @@ class AuthInteractor @Inject constructor(
     private var needsToRevalidateInput = false
 
     fun getViewStateObservable(): Observable<AuthViewState> = viewStateIntentsObservable
-            .scan(AuthViewState.createInitial(), reducer::reduce)
+            .scan(AuthViewState(), reducer::reduce)
             .flatMap(this::changeCredentialsSubmitButtonStateIfNeeded)
 
     private fun changeCredentialsSubmitButtonStateIfNeeded(authViewState: AuthViewState): Observable<AuthViewState> = Observable.just(authViewState)
