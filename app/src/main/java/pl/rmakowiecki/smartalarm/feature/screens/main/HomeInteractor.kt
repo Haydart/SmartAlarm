@@ -5,13 +5,16 @@ import javax.inject.Inject
 
 class HomeInteractor @Inject constructor() {
 
-    private var viewStateIntentsObservable: Observable<HomeViewState> = Observable.empty()
+    private var viewStateChanges = Observable.empty<HomeViewState>()
 
-    fun getViewStateObservable() = viewStateIntentsObservable
+    val viewStateObservable: Observable<HomeViewState>
+        get() = viewStateChanges
 
-    fun attachTabSwitchIntent(intent: Observable<Int>) {
-        viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
-                intent.map(::HomeViewState)
-        )
+    fun attachTabSwitchIntent(intent: Observable<Int>) = mergeChanges(
+            intent.map(::HomeViewState)
+    )
+
+    private fun mergeChanges(changes: Observable<HomeViewState>) {
+        viewStateChanges = viewStateChanges.mergeWith(changes)
     }
 }

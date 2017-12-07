@@ -107,7 +107,7 @@ class AuthInteractor @Inject constructor(
 
     fun attachLoginIntent(intent: Observable<LoginCredentials>) {
         mergeChanges(intent
-                .map { CredentialsSubmit() }
+                .map { CredentialsSubmit }
         )
         mergeChanges(intent
                 .flatMapSingle(authService::login)
@@ -121,7 +121,7 @@ class AuthInteractor @Inject constructor(
                         .flatMap(this::validateAssignedCoreDeviceUid)
                         .toObservable()
                         .doOnNext(this::navigateToProperScreen)
-                        .map { AuthSuccess() }
+                        .map { AuthSuccess }
             } else Observable.just(
                     AuthFailure(response.error?.localizedMessage ?: "Unknown error"))
 
@@ -136,7 +136,7 @@ class AuthInteractor @Inject constructor(
 
     fun attachRegisterIntent(intent: Observable<RegisterCredentials>) {
         mergeChanges(intent
-                .map { CredentialsSubmit() }
+                .map { CredentialsSubmit }
         )
         mergeChanges(intent
                 .flatMapSingle(authService::register)
@@ -146,7 +146,7 @@ class AuthInteractor @Inject constructor(
 
     fun attachResetPasswordIntent(intent: Observable<RemindPasswordCredentials>) {
         mergeChanges(intent
-                .map { CredentialsSubmit() }
+                .map { CredentialsSubmit }
         )
         mergeChanges(intent
                 .delay(1, TimeUnit.SECONDS)
@@ -157,7 +157,7 @@ class AuthInteractor @Inject constructor(
 
     private fun applyBackendPasswordResetResponse(response: AuthResponse): Observable<out AuthViewStateChange> =
             if (response.isSuccessful) {
-                Observable.just(AuthSuccess())
+                Observable.just(AuthSuccess)
                         .doOnNext { navigator.showResetPasswordCompleteDialog() }
             } else {
                 Observable.just(AuthFailure(""))

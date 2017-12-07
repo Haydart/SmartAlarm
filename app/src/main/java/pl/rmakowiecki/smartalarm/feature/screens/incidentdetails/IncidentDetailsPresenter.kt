@@ -12,6 +12,6 @@ class IncidentDetailsPresenter @Inject constructor(
                 intent(IncidentDetailsView::photoSwipeIntent)
         )
 
-        subscribeViewState(getViewStateObservable(), IncidentDetailsView::render)
+        subscribeViewState(viewStateObservable, IncidentDetailsView::render)
     }
 }

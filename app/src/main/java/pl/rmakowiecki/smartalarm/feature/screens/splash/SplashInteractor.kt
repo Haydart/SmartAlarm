@@ -5,6 +5,7 @@ import io.reactivex.Single
 import pl.rmakowiecki.smartalarm.base.Contracts
 import pl.rmakowiecki.smartalarm.data.auth.FirebaseAuthService
 import pl.rmakowiecki.smartalarm.data.auth.FirebaseSetupService
+import pl.rmakowiecki.smartalarm.domain.splash.UserState
 import pl.rmakowiecki.smartalarm.extensions.applyIoSchedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -49,9 +50,4 @@ class SplashInteractor @Inject constructor(
             navigator.showAuthScreen()
         }
     }
-
-    inner class UserState(
-            val isLoggedIn: Boolean,
-            val isSetUpWithCoreDevice: Boolean
-    )
 }

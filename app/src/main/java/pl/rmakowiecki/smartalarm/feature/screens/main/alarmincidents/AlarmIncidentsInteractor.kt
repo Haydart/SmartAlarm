@@ -22,33 +22,29 @@ class AlarmIncidentsInteractor @Inject constructor(
         private val detailsLogicGateway: DetailsGateway
 ) {
 
-    private var viewStateObservable = Observable.empty<AlarmIncidentsViewStateChange>()
+    private var viewStateChanges = Observable.empty<AlarmIncidentsViewStateChange>()
 
-    fun getViewStateObservable(): Observable<AlarmIncidentsViewState> = viewStateObservable
-            .scan(AlarmIncidentsViewState(), reducer::reduce)
+    val viewStateObservable: Observable<AlarmIncidentsViewState>
+        get() = viewStateChanges
+                .scan(AlarmIncidentsViewState(), reducer::reduce)
 
     init {
         checkIncidentsAvailability()
         observeIncidentsChanges()
     }
 
-    private fun checkIncidentsAvailability() {
-        viewStateObservable = viewStateObservable
-                .mergeWith(alarmIncidentService
-                        .isIncidentsListEmpty()
-                        .toObservable()
-                        .map(AlarmIncidentsViewStateChange::ItemsEmpty)
-                )
-    }
+    private fun checkIncidentsAvailability() = mergeChanges(
+            alarmIncidentService
+                    .isIncidentsListEmpty()
+                    .toObservable()
+                    .map(AlarmIncidentsViewStateChange::ItemsEmpty)
+    )
 
-    private fun observeIncidentsChanges() {
-        viewStateObservable = viewStateObservable
-                .mergeWith(alarmIncidentService
-                        .observeIncidentsChanges()
-                        .map(this::mapToViewStateChange)
-
-                )
-    }
+    private fun observeIncidentsChanges() = mergeChanges(
+            alarmIncidentService
+                    .observeIncidentsChanges()
+                    .map(this::mapToViewStateChange)
+    )
 
     private fun mapToViewStateChange(incidentChange: IncidentChange): AlarmIncidentsViewStateChange = with(incidentChange) {
         when (incidentChange.operation) {
@@ -72,50 +68,48 @@ class AlarmIncidentsInteractor @Inject constructor(
         }
     }
 
-    fun attachArchiveIntent(intent: Observable<Int>) {
-        viewStateObservable = viewStateObservable
-                .mergeWith(intent
-                        .flatMapSingle(alarmIncidentService::archiveIncident)
-                        .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() }) //state change will come from firebase
-                .mergeWith(intent
-                        .map { SnackBarShown("Incident archived") }) //todo get other language resources
-                .mergeWith(intent
-                        .switchMap {
-                            Observable.just(SnackBarHidden())
-                                    .delay(SNACKBAR_HIDE_DELAY, TimeUnit.SECONDS)
-                        })
-    }
+    fun attachArchiveIntent(intentObservable: Observable<Int>) = mergeChanges(
+            intentObservable
+                    .flatMapSingle(alarmIncidentService::archiveIncident)
+                    .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() }, //state change will come from firebase
+            intentObservable
+                    .map { SnackBarShown("Incident archived") }, //todo get other language resources
+            intentObservable
+                    .switchMap {
+                        Observable.just(SnackBarHidden)
+                                .delay(SNACKBAR_HIDE_DELAY, TimeUnit.SECONDS)
+                    }
+    )
 
-    fun attachDeletionIntent(intent: Observable<Int>) {
-        viewStateObservable = viewStateObservable
-                .mergeWith(intent
-                        .flatMapMaybe { listPosition ->
-                            navigator.showDeleteConfirmationDialog()
-                                    .doOnSuccess { alarmIncidentService.deleteIncident(listPosition) }
-                        }.flatMap { Observable.empty<AlarmIncidentsViewStateChange>() })
-                .mergeWith(intent
-                        .map { SnackBarShown("Incident deleted") }) //todo get other language resources
-                .mergeWith(intent
-                        .switchMap {
-                            Observable.just(SnackBarHidden())
-                                    .delay(SNACKBAR_HIDE_DELAY, TimeUnit.SECONDS)
-                        })
+    fun attachDeletionIntent(intentObservable: Observable<Int>) = mergeChanges(
+            intentObservable
+                    .flatMapMaybe { listPosition ->
+                        navigator.showDeleteConfirmationDialog()
+                                .doOnSuccess { alarmIncidentService.deleteIncident(listPosition) }
+                    }
+                    .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() },
+            intentObservable
+                    .map { SnackBarShown("Incident deleted") },
+            intentObservable
+                    .switchMap {
+                        Observable.just(SnackBarHidden)
+                                .delay(SNACKBAR_HIDE_DELAY, TimeUnit.SECONDS)
+                    }
+    )
 
-    }
+    fun attachSnackBarDismissIntent(intentObservable: Observable<Unit>) = mergeChanges(
+            intentObservable.map { SnackBarHidden }
+    )
 
-    fun attachSnackBarDismissIntent(intent: Observable<Unit>) {
-        viewStateObservable = viewStateObservable
-                .mergeWith(intent
-                        .map { SnackBarHidden() })
-    }
+    fun attachDetailsIntent(intentObservable: Observable<Int>) = mergeChanges(
+            intentObservable
+                    .doOnNext {
+                        detailsLogicGateway.incidentBackendIdSingle = alarmIncidentService.fetchIdForListPosition(it)
+                        navigator.showIncidentDetailsScreen()
+                    }
+                    .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() }
+    )
 
-    fun attachDetailsIntent(intent: Observable<Int>) {
-        viewStateObservable = viewStateObservable.mergeWith(intent
-                .doOnNext {
-                    detailsLogicGateway.incidentBackendIdSingle = alarmIncidentService.fetchIdForListPosition(it)
-                    navigator.showIncidentDetailsScreen()
-                }
-                .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() }
-        )
-    }
+    private fun <T : AlarmIncidentsViewStateChange> mergeChanges(vararg changes: Observable<out T>) = changes
+            .forEach { viewStateChanges = viewStateChanges.mergeWith(it) }
 }

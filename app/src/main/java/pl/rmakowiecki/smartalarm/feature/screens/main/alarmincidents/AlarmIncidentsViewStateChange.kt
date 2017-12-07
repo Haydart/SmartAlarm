@@ -9,5 +9,5 @@ sealed class AlarmIncidentsViewStateChange {
     class ItemArchived(val positionInList: Int) : AlarmIncidentsViewStateChange()
     class ItemDeleted(val positionInList: Int) : AlarmIncidentsViewStateChange()
     class SnackBarShown(val message: String) : AlarmIncidentsViewStateChange()
-    class SnackBarHidden : AlarmIncidentsViewStateChange()
+    object SnackBarHidden : AlarmIncidentsViewStateChange()
 }

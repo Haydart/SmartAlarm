@@ -11,27 +11,28 @@ class IncidentDetailsInteractor @Inject constructor(
         private val detailsGateway: DetailsGateway
 ) {
 
-    private var viewStateObservable = Observable.empty<IncidentDetailsViewStateChange>()
+    private var viewStateChanges = Observable.empty<IncidentDetailsViewStateChange>()
+
+    val viewStateObservable: Observable<IncidentDetailsViewState>
+        get() = viewStateChanges
+                .scan(IncidentDetailsViewState(), reducer::reduce)
 
     init {
         observeIncidentPhotos()
     }
 
-    private fun observeIncidentPhotos() {
-        viewStateObservable = viewStateObservable
-                .mergeWith(detailsGateway
-                        .incidentBackendIdSingle
-                        .toObservable()
-                        .flatMap { incidentId -> photosService.observePhotos(incidentId) }
-                        .map(IncidentDetailsViewStateChange::PhotoAdded))
-    }
+    private fun observeIncidentPhotos() = mergeChanges(detailsGateway
+            .incidentBackendIdSingle
+            .toObservable()
+            .flatMap { incidentId -> photosService.observePhotos(incidentId) }
+            .map(IncidentDetailsViewStateChange::PhotoAdded)
+    )
 
-    fun getViewStateObservable(): Observable<IncidentDetailsViewState> = viewStateObservable
-            .scan(IncidentDetailsViewState(), reducer::reduce)
+    fun attachPhotoSwipeIntent(intent: Observable<Int>) = mergeChanges(intent
+            .map(IncidentDetailsViewStateChange::CurrentPhotoChanged)
+    )
 
-    fun attachPhotoSwipeIntent(intent: Observable<Int>) {
-        viewStateObservable = viewStateObservable
-                .mergeWith(intent
-                        .map(IncidentDetailsViewStateChange::CurrentPhotoChanged))
+    private fun <T : IncidentDetailsViewStateChange> mergeChanges(changes: Observable<T>) {
+        viewStateChanges = viewStateChanges.mergeWith(changes)
     }
 }

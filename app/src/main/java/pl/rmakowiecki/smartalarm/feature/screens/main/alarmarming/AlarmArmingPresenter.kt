@@ -10,12 +10,10 @@ class AlarmArmingPresenter @Inject constructor(
     override fun bindIntents() = with(interactor) {
 
         attachAlarmArmingIntent(
-                intent(AlarmArmingView::alarmArmingIntent)
-        )
+                intent(AlarmArmingView::alarmArmingIntent))
 
         attachAlarmDisarmingIntent(
-                intent(AlarmArmingView::alarmDisarmingIntent)
-        )
+                intent(AlarmArmingView::alarmDisarmingIntent))
 
         subscribeViewState(viewStateObservable, AlarmArmingView::render)
     }

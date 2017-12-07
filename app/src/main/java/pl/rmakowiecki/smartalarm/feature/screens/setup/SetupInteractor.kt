@@ -5,25 +5,24 @@ import javax.inject.Inject
 
 class SetupInteractor @Inject constructor() {
 
-    private var viewStateObservable = Observable.empty<SetupViewState>()
+    private var viewStateChanges = Observable.empty<SetupViewState>()
 
-    fun getViewStateObservable(): Observable<SetupViewState> = viewStateObservable
+    val viewStateObservable: Observable<SetupViewState>
+        get() = viewStateChanges
 
-    fun attachSsidInputIntent(intent: Observable<String>) {
-        viewStateObservable = viewStateObservable.mergeWith(
-                intent.map { SetupViewState() }
-        )
-    }
+    fun attachSsidInputIntent(intent: Observable<String>) = mergeChanges(
+            intent.map { SetupViewState() }
+    )
 
-    fun attachNetworkPasswordInputIntent(intent: Observable<String>) {
-        viewStateObservable = viewStateObservable.mergeWith(
-                intent.map { SetupViewState() }
-        )
-    }
+    fun attachNetworkPasswordInputIntent(intent: Observable<String>) = mergeChanges(
+            intent.map { SetupViewState() }
+    )
 
-    fun attachNetworkCredentialsSubmitIntent(intent: Observable<Unit>) {
-        viewStateObservable = viewStateObservable.mergeWith(
-                intent.map { SetupViewState() }
-        )
+    fun attachNetworkCredentialsSubmitIntent(intent: Observable<Unit>) = mergeChanges(
+            intent.map { SetupViewState() }
+    )
+
+    private fun mergeChanges(changes: Observable<SetupViewState>) {
+        viewStateChanges = viewStateChanges.mergeWith(changes)
     }
 }
