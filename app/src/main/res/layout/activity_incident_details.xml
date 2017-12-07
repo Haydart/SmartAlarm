@@ -5,9 +5,9 @@
     android:layout_height="match_parent"
     android:background="@android:color/black"
     android:animateLayoutChanges="true"
-    tools:context="pl.rmakowiecki.smartalarm.ui.screens.incidentdetails.IncidentDetailsActivity">
+    tools:context="pl.rmakowiecki.smartalarm.feature.screens.incidentdetails.IncidentDetailsActivity">
 
-    <pl.rmakowiecki.smartalarm.ui.customView.ExtendedViewPager
+    <pl.rmakowiecki.smartalarm.customView.ExtendedViewPager
         android:id="@+id/contentViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.screens.splash.SplashActivity"
+            android:name=".feature.screens.splash.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -24,13 +24,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.screens.auth.AuthActivity"
+            android:name=".feature.screens.auth.AuthActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.screens.setup.SetupActivity"
+            android:name=".feature.screens.setup.SetupActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.screens.main.HomeActivity"
+            android:name=".feature.screens.main.HomeActivity"
             android:screenOrientation="portrait"/>
 
         <meta-data
@@ -54,14 +54,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.screens.incidentdetails.IncidentDetailsActivity"
+            android:name=".feature.screens.incidentdetails.IncidentDetailsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_incident_details"
-            android:parentActivityName=".ui.screens.main.HomeActivity"
+            android:parentActivityName=".feature.screens.main.HomeActivity"
             android:theme="@style/FullscreenGalleryTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="pl.rmakowiecki.smartalarm.ui.screens.main.HomeActivity"/>
+                android:value="pl.rmakowiecki.smartalarm.feature.screens.main.HomeActivity"/>
         </activity>
     </application>
 

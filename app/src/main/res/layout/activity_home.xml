@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:animateLayoutChanges="true"
-    tools:context="pl.rmakowiecki.smartalarm.ui.screens.main.HomeActivity">
+    tools:context="pl.rmakowiecki.smartalarm.feature.screens.main.HomeActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -35,7 +35,7 @@
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <pl.rmakowiecki.smartalarm.ui.screens.main.BottomBarViewPager
+    <pl.rmakowiecki.smartalarm.feature.screens.main.BottomBarViewPager
         android:id="@+id/fragmentViewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"

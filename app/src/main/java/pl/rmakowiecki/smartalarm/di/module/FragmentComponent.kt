@@ -2,9 +2,9 @@ package pl.rmakowiecki.smartalarm.di.module
 
 import dagger.Subcomponent
 import pl.rmakowiecki.smartalarm.di.FragmentScope
-import pl.rmakowiecki.smartalarm.ui.screens.main.alarmincidents.AlarmIncidentsFragment
-import pl.rmakowiecki.smartalarm.ui.screens.main.alarmstate.AlarmStateFragment
-import pl.rmakowiecki.smartalarm.ui.screens.main.settings.SettingsFragment
+import pl.rmakowiecki.smartalarm.feature.screens.main.alarmincidents.AlarmIncidentsFragment
+import pl.rmakowiecki.smartalarm.feature.screens.main.alarmstate.AlarmStateFragment
+import pl.rmakowiecki.smartalarm.feature.screens.main.settings.SettingsFragment
 
 @FragmentScope
 @Subcomponent(modules = arrayOf(ActivityModule::class))
