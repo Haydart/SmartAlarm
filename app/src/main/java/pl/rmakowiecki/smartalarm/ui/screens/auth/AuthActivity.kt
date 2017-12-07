@@ -17,8 +17,8 @@ import pl.rmakowiecki.smartalarm.ui.customView.TilingDrawable
 import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthPerspective.*
 import javax.inject.Inject
 
-class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
-        Auth.View {
+class AuthActivity : MviActivity<AuthView, AuthViewState, AuthPresenter>(),
+        AuthView {
 
     @Inject lateinit var presenter: AuthPresenter
 
@@ -74,13 +74,13 @@ class AuthActivity : MviActivity<Auth.View, AuthViewState, AuthPresenter>(),
     override val forgotPasswordIntent: Observable<Unit>
         get() = forgotPasswordText.clicks()
 
-    override fun retrievePresenter() = presenter
-
-    override fun injectComponents() = activityComponent.inject(this)
-
     private var loginIntentBlocked = false
     private var registerIntentBlocked = true
     private var resetPasswordIntentBlocked = true
+
+    override fun retrievePresenter() = presenter
+
+    override fun injectComponents() = activityComponent.inject(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

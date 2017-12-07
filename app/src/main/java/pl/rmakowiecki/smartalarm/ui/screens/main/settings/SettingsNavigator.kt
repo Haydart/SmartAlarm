@@ -12,21 +12,21 @@ import javax.inject.Inject
 
 class SettingsNavigator @Inject constructor(
         private val activity: Activity
-) : Settings.Navigator {
+) {
 
-    override fun showPhotoCountInfoDialog() = AlertDialog.Builder(activity)
+    fun showPhotoCountInfoDialog() = AlertDialog.Builder(activity)
             .setMessage(R.string.photo_count_description)
             .setPositiveButton(android.R.string.ok, null)
             .create()
             .show()
 
-    override fun showSequenceIntervalInfoDialog() = AlertDialog.Builder(activity)
+    fun showSequenceIntervalInfoDialog() = AlertDialog.Builder(activity)
             .setMessage(R.string.sequence_interval_description)
             .setPositiveButton(android.R.string.ok, null)
             .create()
             .show()
 
-    override fun showLogoutConfirmationDialog(): Maybe<Boolean> = Maybe.create { emitter ->
+    fun showLogoutConfirmationDialog(): Maybe<Boolean> = Maybe.create { emitter ->
         AlertDialog.Builder(activity)
                 .setMessage(R.string.logout_confirmation_message)
                 .setPositiveButton(R.string.logout, { _, _ -> emitter.onSuccess(true) })
@@ -35,7 +35,7 @@ class SettingsNavigator @Inject constructor(
                 .show()
     }
 
-    override fun showSplashScreen() = activity.startActivity<SplashActivity>(
+    fun showSplashScreen() = activity.startActivity<SplashActivity>(
             Extra.IntentFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
     )
 }

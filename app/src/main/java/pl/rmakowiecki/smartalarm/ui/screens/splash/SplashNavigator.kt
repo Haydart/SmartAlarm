@@ -17,9 +17,9 @@ import javax.inject.Inject
 
 class SplashNavigator @Inject constructor(
         private val activity: Activity
-) : Splash.Navigator {
+) {
 
-    override fun showAuthScreen() = with(activity as SplashActivity) {
+    fun showAuthScreen() = with(activity as SplashActivity) {
         startActivity<AuthActivity>(
                 Extra.SharedView(splashLogo),
                 Extra.SharedView(contentView)
@@ -28,7 +28,7 @@ class SplashNavigator @Inject constructor(
         window.exitTransition = Explode()
     }
 
-    override fun showSetupScreen() = with(activity) {
+    fun showSetupScreen() = with(activity) {
         activity.startActivity<SetupActivity>(
                 Extra.SharedView(splashLogo),
                 Extra.SharedView(contentView)
@@ -37,13 +37,13 @@ class SplashNavigator @Inject constructor(
         window.exitTransition = Explode()
     }
 
-    override fun showHomeScreen() = with(activity as SplashActivity) {
+    fun showHomeScreen() = with(activity as SplashActivity) {
         startActivity<HomeActivity>()
         overridePendingTransition(0, 0)
         window.exitTransition = Explode()
     }
 
-    override fun startLogoTransition() {
+    fun startLogoTransition() {
         val transitionSet = TransitionInflater
                 .from(activity)
                 .inflateTransition(R.transition.splash_logo) as TransitionSet

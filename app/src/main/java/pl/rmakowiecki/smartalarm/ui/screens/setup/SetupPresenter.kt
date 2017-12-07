@@ -5,14 +5,14 @@ import javax.inject.Inject
 
 class SetupPresenter @Inject constructor(
         private val interactor: SetupInteractor
-) : MviPresenter<Setup.View, SetupViewState>() {
+) : MviPresenter<SetupView, SetupViewState>() {
 
     override fun bindIntents() = with(interactor) {
 
-        attachSsidInputIntent(bindIntent(Setup.View::ssidInputIntent))
-        attachNetworkPasswordInputIntent(bindIntent(Setup.View::networkPasswordInputIntent))
-        attachNetworkCredentialsSubmitIntent(bindIntent(Setup.View::networkCredentialsSubmitIntent))
+        attachSsidInputIntent(bindIntent(SetupView::ssidInputIntent))
+        attachNetworkPasswordInputIntent(bindIntent(SetupView::networkPasswordInputIntent))
+        attachNetworkCredentialsSubmitIntent(bindIntent(SetupView::networkCredentialsSubmitIntent))
 
-        subscribeViewState(getViewStateObservable(), Setup.View::render)
+        subscribeViewState(getViewStateObservable(), SetupView::render)
     }
 }

@@ -20,8 +20,8 @@ import javax.inject.Inject
 private const val UI_ANIMATION_DELAY = 150
 private const val UI_ANIMATION_DURATION = 150L
 
-class IncidentDetailsActivity : MviActivity<IncidentDetails.View, IncidentDetailsViewState, IncidentDetailsPresenter>(),
-        IncidentDetails.View {
+class IncidentDetailsActivity : MviActivity<IncidentDetailsView, IncidentDetailsViewState, IncidentDetailsPresenter>(),
+        IncidentDetailsView {
 
     @Inject lateinit var presenter: IncidentDetailsPresenter
 
@@ -58,7 +58,7 @@ class IncidentDetailsActivity : MviActivity<IncidentDetails.View, IncidentDetail
                 .start()
     }
 
-    val galleryAdapter = TouchImageViewAdapter(
+    private val galleryAdapter = TouchImageViewAdapter(
             this,
             emptyList(),
             object : SingleTapListener {

@@ -16,9 +16,9 @@ class SplashInteractor @Inject constructor(
         private val authService: FirebaseAuthService,
         private val setupService: FirebaseSetupService,
         private val navigator: SplashNavigator
-) : Splash.Interactor {
+) {
 
-    override var stubIntentObservable: Observable<Contracts.ViewState> = Observable.empty<Contracts.ViewState>()
+    var stubIntentObservable: Observable<Contracts.ViewState> = Observable.empty<Contracts.ViewState>()
             .mergeWith(Observable
                     .timer(TRANSITION_DELAY, TimeUnit.SECONDS)
                     .applyIoSchedulers()

@@ -10,7 +10,7 @@ import pl.rmakowiecki.smartalarm.base.mvi.MviActivity
 import pl.rmakowiecki.smartalarm.ui.customView.TilingDrawable
 import javax.inject.Inject
 
-class SetupActivity : MviActivity<Setup.View, SetupViewState, SetupPresenter>(), Setup.View {
+class SetupActivity : MviActivity<SetupView, SetupViewState, SetupPresenter>(), SetupView {
 
     @Inject lateinit var presenter: SetupPresenter
 

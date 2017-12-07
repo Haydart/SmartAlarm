@@ -5,7 +5,7 @@ import pl.rmakowiecki.smartalarm.base.Contracts
 import pl.rmakowiecki.smartalarm.base.mvi.MviFragment
 import javax.inject.Inject
 
-class AlarmStateFragment : MviFragment<AlarmState.View, Contracts.ViewState, AlarmStatePresenter>() {
+class AlarmStateFragment : MviFragment<AlarmStateView, Contracts.ViewState, AlarmStatePresenter>() {
 
     @Inject lateinit var presenter: AlarmStatePresenter
 

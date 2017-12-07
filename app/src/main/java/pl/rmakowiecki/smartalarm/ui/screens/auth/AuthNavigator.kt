@@ -10,13 +10,19 @@ import javax.inject.Inject
 
 class AuthNavigator @Inject constructor(
         private val activity: Activity
-) : Auth.Navigator {
+) {
 
-    override fun showHomeScreen() = activity.startActivity<HomeActivity>()
+    fun showHomeScreen() {
+        activity.startActivity<HomeActivity>()
+        activity.finish()
+    }
 
-    override fun showSetupScreen() = activity.startActivity<SetupActivity>()
+    fun showSetupScreen() {
+        activity.startActivity<SetupActivity>()
+        activity.finish()
+    }
 
-    override fun showResetPasswordCompleteDialog() {
+    fun showResetPasswordCompleteDialog() {
         AlertDialog.Builder(activity)
                 .setMessage(R.string.reset_password_complete)
                 .setPositiveButton(android.R.string.ok, null)
@@ -24,7 +30,7 @@ class AuthNavigator @Inject constructor(
                 .show()
     }
 
-    override fun showFailureDialog(localizedMessage: String) {
+    fun showFailureDialog(localizedMessage: String) {
         AlertDialog.Builder(activity)
                 .setMessage(localizedMessage)
                 .setPositiveButton(android.R.string.ok, null)

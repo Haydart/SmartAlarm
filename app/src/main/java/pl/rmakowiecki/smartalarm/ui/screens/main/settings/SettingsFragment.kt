@@ -14,8 +14,8 @@ import pl.rmakowiecki.smartalarm.extensions.invisible
 import pl.rmakowiecki.smartalarm.extensions.visible
 import javax.inject.Inject
 
-class SettingsFragment : MviFragment<Settings.View, SettingsViewState, SettingsPresenter>(),
-        Settings.View {
+class SettingsFragment : MviFragment<SettingsView, SettingsViewState, SettingsPresenter>(),
+        SettingsView {
 
     @Inject lateinit var presenter: SettingsPresenter
 

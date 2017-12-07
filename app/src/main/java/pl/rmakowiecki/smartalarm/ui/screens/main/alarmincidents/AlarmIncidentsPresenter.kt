@@ -5,23 +5,23 @@ import javax.inject.Inject
 
 class AlarmIncidentsPresenter @Inject constructor(
         private val interactor: AlarmIncidentsInteractor
-) : MviPresenter<AlarmIncidents.View, AlarmIncidentsViewState>() {
+) : MviPresenter<AlarmIncidentsView, AlarmIncidentsViewState>() {
 
     override fun bindIntents() = with(interactor) {
 
         attachArchiveIntent(
-                bindIntent(AlarmIncidents.View::incidentArchivingIntent)
+                bindIntent(AlarmIncidentsView::incidentArchivingIntent)
         )
         attachDeletionIntent(
-                bindIntent(AlarmIncidents.View::incidentDeletionIntent)
+                bindIntent(AlarmIncidentsView::incidentDeletionIntent)
         )
         attachDetailsIntent(
-                bindIntent(AlarmIncidents.View::incidentDetailsIntent)
+                bindIntent(AlarmIncidentsView::incidentDetailsIntent)
         )
         attachSnackBarDismissIntent(
-                bindIntent(AlarmIncidents.View::snackBarDismissIntent)
+                bindIntent(AlarmIncidentsView::snackBarDismissIntent)
         )
 
-        subscribeViewState(getViewStateObservable(), AlarmIncidents.View::render)
+        subscribeViewState(getViewStateObservable(), AlarmIncidentsView::render)
     }
 }
