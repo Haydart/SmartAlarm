@@ -1,4 +1,4 @@
-package pl.rmakowiecki.smartalarm.feature.screens.main.alarmstate
+package pl.rmakowiecki.smartalarm.feature.screens.main.alarmarming
 
 import android.os.Bundle
 import android.view.View
@@ -9,7 +9,7 @@ import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.Contracts
 import pl.rmakowiecki.smartalarm.base.mvi.MviFragment
 
-class AlarmStateFragment : MviFragment<AlarmStateView, Contracts.ViewState, AlarmStatePresenter>(), AlarmStateView {
+class AlarmArmingFragment : MviFragment<AlarmStateView, Contracts.ViewState, AlarmArmingPresenter>(), AlarmStateView {
 
     override val layout = R.layout.fragment_alarm_state
 
@@ -32,6 +32,6 @@ class AlarmStateFragment : MviFragment<AlarmStateView, Contracts.ViewState, Alar
     }
 
     companion object {
-        fun newInstance() = AlarmStateFragment()
+        fun newInstance() = AlarmArmingFragment()
     }
 }
