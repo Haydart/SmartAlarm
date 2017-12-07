@@ -15,15 +15,15 @@ class AlarmArmingInteractor @Inject constructor(
         get() = viewStateChanges
                 .scan(AlarmArmingViewState(), reducer::reduce)
 
-    fun attachAlarmArmingIntent(intent: Observable<Unit>) = mergeChanges(
-            intent.map { AlarmArmed }
+    fun attachAlarmArmingIntent(intentObservable: Observable<Unit>) = mergeChanges(
+            intentObservable.map { AlarmArmed }
     )
 
-    fun attachAlarmDisarmingIntent(intent: Observable<Unit>) = mergeChanges(
-            intent.map { AlarmDisarmed }
+    fun attachAlarmDisarmingIntent(intentObservable: Observable<Unit>) = mergeChanges(
+            intentObservable.map { AlarmDisarmed }
     )
 
-    private fun <T : AlarmArmingViewStateChange> mergeChanges(changes: Observable<T>) {
-        viewStateChanges = viewStateChanges.mergeWith(changes)
+    private fun <T : AlarmArmingViewStateChange> mergeChanges(vararg changes: Observable<out T>) = changes.forEach {
+        viewStateChanges = viewStateChanges.mergeWith(it)
     }
 }

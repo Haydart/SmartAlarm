@@ -10,11 +10,11 @@ class HomeInteractor @Inject constructor() {
     val viewStateObservable: Observable<HomeViewState>
         get() = viewStateChanges
 
-    fun attachTabSwitchIntent(intent: Observable<Int>) = mergeChanges(
-            intent.map(::HomeViewState)
+    fun attachTabSwitchIntent(intentObservable: Observable<Int>) = mergeChanges(
+            intentObservable.map(::HomeViewState)
     )
 
-    private fun mergeChanges(changes: Observable<HomeViewState>) {
-        viewStateChanges = viewStateChanges.mergeWith(changes)
+    private fun mergeChanges(vararg changes: Observable<out HomeViewState>) = changes.forEach {
+        viewStateChanges = viewStateChanges.mergeWith(it)
     }
 }

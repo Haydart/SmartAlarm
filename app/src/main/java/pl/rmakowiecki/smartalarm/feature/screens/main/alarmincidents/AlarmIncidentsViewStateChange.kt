@@ -1,5 +1,7 @@
 package pl.rmakowiecki.smartalarm.feature.screens.main.alarmincidents
 
+import pl.rmakowiecki.smartalarm.domain.main.alarmincidents.SecurityIncidentItemViewState
+
 sealed class AlarmIncidentsViewStateChange {
 
     class ItemsEmpty(val isEmpty: Boolean) : AlarmIncidentsViewStateChange()

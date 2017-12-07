@@ -1,6 +1,7 @@
 package pl.rmakowiecki.smartalarm.feature.screens.main.alarmincidents
 
 import pl.rmakowiecki.smartalarm.base.Contracts
+import pl.rmakowiecki.smartalarm.domain.main.alarmincidents.SecurityIncidentItemViewState
 
 data class AlarmIncidentsViewState(
         val isLoading: Boolean = true,

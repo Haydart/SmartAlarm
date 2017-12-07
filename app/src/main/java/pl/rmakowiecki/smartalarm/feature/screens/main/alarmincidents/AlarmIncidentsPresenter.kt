@@ -20,6 +20,6 @@ class AlarmIncidentsPresenter @Inject constructor(
         attachSnackBarDismissIntent(
                 intent(AlarmIncidentsView::snackBarDismissIntent))
 
-        subscribeViewState(getViewStateObservable(), AlarmIncidentsView::render)
+        subscribeViewState(viewStateObservable, AlarmIncidentsView::render)
     }
 }

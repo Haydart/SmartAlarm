@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import pl.rmakowiecki.smartalarm.R
+import pl.rmakowiecki.smartalarm.domain.main.alarmincidents.SecurityIncidentItemViewState
 import pl.rmakowiecki.smartalarm.extensions.gone
 import pl.rmakowiecki.smartalarm.extensions.loadImage
 import pl.rmakowiecki.smartalarm.extensions.visible

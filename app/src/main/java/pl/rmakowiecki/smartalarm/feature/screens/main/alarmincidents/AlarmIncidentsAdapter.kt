@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import pl.rmakowiecki.smartalarm.R
+import pl.rmakowiecki.smartalarm.domain.main.alarmincidents.SecurityIncidentItemViewState
 
 class AlarmIncidentsAdapter(
         var items: List<SecurityIncidentItemViewState>,

@@ -21,18 +21,19 @@ class IncidentDetailsInteractor @Inject constructor(
         observeIncidentPhotos()
     }
 
-    private fun observeIncidentPhotos() = mergeChanges(detailsGateway
-            .incidentBackendIdSingle
-            .toObservable()
-            .flatMap { incidentId -> photosService.observePhotos(incidentId) }
-            .map(IncidentDetailsViewStateChange::PhotoAdded)
+    private fun observeIncidentPhotos() = mergeChanges(
+            detailsGateway
+                    .incidentBackendIdSingle
+                    .toObservable()
+                    .flatMap { incidentId -> photosService.observePhotos(incidentId) }
+                    .map(IncidentDetailsViewStateChange::PhotoAdded)
     )
 
-    fun attachPhotoSwipeIntent(intent: Observable<Int>) = mergeChanges(intent
-            .map(IncidentDetailsViewStateChange::CurrentPhotoChanged)
+    fun attachPhotoSwipeIntent(intentObservable: Observable<Int>) = mergeChanges(
+            intentObservable.map(IncidentDetailsViewStateChange::CurrentPhotoChanged)
     )
 
-    private fun <T : IncidentDetailsViewStateChange> mergeChanges(changes: Observable<T>) {
-        viewStateChanges = viewStateChanges.mergeWith(changes)
+    private fun <T : IncidentDetailsViewStateChange> mergeChanges(vararg changes: Observable<out T>) = changes.forEach {
+        viewStateChanges = viewStateChanges.mergeWith(it)
     }
 }
