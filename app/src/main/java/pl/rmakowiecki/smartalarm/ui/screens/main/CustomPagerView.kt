@@ -1,5 +1,6 @@
 package pl.rmakowiecki.smartalarm.ui.screens.main
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v4.view.ViewPager
 import android.util.AttributeSet
@@ -13,9 +14,9 @@ class BottomBarViewPager @JvmOverloads constructor(
 
     private val isPagingEnabled: Boolean = false
 
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        return this.isPagingEnabled && super.onTouchEvent(event)
-    }
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent) =
+            this.isPagingEnabled && super.onTouchEvent(event)
 
     //for samsung phones to prevent tab switching keys to show on keyboard
     override fun executeKeyEvent(event: KeyEvent): Boolean =

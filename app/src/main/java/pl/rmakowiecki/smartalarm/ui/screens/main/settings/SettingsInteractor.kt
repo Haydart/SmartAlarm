@@ -2,6 +2,7 @@ package pl.rmakowiecki.smartalarm.ui.screens.main.settings
 
 import io.reactivex.Observable
 import pl.rmakowiecki.smartalarm.data.auth.FirebaseAuthService
+import pl.rmakowiecki.smartalarm.data.settings.FirebaseSettingsService
 import pl.rmakowiecki.smartalarm.ui.screens.main.settings.SettingsViewStateChange.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
