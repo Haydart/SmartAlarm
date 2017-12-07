@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:visibility="invisible">
 
         <ImageView
             android:id="@+id/alarmStateImage"
@@ -32,7 +33,7 @@
     </LinearLayout>
 
     <pl.rmakowiecki.smartalarm.customView.ActionButton
-        android:id="@+id/alarmArmingButton"
+        android:id="@+id/armingButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/action_button_height"
         android:layout_margin="@dimen/margin_large"
@@ -42,7 +43,22 @@
         app:success_icon="@drawable/icon_success_pill_button"
         app:text="@string/arm_the_alarm"
         android:layout_gravity="bottom"
-        app:text_color="@android:color/white"/>
+        app:text_color="@android:color/white"
+        android:visibility="invisible"/>
+
+    <pl.rmakowiecki.smartalarm.customView.ActionButton
+        android:id="@+id/disarmingButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/action_button_height"
+        android:layout_margin="@dimen/margin_large"
+        app:default_color="@color/accent"
+        app:failure_color="@color/failureRed"
+        app:failure_icon="@drawable/icon_failure_pill_button"
+        app:success_icon="@drawable/icon_success_pill_button"
+        app:text="@string/arm_the_alarm"
+        android:layout_gravity="bottom"
+        app:text_color="@android:color/white"
+        android:visibility="invisible"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
