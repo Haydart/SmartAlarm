@@ -5,7 +5,7 @@
     android:id="@+id/incidentsFragmentRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.screens.splash.SplashActivity">
+    tools:context=".feature.screens.splash.SplashActivity">
 
     <LinearLayout
         android:id="@+id/contentLayout"

@@ -109,7 +109,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <pl.rmakowiecki.smartalarm.ui.customView.ActionButton
+    <pl.rmakowiecki.smartalarm.customView.ActionButton
         android:id="@+id/logoutButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/action_button_height"
