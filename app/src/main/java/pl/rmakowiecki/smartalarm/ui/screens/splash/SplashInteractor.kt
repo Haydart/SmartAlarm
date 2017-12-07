@@ -3,9 +3,9 @@ package pl.rmakowiecki.smartalarm.ui.screens.splash
 import io.reactivex.Observable
 import io.reactivex.Single
 import pl.rmakowiecki.smartalarm.base.Contracts
+import pl.rmakowiecki.smartalarm.data.auth.FirebaseAuthService
+import pl.rmakowiecki.smartalarm.data.auth.FirebaseSetupService
 import pl.rmakowiecki.smartalarm.extensions.applyIoSchedulers
-import pl.rmakowiecki.smartalarm.ui.screens.auth.FirebaseAuthService
-import pl.rmakowiecki.smartalarm.ui.screens.auth.FirebaseSetupService
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

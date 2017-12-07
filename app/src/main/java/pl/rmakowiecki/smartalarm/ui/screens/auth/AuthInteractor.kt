@@ -2,7 +2,11 @@ package pl.rmakowiecki.smartalarm.ui.screens.auth
 
 import io.reactivex.Observable
 import io.reactivex.Single
-import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthPerspective.*
+import pl.rmakowiecki.smartalarm.data.auth.AuthResponse
+import pl.rmakowiecki.smartalarm.data.auth.FirebaseAuthService
+import pl.rmakowiecki.smartalarm.data.auth.FirebaseSetupService
+import pl.rmakowiecki.smartalarm.domain.auth.AuthMode.*
+import pl.rmakowiecki.smartalarm.domain.auth.CredentialsValidator
 import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthViewStateChange.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

@@ -1,5 +1,6 @@
 package pl.rmakowiecki.smartalarm.ui.screens.auth
 
+import pl.rmakowiecki.smartalarm.domain.auth.AuthMode
 import pl.rmakowiecki.smartalarm.ui.screens.auth.AuthViewStateChange.*
 import javax.inject.Inject
 
@@ -10,7 +11,7 @@ class AuthStateReducer @Inject constructor() {
             currentState.copy(emailInputText = change.email, emailInputError = null)
         }
         is EmailValidation -> {
-            if (currentState.screenPerspective != AuthPerspective.LOGIN)
+            if (currentState.screenPerspective != AuthMode.LOGIN)
                 currentState.copy(emailInputError = change.emailError)
             else currentState
         }
@@ -18,7 +19,7 @@ class AuthStateReducer @Inject constructor() {
             currentState.copy(passwordInputText = change.password, passwordInputError = null)
         }
         is PasswordValidation -> {
-            if (currentState.screenPerspective != AuthPerspective.LOGIN)
+            if (currentState.screenPerspective != AuthMode.LOGIN)
                 currentState.copy(passwordInputError = change.passwordError)
             else currentState
         }
@@ -39,16 +40,16 @@ class AuthStateReducer @Inject constructor() {
                         emailInputError = null, passwordInputError = null, repeatPasswordInputError = null)
             else currentState
         }
-        is AuthViewStateChange.CredentialsButtonChange -> {
+        is CredentialsButtonChange -> {
             currentState.copy(credentialsSubmitButtonEnabled = change.credentialsSubmitButtonEnabled)
         }
-        is AuthViewStateChange.AuthSuccess -> {
+        is AuthSuccess -> {
             currentState.copy(isLoading = false, isShowingSuccess = true)
         }
-        is AuthViewStateChange.AuthFailure -> {
+        is AuthFailure -> {
             currentState.copy(isLoading = false, generalError = change.errorMessage)
         }
-        is AuthViewStateChange.Neutral -> {
+        is Neutral -> {
             currentState.copy(isLoading = false, isShowingSuccess = false, generalError = null)
         }
     }
