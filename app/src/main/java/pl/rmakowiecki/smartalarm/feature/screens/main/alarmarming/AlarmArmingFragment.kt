@@ -9,7 +9,7 @@ import pl.rmakowiecki.smartalarm.R
 import pl.rmakowiecki.smartalarm.base.Contracts
 import pl.rmakowiecki.smartalarm.base.mvi.MviFragment
 
-class AlarmArmingFragment : MviFragment<AlarmStateView, Contracts.ViewState, AlarmArmingPresenter>(), AlarmStateView {
+class AlarmArmingFragment : MviFragment<AlarmArmingView, Contracts.ViewState, AlarmArmingPresenter>(), AlarmArmingView {
 
     override val layout = R.layout.fragment_alarm_state
 
@@ -27,7 +27,7 @@ class AlarmArmingFragment : MviFragment<AlarmStateView, Contracts.ViewState, Ala
         disarmingButton.isEnabled = true
     }
 
-    override fun render(viewState: AlarmStateViewState) {
+    override fun render(viewState: AlarmArmingViewState) {
         //todo implement
     }
 

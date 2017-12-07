@@ -1,12 +1,22 @@
 package pl.rmakowiecki.smartalarm.feature.screens.main.alarmarming
 
-import pl.rmakowiecki.smartalarm.base.Contracts
 import pl.rmakowiecki.smartalarm.base.mvi.MviPresenter
 import javax.inject.Inject
 
 class AlarmArmingPresenter @Inject constructor(
         private val interactor: AlarmArmingInteractor
-) : MviPresenter<AlarmStateView, Contracts.ViewState>() {
+) : MviPresenter<AlarmArmingView, AlarmArmingViewState>() {
 
-    override fun bindIntents() = Unit
+    override fun bindIntents() = with(interactor) {
+
+        attachAlarmArmingIntent(
+                intent(AlarmArmingView::alarmArmingIntent)
+        )
+
+        attachAlarmDisarmingIntent(
+                intent(AlarmArmingView::alarmDisarmingIntent)
+        )
+
+        subscribeViewState(viewStateObservable, AlarmArmingView::render)
+    }
 }

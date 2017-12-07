@@ -2,7 +2,7 @@ package pl.rmakowiecki.smartalarm.feature.screens.main.alarmarming
 
 import pl.rmakowiecki.smartalarm.base.Contracts
 
-data class AlarmStateViewState(
+data class AlarmArmingViewState(
         val isInitializing: Boolean = true,
         val isStateChangeLoading: Boolean = true,
         val isAlarmArmed: Boolean = false,
