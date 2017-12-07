@@ -57,7 +57,6 @@ abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState> : Cont
     }
 
     protected fun unbindIntents() {
-        //todo actually UNBIND them
         viewStateDisposable.dispose()
         strayDisposables.clear()
     }

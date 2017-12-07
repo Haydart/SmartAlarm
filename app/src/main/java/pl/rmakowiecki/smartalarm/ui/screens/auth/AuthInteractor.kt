@@ -44,20 +44,20 @@ class AuthInteractor @Inject constructor(
         }
     }
 
-    fun attachFacebookAuthIntent(intentObservable: Observable<Unit>) {
+    fun attachFacebookAuthIntent(intent: Observable<Unit>) {
         //todo implement
     }
 
-    fun attachGoogleAuthIntent(intentObservable: Observable<Unit>) {
+    fun attachGoogleAuthIntent(intent: Observable<Unit>) {
         //todo implement
     }
 
-    fun attachEmailInputIntent(intentObservable: Observable<String>) {
+    fun attachEmailInputIntent(intent: Observable<String>) {
         viewStateIntentsObservable = viewStateIntentsObservable
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .map(AuthViewStateChange::EmailInput)
                         .doOnEach { needsToRevalidateInput = true })
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .switchMapSingle(validator::validateEmail)
                         .map(this::mapToEmailError)
                         .delayInputValidation())
@@ -68,12 +68,12 @@ class AuthInteractor @Inject constructor(
     private fun mapToEmailError(isValid: Boolean) =
             EmailValidation(if (isValid) "" else "Invalid email format")
 
-    fun attachPasswordInputIntent(intentObservable: Observable<String>) {
+    fun attachPasswordInputIntent(intent: Observable<String>) {
         viewStateIntentsObservable = viewStateIntentsObservable
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .map(AuthViewStateChange::PasswordInput)
                         .doOnEach { needsToRevalidateInput = true })
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .switchMapSingle(validator::validatePassword)
                         .map(this::mapToPasswordError)
                         .delayInputValidation())
@@ -83,12 +83,12 @@ class AuthInteractor @Inject constructor(
             if (isValid) "" else "Password must be at least 8 characters long"
     )
 
-    fun attachRepeatPasswordInputIntent(intentObservable: Observable<String>) {
+    fun attachRepeatPasswordInputIntent(intent: Observable<String>) {
         viewStateIntentsObservable = viewStateIntentsObservable
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .map(AuthViewStateChange::RepeatPasswordInput)
                         .doOnEach { needsToRevalidateInput = true })
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .switchMapSingle(validator::validatePasswordRepeat)
                         .map(this::mapToRepeatPasswordError)
                         .delayInputValidation())
@@ -98,11 +98,11 @@ class AuthInteractor @Inject constructor(
             if (arePasswordsIdentical) "" else "Passwords are not identical"
     )
 
-    fun attachLoginIntent(intentObservable: Observable<LoginCredentials>) {
+    fun attachLoginIntent(intent: Observable<LoginCredentials>) {
         viewStateIntentsObservable = viewStateIntentsObservable
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .map { CredentialsSubmit() })
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .flatMapSingle(authService::login)
                         .flatMap(this::applyBackendAuthResponse))
     }
@@ -126,20 +126,20 @@ class AuthInteractor @Inject constructor(
             if (isSetupWithCoreDevice) navigator.showHomeScreen()
             else navigator.showSetupScreen()
 
-    fun attachRegisterIntent(intentObservable: Observable<RegisterCredentials>) {
+    fun attachRegisterIntent(intent: Observable<RegisterCredentials>) {
         viewStateIntentsObservable = viewStateIntentsObservable
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .map { CredentialsSubmit() })
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .flatMapSingle(authService::register)
                         .flatMap(this::applyBackendAuthResponse))
     }
 
-    fun attachResetPasswordIntent(intentObservable: Observable<RemindPasswordCredentials>) {
+    fun attachResetPasswordIntent(intent: Observable<RemindPasswordCredentials>) {
         viewStateIntentsObservable = viewStateIntentsObservable
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .map { CredentialsSubmit() })
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .delay(1, TimeUnit.SECONDS)
                         .flatMapSingle(authService::resetPassword)
                         .flatMap(this::applyBackendPasswordResetResponse))
@@ -154,22 +154,22 @@ class AuthInteractor @Inject constructor(
                         .doOnNext { navigator.showFailureDialog(response.error?.localizedMessage ?: "Unknown password reset error.") }
             }
 
-    fun attachEmailRegistrationIntent(intentObservable: Observable<Unit>) {
+    fun attachEmailRegistrationIntent(intent: Observable<Unit>) {
         viewStateIntentsObservable = viewStateIntentsObservable
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .map { PerspectiveSwitch(REGISTER) }
                         .doAfterNext { needsToRevalidateInput = true })
     }
 
-    fun attachBackButtonClickIntent(intentObservable: Observable<Unit>) {
+    fun attachBackButtonClickIntent(intent: Observable<Unit>) {
         viewStateIntentsObservable = viewStateIntentsObservable
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .map { PerspectiveSwitch(LOGIN) })
     }
 
-    fun attachForgotPasswordIntent(intentObservable: Observable<Unit>) {
+    fun attachForgotPasswordIntent(intent: Observable<Unit>) {
         viewStateIntentsObservable = viewStateIntentsObservable
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .map { PerspectiveSwitch(FORGOT_PASSWORD) }
                         .doAfterNext { needsToRevalidateInput = true })
     }

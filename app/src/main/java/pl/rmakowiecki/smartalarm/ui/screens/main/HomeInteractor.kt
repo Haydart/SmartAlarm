@@ -9,9 +9,9 @@ class HomeInteractor @Inject constructor() {
 
     fun getViewStateObservable() = viewStateIntentsObservable
 
-    fun attachTabSwitchIntent(intentObservable: Observable<Int>) {
+    fun attachTabSwitchIntent(intent: Observable<Int>) {
         viewStateIntentsObservable = viewStateIntentsObservable.mergeWith(
-                intentObservable.map(::HomeViewState)
+                intent.map(::HomeViewState)
         )
     }
 }

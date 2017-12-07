@@ -29,9 +29,9 @@ class IncidentDetailsInteractor @Inject constructor(
     fun getViewStateObservable(): Observable<IncidentDetailsViewState> = viewStateObservable
             .scan(IncidentDetailsViewState(), reducer::reduce)
 
-    fun attachPhotoSwipeIntent(intentObservable: Observable<Int>) {
+    fun attachPhotoSwipeIntent(intent: Observable<Int>) {
         viewStateObservable = viewStateObservable
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .map(IncidentDetailsViewStateChange::CurrentPhotoChanged))
     }
 }

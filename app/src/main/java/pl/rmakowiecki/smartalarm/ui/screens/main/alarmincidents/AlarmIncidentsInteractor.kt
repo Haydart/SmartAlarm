@@ -72,30 +72,30 @@ class AlarmIncidentsInteractor @Inject constructor(
         }
     }
 
-    fun attachArchiveIntent(intentObservable: Observable<Int>) {
+    fun attachArchiveIntent(intent: Observable<Int>) {
         viewStateObservable = viewStateObservable
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .flatMapSingle(alarmIncidentService::archiveIncident)
                         .flatMap { Observable.empty<AlarmIncidentsViewStateChange>() }) //state change will come from firebase
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .map { SnackBarShown("Incident archived") }) //todo get other language resources
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .switchMap {
                             Observable.just(SnackBarHidden())
                                     .delay(SNACKBAR_HIDE_DELAY, TimeUnit.SECONDS)
                         })
     }
 
-    fun attachDeletionIntent(intentObservable: Observable<Int>) {
+    fun attachDeletionIntent(intent: Observable<Int>) {
         viewStateObservable = viewStateObservable
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .flatMapMaybe { listPosition ->
                             navigator.showDeleteConfirmationDialog()
                                     .doOnSuccess { alarmIncidentService.deleteIncident(listPosition) }
                         }.flatMap { Observable.empty<AlarmIncidentsViewStateChange>() })
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .map { SnackBarShown("Incident deleted") }) //todo get other language resources
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .switchMap {
                             Observable.just(SnackBarHidden())
                                     .delay(SNACKBAR_HIDE_DELAY, TimeUnit.SECONDS)
@@ -103,14 +103,14 @@ class AlarmIncidentsInteractor @Inject constructor(
 
     }
 
-    fun attachSnackBarDismissIntent(intentObservable: Observable<Unit>) {
+    fun attachSnackBarDismissIntent(intent: Observable<Unit>) {
         viewStateObservable = viewStateObservable
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .map { SnackBarHidden() })
     }
 
-    fun attachDetailsIntent(intentObservable: Observable<Int>) {
-        viewStateObservable = viewStateObservable.mergeWith(intentObservable
+    fun attachDetailsIntent(intent: Observable<Int>) {
+        viewStateObservable = viewStateObservable.mergeWith(intent
                 .doOnNext {
                     detailsLogicGateway.incidentBackendIdSingle = alarmIncidentService.fetchIdForListPosition(it)
                     navigator.showIncidentDetailsScreen()

@@ -7,15 +7,15 @@ import javax.inject.Inject
 class IncidentDetailsViewStateReducer @Inject constructor() {
 
     fun reduce(currentState: IncidentDetailsViewState, change: IncidentDetailsViewStateChange) = when (change) {
-        is CurrentPhotoChanged -> {
-            currentState.copy(currentPhotoPage = change.newPosition)
-        }
-        is PhotoAdded -> {
-            currentState.copy(photoUrlsList = currentState
-                    .photoUrlsList
-                    .toMutableList()
-                    .plus(change.newPhoto)
-            )
-        }
+
+        is CurrentPhotoChanged -> currentState.copy(
+                currentPhotoPage = change.newPosition
+        )
+        is PhotoAdded -> currentState.copy(
+                photoUrlsList = currentState
+                        .photoUrlsList
+                        .toMutableList()
+                        .plus(change.newPhoto)
+        )
     }
 }

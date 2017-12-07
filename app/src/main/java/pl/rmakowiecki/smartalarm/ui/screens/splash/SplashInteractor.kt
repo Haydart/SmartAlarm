@@ -18,7 +18,7 @@ class SplashInteractor @Inject constructor(
         private val navigator: SplashNavigator
 ) {
 
-    var stubIntentObservable: Observable<Contracts.ViewState> = Observable.empty<Contracts.ViewState>()
+    var stubintent: Observable<Contracts.ViewState> = Observable.empty<Contracts.ViewState>()
             .mergeWith(Observable
                     .timer(TRANSITION_DELAY, TimeUnit.SECONDS)
                     .applyIoSchedulers()

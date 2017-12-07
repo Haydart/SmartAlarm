@@ -24,9 +24,9 @@ class SettingsInteractor @Inject constructor(
     fun getViewStateObservable(): Observable<SettingsViewState> = viewStateObservable
             .scan(SettingsViewState(), reducer::reduce)
 
-    fun attachLogoutButtonClickIntent(intentObservable: Observable<Unit>) {
+    fun attachLogoutButtonClickIntent(intent: Observable<Unit>) {
         viewStateObservable = viewStateObservable
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .flatMapMaybe { navigator.showLogoutConfirmationDialog() }
                         .flatMapSingle { authService.logoutUser() }
                         .doOnNext { navigator.showSplashScreen() }
@@ -34,28 +34,28 @@ class SettingsInteractor @Inject constructor(
                 )
     }
 
-    fun attachPhotoCountInfoIntent(intentObservable: Observable<Unit>) {
+    fun attachPhotoCountInfoIntent(intent: Observable<Unit>) {
         viewStateObservable = viewStateObservable
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .doOnNext { navigator.showPhotoCountInfoDialog() }
                         .flatMap { Observable.empty<SettingsViewStateChange>() }
                 )
     }
 
-    fun attachSequenceIntervalInfoIntent(intentObservable: Observable<Unit>) {
+    fun attachSequenceIntervalInfoIntent(intent: Observable<Unit>) {
         viewStateObservable = viewStateObservable
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .doOnNext { navigator.showSequenceIntervalInfoDialog() }
                         .flatMap { Observable.empty<SettingsViewStateChange>() }
                 )
     }
 
-    fun attachPhotoCountChangeIntent(intentObservable: Observable<Int>) {
+    fun attachPhotoCountChangeIntent(intent: Observable<Int>) {
         viewStateObservable = viewStateObservable
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .map { PhotoCountValueChange(it + PHOTO_COUNT_OFFSET) }
                 )
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .map { it + PHOTO_COUNT_OFFSET }
                         .switchMapSingle(settingsService::sendPhotoCountValue)
                         .debounce(LOADER_HIDE_DELAY_MILLIS, TimeUnit.MILLISECONDS)
@@ -63,12 +63,12 @@ class SettingsInteractor @Inject constructor(
                 )
     }
 
-    fun attachPhotoSequenceIntervalChangeIntent(intentObservable: Observable<Int>) {
+    fun attachPhotoSequenceIntervalChangeIntent(intent: Observable<Int>) {
         viewStateObservable = viewStateObservable
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .map { SequenceIntervalValueChange(it * SEQUENCE_INTERVAL_MULTIPLIER + SEQUENCE_INTERVAL_OFFSET) }
                 )
-                .mergeWith(intentObservable
+                .mergeWith(intent
                         .map { it * SEQUENCE_INTERVAL_MULTIPLIER + SEQUENCE_INTERVAL_OFFSET }
                         .switchMapSingle(settingsService::sendPhotoSequenceIntervalValue)
                         .debounce(LOADER_HIDE_DELAY_MILLIS, TimeUnit.MILLISECONDS)

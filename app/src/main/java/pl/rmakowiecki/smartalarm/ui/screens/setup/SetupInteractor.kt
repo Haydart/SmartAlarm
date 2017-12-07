@@ -9,21 +9,21 @@ class SetupInteractor @Inject constructor() {
 
     fun getViewStateObservable(): Observable<SetupViewState> = viewStateObservable
 
-    fun attachSsidInputIntent(intentObservable: Observable<String>) {
+    fun attachSsidInputIntent(intent: Observable<String>) {
         viewStateObservable = viewStateObservable.mergeWith(
-                intentObservable.map { SetupViewState() }
+                intent.map { SetupViewState() }
         )
     }
 
-    fun attachNetworkPasswordInputIntent(intentObservable: Observable<String>) {
+    fun attachNetworkPasswordInputIntent(intent: Observable<String>) {
         viewStateObservable = viewStateObservable.mergeWith(
-                intentObservable.map { SetupViewState() }
+                intent.map { SetupViewState() }
         )
     }
 
-    fun attachNetworkCredentialsSubmitIntent(intentObservable: Observable<Unit>) {
+    fun attachNetworkCredentialsSubmitIntent(intent: Observable<Unit>) {
         viewStateObservable = viewStateObservable.mergeWith(
-                intentObservable.map { SetupViewState() }
+                intent.map { SetupViewState() }
         )
     }
 }
