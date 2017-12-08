@@ -70,7 +70,7 @@ abstract class MviPresenter<V : Contracts.View, VS : Contracts.ViewState> : Cont
         )
     }
 
-    @MainThread protected fun <I> bindIntent(binderFunction: (V) -> Observable<I>): Observable<I> {
+    @MainThread protected fun <I> intent(binderFunction: (V) -> Observable<I>): Observable<I> {
         val intentRelay = PublishSubject.create<I>()
         intentRelaysBinders.add(IntentRelayBinderPair(intentRelay, binderFunction))
         return intentRelay

@@ -8,8 +8,9 @@ class HomePresenter @Inject constructor(
 ) : MviPresenter<HomeView, HomeViewState>() {
 
     override fun bindIntents() = with(interactor) {
-        attachTabSwitchIntent(bindIntent(HomeView::tabSwitchIntent))
+        attachTabSwitchIntent(
+                intent(HomeView::tabSwitchIntent))
 
-        subscribeViewState(getViewStateObservable(), HomeView::render)
+        subscribeViewState(viewStateObservable, HomeView::render)
     }
 }

@@ -1,4 +1,4 @@
-package pl.rmakowiecki.smartalarm.feature.screens.main.alarmincidents
+package pl.rmakowiecki.smartalarm.domain.main.alarmincidents
 
 class SecurityIncidentItemViewState(
         val thumbnailUrl: String,

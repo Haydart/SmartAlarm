@@ -4,6 +4,6 @@ sealed class SettingsViewStateChange {
 
     class PhotoCountValueChange(val newValue: Int) : SettingsViewStateChange()
     class SequenceIntervalValueChange(val newValue: Int) : SettingsViewStateChange()
-    class PhotoCountChangeComplete : SettingsViewStateChange()
-    class SequenceIntervalChangeComplete : SettingsViewStateChange()
+    object PhotoCountChangeComplete : SettingsViewStateChange()
+    object SequenceIntervalChangeComplete : SettingsViewStateChange()
 }

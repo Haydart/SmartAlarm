@@ -1,13 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/alarmIdleStateLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/alarmStateImage"
+            android:layout_width="@dimen/alarm_arming_button_size"
+            android:layout_height="@dimen/alarm_arming_button_size"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_power_active"/>
+
+        <TextView
+            android:id="@+id/alarmStateText"
+            android:layout_margin="@dimen/margin_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/alarm_state_armed"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <pl.rmakowiecki.smartalarm.customView.ActionButton
+        android:id="@+id/armingButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/action_button_height"
+        android:layout_margin="@dimen/margin_large"
+        app:default_color="@color/accent"
+        app:failure_color="@color/failureRed"
+        app:failure_icon="@drawable/icon_failure_pill_button"
+        app:success_icon="@drawable/icon_success_pill_button"
+        app:text="@string/arm_the_alarm"
+        android:layout_gravity="bottom"
+        app:text_color="@android:color/white"
+        android:visibility="invisible"/>
+
+    <pl.rmakowiecki.smartalarm.customView.ActionButton
+        android:id="@+id/disarmingButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/action_button_height"
+        android:layout_margin="@dimen/margin_large"
+        app:default_color="@color/accent"
+        app:failure_color="@color/failureRed"
+        app:failure_icon="@drawable/icon_failure_pill_button"
+        app:success_icon="@drawable/icon_success_pill_button"
+        app:text="@string/disarm_the_alarm"
+        android:layout_gravity="bottom"
+        app:text_color="@android:color/white"
+        android:visibility="invisible"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Alarm state fragment"/>
+        android:layout_gravity="center"/>
 
-</LinearLayout>
+</FrameLayout>

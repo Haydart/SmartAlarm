@@ -8,20 +8,18 @@ class AlarmIncidentsPresenter @Inject constructor(
 ) : MviPresenter<AlarmIncidentsView, AlarmIncidentsViewState>() {
 
     override fun bindIntents() = with(interactor) {
-
         attachArchiveIntent(
-                bindIntent(AlarmIncidentsView::incidentArchivingIntent)
-        )
-        attachDeletionIntent(
-                bindIntent(AlarmIncidentsView::incidentDeletionIntent)
-        )
-        attachDetailsIntent(
-                bindIntent(AlarmIncidentsView::incidentDetailsIntent)
-        )
-        attachSnackBarDismissIntent(
-                bindIntent(AlarmIncidentsView::snackBarDismissIntent)
-        )
+                intent(AlarmIncidentsView::incidentArchivingIntent))
 
-        subscribeViewState(getViewStateObservable(), AlarmIncidentsView::render)
+        attachDeletionIntent(
+                intent(AlarmIncidentsView::incidentDeletionIntent))
+
+        attachDetailsIntent(
+                intent(AlarmIncidentsView::incidentDetailsIntent))
+
+        attachSnackBarDismissIntent(
+                intent(AlarmIncidentsView::snackBarDismissIntent))
+
+        subscribeViewState(viewStateObservable, AlarmIncidentsView::render)
     }
 }

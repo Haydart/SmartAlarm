@@ -8,6 +8,5 @@ class SplashPresenter @Inject constructor(
         private val interactor: SplashInteractor
 ) : MviPresenter<Contracts.View, Contracts.ViewState>() {
 
-    override fun bindIntents() = subscribeViewState(
-            interactor.stubintent, null)
+    override fun bindIntents() = subscribeViewState(interactor.stubintent, null)
 }

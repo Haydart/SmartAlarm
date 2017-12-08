@@ -43,5 +43,9 @@
     <string name="setup_connect_text">Connect the smartphone to\nyour Core Device via USB cable\nin order to safely pair up.\nWe care for your privacy and safety.</string>
     <string name="connect_to_wifi">Connect</string>
     <string name="cancel">Cancel</string>
+    <string name="alarm_state_disarmed">Your alarm is UNARMED.\nYou won\'t get any breach reports.</string>
+    <string name="alarm_state_armed">Your alarm is ARMED.\nDon\'t worry, we\'ve got you covered!</string>
+    <string name="arm_the_alarm">Arm the alarm</string>
+    <string name="disarm_the_alarm">Disarm the alarm</string>
 
 </resources>

@@ -1,5 +1,7 @@
 package pl.rmakowiecki.smartalarm.feature.screens.main.alarmincidents
 
+import pl.rmakowiecki.smartalarm.domain.main.alarmincidents.SecurityIncidentItemViewState
+
 sealed class AlarmIncidentsViewStateChange {
 
     class ItemsEmpty(val isEmpty: Boolean) : AlarmIncidentsViewStateChange()
@@ -9,5 +11,5 @@ sealed class AlarmIncidentsViewStateChange {
     class ItemArchived(val positionInList: Int) : AlarmIncidentsViewStateChange()
     class ItemDeleted(val positionInList: Int) : AlarmIncidentsViewStateChange()
     class SnackBarShown(val message: String) : AlarmIncidentsViewStateChange()
-    class SnackBarHidden : AlarmIncidentsViewStateChange()
+    object SnackBarHidden : AlarmIncidentsViewStateChange()
 }

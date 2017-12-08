@@ -9,38 +9,38 @@ class AuthPresenter @Inject constructor(
 
     override fun bindIntents() = with(interactor) {
         attachFacebookAuthIntent(
-                bindIntent(AuthView::facebookAuthIntent))
+                intent(AuthView::facebookAuthIntent))
 
         attachGoogleAuthIntent(
-                bindIntent(AuthView::googleAuthIntent))
+                intent(AuthView::googleAuthIntent))
 
         attachEmailInputIntent(
-                bindIntent(AuthView::emailInputIntent))
+                intent(AuthView::emailInputIntent))
 
         attachPasswordInputIntent(
-                bindIntent(AuthView::passwordInputIntent))
+                intent(AuthView::passwordInputIntent))
 
         attachRepeatPasswordInputIntent(
-                bindIntent(AuthView::repeatPasswordInputIntent))
+                intent(AuthView::repeatPasswordInputIntent))
 
         attachLoginIntent(
-                bindIntent(AuthView::loginIntent))
+                intent(AuthView::loginIntent))
 
         attachRegisterIntent(
-                bindIntent(AuthView::registerIntent))
+                intent(AuthView::registerIntent))
 
         attachResetPasswordIntent(
-                bindIntent(AuthView::resetPasswordIntent))
+                intent(AuthView::resetPasswordIntent))
 
         attachEmailRegistrationIntent(
-                bindIntent(AuthView::emailRegistrationIntent))
+                intent(AuthView::emailRegistrationIntent))
 
         attachBackButtonClickIntent(
-                bindIntent(AuthView::backButtonIntent))
+                intent(AuthView::backButtonIntent))
 
         attachForgotPasswordIntent(
-                bindIntent(AuthView::forgotPasswordIntent))
+                intent(AuthView::forgotPasswordIntent))
 
-        subscribeViewState(getViewStateObservable(), AuthView::render)
+        subscribeViewState(viewStateObservable, AuthView::render)
     }
 }
