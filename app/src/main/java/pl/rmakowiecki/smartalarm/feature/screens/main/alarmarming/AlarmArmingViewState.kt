@@ -4,8 +4,5 @@ import pl.rmakowiecki.smartalarm.base.Contracts
 
 data class AlarmArmingViewState(
         val isInitializing: Boolean = true,
-        val isStateChangeLoading: Boolean = true,
-        val isAlarmArmed: Boolean = false,
-        val alarmStateDescriptionText: String = "",
-        val alarmStateButtonText: String = ""
+        val isAlarmArmed: Boolean = false
 ) : Contracts.ViewState

@@ -8,7 +8,13 @@ class AlarmArmingViewStateReducer @Inject constructor() {
 
     fun reduce(currentViewState: AlarmArmingViewState, change: AlarmArmingViewStateChange) = when (change) {
 
-        AlarmArmed -> currentViewState
-        AlarmDisarmed -> currentViewState
+        AlarmArmed -> currentViewState.copy(
+                isInitializing = false,
+                isAlarmArmed = true
+        )
+        AlarmDisarmed -> currentViewState.copy(
+                isInitializing = false,
+                isAlarmArmed = false
+        )
     }
 }

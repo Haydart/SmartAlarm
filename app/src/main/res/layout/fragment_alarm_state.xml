@@ -19,7 +19,7 @@
             android:layout_width="@dimen/alarm_arming_button_size"
             android:layout_height="@dimen/alarm_arming_button_size"
             android:layout_gravity="center"
-            android:background="@drawable/ic_power"/>
+            android:background="@drawable/ic_power_active"/>
 
         <TextView
             android:id="@+id/alarmStateText"
@@ -55,7 +55,7 @@
         app:failure_color="@color/failureRed"
         app:failure_icon="@drawable/icon_failure_pill_button"
         app:success_icon="@drawable/icon_success_pill_button"
-        app:text="@string/arm_the_alarm"
+        app:text="@string/disarm_the_alarm"
         android:layout_gravity="bottom"
         app:text_color="@android:color/white"
         android:visibility="invisible"/>
