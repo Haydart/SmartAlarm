@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="pl.rmakowiecki.smartalarm.feature.splash.SplashActivity"
+            android:name=".feature.splash.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -24,13 +24,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="pl.rmakowiecki.smartalarm.feature.auth.AuthActivity"
+            android:name=".feature.auth.AuthActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="pl.rmakowiecki.smartalarm.feature.setup.SetupActivity"
+            android:name=".feature.setup.SetupActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="pl.rmakowiecki.smartalarm.feature.main.HomeActivity"
+            android:name=".feature.main.HomeActivity"
             android:screenOrientation="portrait"/>
 
         <meta-data
@@ -54,15 +54,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="pl.rmakowiecki.smartalarm.feature.incidentdetails.IncidentDetailsActivity"
+            android:name=".feature.incidentdetails.IncidentDetailsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_incident_details"
-            android:parentActivityName="pl.rmakowiecki.smartalarm.feature.main.HomeActivity"
+            android:parentActivityName=".feature.main.HomeActivity"
             android:theme="@style/FullscreenGalleryTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="pl.rmakowiecki.smartalarm.feature.main.HomeActivity"/>
         </activity>
+        <activity
+            android:name=".feature.coresetup.CoreSetupActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
