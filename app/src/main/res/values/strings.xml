@@ -47,5 +47,7 @@
     <string name="alarm_state_armed">Your alarm is ARMED.\nDon\'t worry, we\'ve got you covered!</string>
     <string name="arm_the_alarm">Arm the alarm</string>
     <string name="disarm_the_alarm">Disarm the alarm</string>
+    <string name="core_device_setup_text">This is the first smartphone being\nconnected to your Core Device.\nPlease input the Wi-Fi network\ncredentials for whichyou want\nyour Core Device to connect to.\nKeep both devices connected via USB.</string>
+    <string name="input_hint_ssid">Network name</string>
 
 </resources>
