@@ -57,7 +57,7 @@
                 android:id="@+id/ssidInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/input_hint_email"
+                android:hint="@string/input_hint_ssid"
                 android:inputType="textEmailAddress"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -86,7 +86,7 @@
             app:failure_color="@color/failureRed"
             app:failure_icon="@drawable/icon_failure_pill_button"
             app:success_icon="@drawable/icon_success_pill_button"
-            app:text="@string/login"
+            app:text="@string/connect_to_wifi"
             app:text_color="@android:color/white"/>
 
     </LinearLayout>
