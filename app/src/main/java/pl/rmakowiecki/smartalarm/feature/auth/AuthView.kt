@@ -4,7 +4,7 @@ import io.reactivex.Observable
 import pl.rmakowiecki.smartalarm.base.Contracts
 import pl.rmakowiecki.smartalarm.domain.auth.LoginCredentials
 import pl.rmakowiecki.smartalarm.domain.auth.RegisterCredentials
-import pl.rmakowiecki.smartalarm.domain.auth.RemindPasswordCredentials
+import pl.rmakowiecki.smartalarm.domain.auth.ResetPasswordIntent
 
 interface AuthView : Contracts.View {
 
@@ -16,7 +16,7 @@ interface AuthView : Contracts.View {
 
     val loginIntent: Observable<LoginCredentials>
     val registerIntent: Observable<RegisterCredentials>
-    val resetPasswordIntent: Observable<RemindPasswordCredentials>
+    val resetPasswordIntent: Observable<ResetPasswordIntent>
 
     val emailRegistrationIntent: Observable<Unit>
     val backButtonIntent: Observable<Unit>

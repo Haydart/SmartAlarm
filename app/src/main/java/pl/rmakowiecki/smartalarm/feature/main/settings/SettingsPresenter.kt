@@ -10,19 +10,19 @@ class SettingsPresenter @Inject constructor(
     override fun bindIntents() = with(interactor) {
 
         attachLogoutButtonClickIntent(
-                intent(SettingsView::logoutButtonClickIntent))
+                bindIntent(SettingsView::logoutButtonClickIntent))
 
         attachPhotoCountInfoIntent(
-                intent(SettingsView::photoCountInfoIntent))
+                bindIntent(SettingsView::photoCountInfoIntent))
 
         attachSequenceIntervalInfoIntent(
-                intent(SettingsView::sequenceIntervalInfoIntent))
+                bindIntent(SettingsView::sequenceIntervalInfoIntent))
 
         attachPhotoCountChangeIntent(
-                intent(SettingsView::photoCountChangeIntent))
+                bindIntent(SettingsView::photoCountChangeIntent))
 
         attachPhotoSequenceIntervalChangeIntent(
-                intent(SettingsView::photoSequenceIntervalChangeIntent))
+                bindIntent(SettingsView::photoSequenceIntervalChangeIntent))
 
 
         subscribeViewState(viewStateObservable, SettingsView::render)

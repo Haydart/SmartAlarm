@@ -9,14 +9,14 @@ import pl.rmakowiecki.smartalarm.domain.auth.AuthMode.*
 import pl.rmakowiecki.smartalarm.domain.auth.CredentialsValidator
 import pl.rmakowiecki.smartalarm.domain.auth.LoginCredentials
 import pl.rmakowiecki.smartalarm.domain.auth.RegisterCredentials
-import pl.rmakowiecki.smartalarm.domain.auth.RemindPasswordCredentials
+import pl.rmakowiecki.smartalarm.domain.auth.ResetPasswordIntent
 import pl.rmakowiecki.smartalarm.feature.auth.AuthViewStateChange.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class AuthInteractor @Inject constructor(
         private val navigator: AuthNavigator,
-        private val reducer: AuthStateReducer,
+        private val reducer: AuthViewStateReducer,
         private val validator: CredentialsValidator,
         private val authService: FirebaseAuthService,
         private val setupService: FirebaseSetupService
@@ -134,7 +134,7 @@ class AuthInteractor @Inject constructor(
                     .flatMap(this::applyBackendAuthResponse)
     )
 
-    fun attachResetPasswordIntent(intentObservable: Observable<RemindPasswordCredentials>) = mergeChanges(
+    fun attachResetPasswordIntent(intentObservable: Observable<ResetPasswordIntent>) = mergeChanges(
             intentObservable
                     .map { CredentialsSubmit },
             intentObservable
@@ -142,15 +142,6 @@ class AuthInteractor @Inject constructor(
                     .flatMapSingle(authService::resetPassword)
                     .flatMap(this::applyBackendPasswordResetResponse)
     )
-
-    private fun applyBackendPasswordResetResponse(response: AuthResponse): Observable<out AuthViewStateChange> =
-            if (response.isSuccessful) {
-                Observable.just(AuthSuccess)
-                        .doOnNext { navigator.showResetPasswordCompleteDialog() }
-            } else {
-                Observable.just(AuthFailure(""))
-                        .doOnNext { navigator.showFailureDialog(response.error?.localizedMessage ?: "Unknown password reset error.") }
-            }
 
     fun attachEmailRegistrationIntent(intentObservable: Observable<Unit>) = mergeChanges(
             intentObservable
@@ -167,6 +158,15 @@ class AuthInteractor @Inject constructor(
                     .map { PerspectiveSwitch(FORGOT_PASSWORD) }
                     .doAfterNext { needsToRevalidateInput = true }
     )
+
+    private fun applyBackendPasswordResetResponse(response: AuthResponse): Observable<out AuthViewStateChange> =
+            if (response.isSuccessful) {
+                Observable.just(AuthSuccess)
+                        .doOnNext { navigator.showResetPasswordCompleteDialog() }
+            } else {
+                Observable.just(AuthFailure(""))
+                        .doOnNext { navigator.showFailureDialog(response.error?.localizedMessage ?: "Unknown password reset error.") }
+            }
 
     private fun <T : AuthViewStateChange> mergeChanges(vararg changes: Observable<out T>) = changes.forEach {
         viewStateChanges = viewStateChanges.mergeWith(it)

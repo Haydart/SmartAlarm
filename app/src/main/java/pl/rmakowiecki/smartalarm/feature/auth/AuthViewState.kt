@@ -16,3 +16,4 @@ data class AuthViewState(
         val isShowingSuccess: Boolean = false,
         val generalError: String? = null
 ) : Contracts.ViewState
+

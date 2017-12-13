@@ -9,7 +9,7 @@ class HomePresenter @Inject constructor(
 
     override fun bindIntents() = with(interactor) {
         attachTabSwitchIntent(
-                intent(HomeView::tabSwitchIntent))
+                bindIntent(HomeView::tabSwitchIntent))
 
         subscribeViewState(viewStateObservable, HomeView::render)
     }

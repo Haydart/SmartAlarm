@@ -20,6 +20,8 @@ abstract class MviActivity<V : Contracts.View, VS : Contracts.ViewState, P : Mvi
     lateinit var activityComponent: ActivityComponent
         private set
 
+    protected abstract fun injectComponents()
+
     @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +43,4 @@ abstract class MviActivity<V : Contracts.View, VS : Contracts.ViewState, P : Mvi
         presenter.detachView()
         super.onStop()
     }
-
-    protected abstract fun injectComponents()
 }

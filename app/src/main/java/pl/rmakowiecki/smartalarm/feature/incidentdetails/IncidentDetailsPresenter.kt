@@ -9,7 +9,7 @@ class IncidentDetailsPresenter @Inject constructor(
 
     override fun bindIntents() = with(interactor) {
         attachPhotoSwipeIntent(
-                intent(IncidentDetailsView::photoSwipeIntent)
+                bindIntent(IncidentDetailsView::photoSwipeIntent)
         )
 
         subscribeViewState(viewStateObservable, IncidentDetailsView::render)

@@ -8,39 +8,24 @@ class AuthPresenter @Inject constructor(
 ) : MviPresenter<AuthView, AuthViewState>() {
 
     override fun bindIntents() = with(interactor) {
-        attachFacebookAuthIntent(
-                intent(AuthView::facebookAuthIntent))
+        attachFacebookAuthIntent(bindIntent(AuthView::facebookAuthIntent))
+        attachGoogleAuthIntent(bindIntent(AuthView::googleAuthIntent))
 
-        attachGoogleAuthIntent(
-                intent(AuthView::googleAuthIntent))
+        attachEmailInputIntent(bindIntent(AuthView::emailInputIntent))
+        attachPasswordInputIntent(bindIntent(AuthView::passwordInputIntent))
+        attachRepeatPasswordInputIntent(bindIntent(AuthView::repeatPasswordInputIntent))
 
-        attachEmailInputIntent(
-                intent(AuthView::emailInputIntent))
+        attachLoginIntent(bindIntent(AuthView::loginIntent))
+        attachRegisterIntent(bindIntent(AuthView::registerIntent))
+        attachResetPasswordIntent(bindIntent(AuthView::resetPasswordIntent))
 
-        attachPasswordInputIntent(
-                intent(AuthView::passwordInputIntent))
-
-        attachRepeatPasswordInputIntent(
-                intent(AuthView::repeatPasswordInputIntent))
-
-        attachLoginIntent(
-                intent(AuthView::loginIntent))
-
-        attachRegisterIntent(
-                intent(AuthView::registerIntent))
-
-        attachResetPasswordIntent(
-                intent(AuthView::resetPasswordIntent))
-
-        attachEmailRegistrationIntent(
-                intent(AuthView::emailRegistrationIntent))
-
-        attachBackButtonClickIntent(
-                intent(AuthView::backButtonIntent))
-
-        attachForgotPasswordIntent(
-                intent(AuthView::forgotPasswordIntent))
+        attachEmailRegistrationIntent(bindIntent(AuthView::emailRegistrationIntent))
+        attachBackButtonClickIntent(bindIntent(AuthView::backButtonIntent))
+        attachForgotPasswordIntent(bindIntent(AuthView::forgotPasswordIntent))
 
         subscribeViewState(viewStateObservable, AuthView::render)
     }
 }
+
+
+

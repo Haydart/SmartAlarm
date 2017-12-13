@@ -13,7 +13,7 @@ import pl.rmakowiecki.smartalarm.customView.TilingDrawable
 import pl.rmakowiecki.smartalarm.domain.auth.AuthMode.*
 import pl.rmakowiecki.smartalarm.domain.auth.LoginCredentials
 import pl.rmakowiecki.smartalarm.domain.auth.RegisterCredentials
-import pl.rmakowiecki.smartalarm.domain.auth.RemindPasswordCredentials
+import pl.rmakowiecki.smartalarm.domain.auth.ResetPasswordIntent
 import pl.rmakowiecki.smartalarm.extensions.gone
 import pl.rmakowiecki.smartalarm.extensions.invisible
 import pl.rmakowiecki.smartalarm.extensions.setTextIfDifferent
@@ -58,10 +58,10 @@ class AuthActivity : MviActivity<AuthView, AuthViewState, AuthPresenter>(),
                             repeatPasswordInput.text.toString())
                 }
 
-    override val resetPasswordIntent: Observable<RemindPasswordCredentials>
+    override val resetPasswordIntent: Observable<ResetPasswordIntent>
         get() = resetPasswordButton.clicks()
                 .filter { !resetPasswordIntentBlocked }
-                .map { RemindPasswordCredentials(emailInput.text.toString()) }
+                .map { ResetPasswordIntent(emailInput.text.toString()) }
 
     override val emailRegistrationIntent: Observable<Unit>
         get() = registerText.clicks()

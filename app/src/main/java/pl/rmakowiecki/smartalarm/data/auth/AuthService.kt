@@ -7,7 +7,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.Single
 import pl.rmakowiecki.smartalarm.domain.auth.LoginCredentials
 import pl.rmakowiecki.smartalarm.domain.auth.RegisterCredentials
-import pl.rmakowiecki.smartalarm.domain.auth.RemindPasswordCredentials
+import pl.rmakowiecki.smartalarm.domain.auth.ResetPasswordIntent
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -39,7 +39,7 @@ class FirebaseAuthService @Inject constructor() : AuthService {
                 }
     }
 
-    override fun resetPassword(credentials: RemindPasswordCredentials): Single<AuthResponse> = Single.create { emitter ->
+    override fun resetPassword(credentials: ResetPasswordIntent): Single<AuthResponse> = Single.create { emitter ->
         FirebaseAuth.getInstance()
                 .sendPasswordResetEmail(credentials.email)
                 .addOnCompleteListener {
@@ -66,7 +66,7 @@ class FirebaseAuthService @Inject constructor() : AuthService {
 interface AuthService {
     fun login(credentials: LoginCredentials): Single<AuthResponse>
     fun register(credentials: RegisterCredentials): Single<AuthResponse>
-    fun resetPassword(credentials: RemindPasswordCredentials): Single<AuthResponse>
+    fun resetPassword(credentials: ResetPasswordIntent): Single<AuthResponse>
     fun signInWithFacebook(credential: AuthCredential): Single<AuthResponse>
     fun signInWithGoogle(credential: AuthCredential): Single<AuthResponse>
     fun isUserLoggedIn(): Single<Boolean>

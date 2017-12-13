@@ -9,16 +9,16 @@ class AlarmIncidentsPresenter @Inject constructor(
 
     override fun bindIntents() = with(interactor) {
         attachArchiveIntent(
-                intent(AlarmIncidentsView::incidentArchivingIntent))
+                bindIntent(AlarmIncidentsView::incidentArchivingIntent))
 
         attachDeletionIntent(
-                intent(AlarmIncidentsView::incidentDeletionIntent))
+                bindIntent(AlarmIncidentsView::incidentDeletionIntent))
 
         attachDetailsIntent(
-                intent(AlarmIncidentsView::incidentDetailsIntent))
+                bindIntent(AlarmIncidentsView::incidentDetailsIntent))
 
         attachSnackBarDismissIntent(
-                intent(AlarmIncidentsView::snackBarDismissIntent))
+                bindIntent(AlarmIncidentsView::snackBarDismissIntent))
 
         subscribeViewState(viewStateObservable, AlarmIncidentsView::render)
     }

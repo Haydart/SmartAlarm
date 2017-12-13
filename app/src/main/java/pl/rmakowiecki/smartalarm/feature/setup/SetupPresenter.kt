@@ -10,13 +10,13 @@ class SetupPresenter @Inject constructor(
     override fun bindIntents() = with(interactor) {
 
         attachSsidInputIntent(
-                intent(SetupView::ssidInputIntent))
+                bindIntent(SetupView::ssidInputIntent))
 
         attachNetworkPasswordInputIntent(
-                intent(SetupView::networkPasswordInputIntent))
+                bindIntent(SetupView::networkPasswordInputIntent))
 
         attachNetworkCredentialsSubmitIntent(
-                intent(SetupView::networkCredentialsSubmitIntent))
+                bindIntent(SetupView::networkCredentialsSubmitIntent))
 
 
         subscribeViewState(viewStateObservable, SetupView::render)
